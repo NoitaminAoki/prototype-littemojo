@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admins\DashboardController;
 use App\Http\Controllers\Admins\AuthController;
+use App\Http\Controllers\Admins\Master\{
+    CatalogController, CatalogTopicController, LevelController
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +29,12 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 
 Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin', 'name' => 'admin.'], function () {
-    Route::get('/management/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/management/dashboard', [DashboardController::class, 'index'])->name('dashboard');    
+    Route::resources([
+        'catalog'       => CatalogController::class,
+        'catalog_topic' => CatalogTopicController::class,
+        'level'         => LevelController::class,
+    ]);
 });
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/register', [AuthController::class, 'registerForm'])->name('register.form');
@@ -50,7 +58,7 @@ Route::get('pass-login', function () {
         return redirect('dashboard');
         //return redirect()->intended('/details');
     }
-        return redirect('login');
+    return redirect('login');
 });
 
 Route::get('pass-login-admin', function () {
@@ -61,5 +69,5 @@ Route::get('pass-login-admin', function () {
         return redirect('admin/management/dashboard');
         //return redirect()->intended('/details');
     }
-        return redirect('login');
+    return redirect('login');
 });

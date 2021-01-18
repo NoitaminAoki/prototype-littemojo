@@ -18,5 +18,9 @@ class DatabaseSeeder extends Seeder
             LevelSeeder::class
         ]);
         // \App\Models\User::factory(10)->create();
+        $this->call([
+        	CatalogSeeder::class,
+        	LevelSeeder::class
+        ]);
     }
 }
