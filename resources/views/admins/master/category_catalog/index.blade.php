@@ -4,11 +4,11 @@
 {{-- kosong --}}
 @endsection
 
-@section('Page-Header', 'Master Catalog')
+@section('Page-Header', 'Master Catalog Topic')
 
 @section('breadcrumbs')
 <li class="breadcrumb-item"><a href="#">Master</a></li>
-<li class="breadcrumb-item active">Catalog</li>
+<li class="breadcrumb-item active">Catalog Topic</li>
 @endsection
 
 @section('content')
@@ -22,22 +22,24 @@
                     <thead>
                         <tr role="row">
                             <th>No</th>
-                            <th>Nama</th>
+                            <th>Nama Catalog</th>
+                            <th>Nama Topic</th>
                             <th>Created By</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($catalogs as $catalog)
+                        @foreach($category_catalogs as $category)
                         <tr>
-                            <td width="40px;">{{$catalog->id}}</td>
-                            <td>{{$catalog->name}}</td>
-                            <td>{{is_null($catalog->created_by) ? '-' : $catalog->created_by}}</td>
+                            <td width="40px;">{{$category->id}}</td>
+                            <td>{{$category->name}}</td>
+                            <td>{{$category->nama_catalog}}</td>
+                            <td>{{is_null($category->created_by) ? '-' : $category->created_by}}</td>
                             <td>
-                                <a href="{{\Request::url().'/'.$catalog->id.'/edit'}}" class="btn btn-outline-primary btn-sm">
+                                <a href="{{\Request::url().'/'.$category->id.'/edit'}}" class="btn btn-outline-primary btn-sm">
                                     Edit
                                 </a>
-                                <form action="{{route('catalog.destroy', $catalog->id)}}" method="POST">
+                                <form action="{{route('catalog_topic.destroy', $category->id)}}" method="POST">
                                     {{ method_field('DELETE') }}
                                     {{ csrf_field() }}
                                     <button type="submit" class="btn btn-outline-danger btn-sm">
@@ -50,7 +52,8 @@
                     </tbody>
                     <tfoot>
                         <th>No</th>
-                        <th>Nama</th>
+                        <th>Nama Catalog</th>
+                        <th>Nama Kategori</th>
                         <th>Created By</th>
                         <th>Aksi</th>
                     </tfoot>

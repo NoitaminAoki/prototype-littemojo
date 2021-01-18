@@ -27,7 +27,7 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <li class="nav-item has-treeview {{\Request::is('admin/catalog*') ? 'menu-open' : '' }}">
+                <li class="nav-item has-treeview {{\Request::is('admin/catalog*') || \Request::is('admin/catalog_topic*') || \Request::is('admin/level*') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link active">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
@@ -37,19 +37,19 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{url('admin/catalog')}}" class="nav-link {{\Request::is('admin/catalog*') ? 'active' : '' }}">
+                            <a href="{{url('admin/catalog')}}" class="nav-link {{\Request::is('admin/catalog*') && !\Request::is('admin/catalog_topic*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Catalog</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{url('admin/catalog_topic')}}" class="nav-link {{\Request::is('admin/catalog_topic*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Catalog Topic</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{url('admin/level')}}" class="nav-link {{\Request::is('admin/level*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Level</p>
                             </a>

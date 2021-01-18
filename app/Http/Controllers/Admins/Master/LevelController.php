@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admins\Master;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Level;
 
 class LevelController extends Controller
 {
@@ -14,7 +15,11 @@ class LevelController extends Controller
      */
     public function index()
     {
-        //
+        $levels = Level::select('levels.id', 'levels.name', 'levels.difficulty', 'levels.description', 'users.name as created_by')
+        ->orderBy('id', 'DESC')
+        ->leftJoin('users', 'users.id', 'levels.created_by')
+        ->get();
+        return view('admins/master/level.index', compact('levels'));
     }
 
     /**
@@ -24,7 +29,7 @@ class LevelController extends Controller
      */
     public function create()
     {
-        //
+        return view('admins/master/level.create');
     }
 
     /**
@@ -35,7 +40,22 @@ class LevelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = \Validator::make(request()->all(), [
+            'name'        => ['required'],
+            'difficulty'  => ['required'],
+            'description' => ['required']
+        ], [
+            'name.required'        => 'Nama Level wajib diisi',
+            'difficulty.required'  => 'Kesulitan wajib diisi',
+            'description.required' => 'Deskripsi wajib diisi'
+        ]);
+        if ($validator->fails()) {
+            return back()->withErrors($validator->errors()->getMessages())->withInput();
+        }else{            
+            $request['created_by'] = \Auth::user()->id;
+            Level::create($request->except('_token'));
+            return redirect('admin/level')->with('alert-message', 'Berhasil Menambah Data');
+        }
     }
 
     /**
@@ -57,7 +77,8 @@ class LevelController extends Controller
      */
     public function edit($id)
     {
-        //
+        $level = Level::findOrFail($id);
+        return view('admins/master/level.edit', compact('id', 'level'));
     }
 
     /**
@@ -69,7 +90,22 @@ class LevelController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = \Validator::make(request()->all(), [
+            'name'        => ['required'],
+            'difficulty'  => ['required'],
+            'description' => ['required']
+        ], [
+            'name.required'        => 'Nama Level wajib diisi',
+            'difficulty.required'  => 'Kesulitan wajib diisi',
+            'description.required' => 'Deskripsi wajib diisi'
+        ]);
+        if ($validator->fails()) {
+            return back()->withErrors($validator->errors()->getMessages())->withInput();
+        }else{
+            $request['updated_by'] = \Auth::user()->id;
+            Level::findOrFail($id)->update($request->except('_token'));
+            return redirect('admin/level')->with('alert-message', 'Berhasil Mengubah Data');
+        }
     }
 
     /**
@@ -80,6 +116,7 @@ class LevelController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Level::findOrFail($id)->delete();
+        return redirect('admin/level')->with('alert-message', 'Berhasil Menghapus Data');
     }
 }

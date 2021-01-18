@@ -16,9 +16,9 @@ class CatalogController extends Controller
     public function index()
     {
         $catalogs = Catalog::select('catalogs.id', 'catalogs.name', 'users.name as created_by')
-                            ->orderBy('id', 'DESC')
-                            ->leftJoin('users', 'users.id', 'catalogs.created_by')
-                            ->get();
+        ->orderBy('id', 'DESC')
+        ->leftJoin('users', 'users.id', 'catalogs.created_by')
+        ->get();
         return view('admins/master/catalog.index', compact('catalogs'));
     }
 
@@ -40,9 +40,18 @@ class CatalogController extends Controller
      */
     public function store(Request $request)
     {
-        $request['created_by'] = \Auth::user()->id;
-        Catalog::create($request->except('_token'));
-        return redirect('admin/catalog');
+        $validator = \Validator::make(request()->all(), [
+            'name' => ['required']
+        ], [
+            'name.required' => 'Nama wajib diisi'
+        ]);
+        if ($validator->fails()) {
+            return back()->withErrors($validator->errors()->getMessages())->withInput();
+        }else{            
+            $request['created_by'] = \Auth::user()->id;
+            Catalog::create($request->except('_token'));
+            return redirect('admin/catalog')->with('alert-message', 'Berhasil Menambah Data');
+        }
     }
 
     /**
@@ -77,9 +86,18 @@ class CatalogController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request['created_by'] = \Auth::user()->id;
-        Catalog::findOrFail($id)->update($request->except('_token'));
-        return redirect('admin/catalog');
+        $validator = \Validator::make(request()->all(), [
+            'name' => ['required']
+        ], [
+            'name.required' => 'Nama wajib diisi'
+        ]);
+        if ($validator->fails()) {
+            return back()->withErrors($validator->errors()->getMessages())->withInput();
+        }else{
+            $request['updated_by'] = \Auth::user()->id;
+            Catalog::findOrFail($id)->update($request->except('_token'));
+            return redirect('admin/catalog')->with('alert-message', 'Berhasil Mengubah Data');
+        }        
     }
 
     /**
@@ -91,6 +109,6 @@ class CatalogController extends Controller
     public function destroy($id)
     {
         Catalog::findOrFail($id)->delete();
-        return redirect('admin/catalog');
+        return redirect('admin/catalog')->with('alert-message', 'Berhasil Menghapus Data');
     }
 }

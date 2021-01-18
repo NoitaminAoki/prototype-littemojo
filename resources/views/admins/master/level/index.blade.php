@@ -4,11 +4,11 @@
 {{-- kosong --}}
 @endsection
 
-@section('Page-Header', 'Master Catalog')
+@section('Page-Header', 'Master Level')
 
 @section('breadcrumbs')
 <li class="breadcrumb-item"><a href="#">Master</a></li>
-<li class="breadcrumb-item active">Catalog</li>
+<li class="breadcrumb-item active">Level</li>
 @endsection
 
 @section('content')
@@ -23,21 +23,25 @@
                         <tr role="row">
                             <th>No</th>
                             <th>Nama</th>
+                            <th>Difficulty</th>
+                            <th>Description</th>
                             <th>Created By</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($catalogs as $catalog)
+                        @foreach($levels as $level)
                         <tr>
-                            <td width="40px;">{{$catalog->id}}</td>
-                            <td>{{$catalog->name}}</td>
-                            <td>{{is_null($catalog->created_by) ? '-' : $catalog->created_by}}</td>
+                            <td width="40px;">{{$level->id}}</td>
+                            <td>{{$level->name}}</td>
+                            <td>{{$level->difficulty}}</td>
+                            <td>{{$level->description}}</td>
+                            <td>{{is_null($level->created_by) ? '-' : $level->created_by}}</td>
                             <td>
-                                <a href="{{\Request::url().'/'.$catalog->id.'/edit'}}" class="btn btn-outline-primary btn-sm">
+                                <a href="{{\Request::url().'/'.$level->id.'/edit'}}" class="btn btn-outline-primary btn-sm">
                                     Edit
                                 </a>
-                                <form action="{{route('catalog.destroy', $catalog->id)}}" method="POST">
+                                <form action="{{route('level.destroy', $level->id)}}" method="POST">
                                     {{ method_field('DELETE') }}
                                     {{ csrf_field() }}
                                     <button type="submit" class="btn btn-outline-danger btn-sm">
