@@ -4,11 +4,11 @@
 {{-- kosong --}}
 @endsection
 
-@section('Page-Header', 'Master Catalog Topic')
+@section('Page-Header', 'Master User')
 
 @section('breadcrumbs')
 <li class="breadcrumb-item"><a href="#">Master</a></li>
-<li class="breadcrumb-item active">Catalog Topic</li>
+<li class="breadcrumb-item active">User</li>
 @endsection
 
 @section('content')
@@ -16,35 +16,46 @@
     <div class="col-lg">
         <div class="card">
             <div class="card-body">
-                <a href="{{\Request::url().'/create'}}" class="btn btn-outline-primary btn-sm my-2">Tambah Data</a>
                 <table id="example1" class="table table-bordered table-striped table-hover" role="grid" aria-describedby="example1_info">
                     @include('partials.alert')
                     <thead>
                         <tr role="row">
                             <th>No</th>
-                            <th>Nama Catalog</th>
-                            <th>Nama Topic</th>
-                            <th>Created By</th>
+                            <th>Nama</th>
+                            <th>Email</th>
+                            <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($category_catalogs as $category)
+                        @foreach($users as $user)
                         <tr>
-                            <td width="40px;">{{$category->id}}</td>
-                            <td>{{$category->name}}</td>
-                            <td>{{$category->nama_catalog}}</td>
-                            <td>{{is_null($category->created_by) ? '-' : $category->created_by}}</td>
+                            <td width="40px;">{{$user->id}}</td>
+                            <td>{{$user->name}}</td>
+                            <td>{{$user->email}}</td>
                             <td>
-                                <a href="{{\Request::url().'/'.$category->id.'/edit'}}" class="btn btn-outline-primary btn-sm">
+                                @if($user->status == 'A')
+                                <span class="badge badge-primary">Active</span>
+                                @else
+                                <span class="badge badge-danger">Deactive</span>
+                                @endif
+                            </td>
+                            <td>
+                                <a href="{{\Request::url().'/'.$user->id.'/edit'}}" class="btn btn-outline-primary btn-sm">
                                     Edit
                                 </a>
-                                <form action="{{route('admin.catalog_topic.destroy', $category->id)}}" method="POST">
+                                <form action="{{route('admin.user.destroy', $user->id)}}" method="POST">
                                     {{ method_field('DELETE') }}
                                     {{ csrf_field() }}
+                                    @if($user->status == 'A')
                                     <button type="submit" class="btn btn-outline-danger btn-sm">
-                                        Hapus
+                                        Non Aktifkan
                                     </button>
+                                    @else
+                                    <button type="submit" class="btn btn-outline-info btn-sm">
+                                        Aktifkan
+                                    </button>
+                                    @endif
                                 </form>                                
                             </td>
                         </tr>
@@ -52,9 +63,9 @@
                     </tbody>
                     <tfoot>
                         <th>No</th>
-                        <th>Nama Catalog</th>
-                        <th>Nama Kategori</th>
-                        <th>Created By</th>
+                        <th>Nama</th>
+                        <th>Email</th>
+                        <th>Status</th>
                         <th>Aksi</th>
                     </tfoot>
                 </table>

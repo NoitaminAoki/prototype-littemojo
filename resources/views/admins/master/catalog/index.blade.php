@@ -37,7 +37,7 @@
                                 <a href="{{\Request::url().'/'.$catalog->id.'/edit'}}" class="btn btn-outline-primary btn-sm">
                                     Edit
                                 </a>
-                                <form action="{{route('catalog.destroy', $catalog->id)}}" method="POST">
+                                <form action="{{route('admin.catalog.destroy', $catalog->id)}}" method="POST">
                                     {{ method_field('DELETE') }}
                                     {{ csrf_field() }}
                                     <button type="submit" class="btn btn-outline-danger btn-sm">

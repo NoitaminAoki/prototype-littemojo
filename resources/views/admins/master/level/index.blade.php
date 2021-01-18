@@ -41,7 +41,7 @@
                                 <a href="{{\Request::url().'/'.$level->id.'/edit'}}" class="btn btn-outline-primary btn-sm">
                                     Edit
                                 </a>
-                                <form action="{{route('level.destroy', $level->id)}}" method="POST">
+                                <form action="{{route('admin.level.destroy', $level->id)}}" method="POST">
                                     {{ method_field('DELETE') }}
                                     {{ csrf_field() }}
                                     <button type="submit" class="btn btn-outline-danger btn-sm">

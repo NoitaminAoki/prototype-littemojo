@@ -16,7 +16,7 @@
 <div class="row">
     <div class="col-lg">
         <div class="card">
-            <form action="{{route('level.store')}}" method="POST">
+            <form action="{{route('admin.level.store')}}" method="POST">
                 @csrf
                 <div class="card-body">
                     @include('partials.alert')

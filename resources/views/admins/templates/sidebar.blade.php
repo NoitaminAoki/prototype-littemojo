@@ -27,7 +27,7 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <li class="nav-item has-treeview {{\Request::is('admin/catalog*') || \Request::is('admin/catalog_topic*') || \Request::is('admin/level*') ? 'menu-open' : '' }}">
+                <li class="nav-item has-treeview {{\Request::is('admin/*') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link active">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
@@ -36,6 +36,28 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link {{\Request::is('admin/user*') || \Request::is('admin/partner*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Manage
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview pl-3" style="display: {{\Request::is('admin/user*') || \Request::is('admin/partner*') ? 'block' : 'none' }};">
+                                <li class="nav-item">
+                                    <a href="{{url('admin/user')}}" class="nav-link {{\Request::is('admin/user*') ? 'active' : '' }}">
+                                        <i class="far fa-dot-circle nav-icon"></i>
+                                        <p>User</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{url('admin/partner')}}" class="nav-link {{\Request::is('admin/partner*') ? 'active' : '' }}">
+                                        <i class="far fa-dot-circle nav-icon"></i>
+                                        <p>Partner</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="nav-item">
                             <a href="{{url('admin/catalog')}}" class="nav-link {{\Request::is('admin/catalog*') && !\Request::is('admin/catalog_topic*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admins\DashboardController;
 use App\Http\Controllers\Admins\AuthController as AdminAuthController;
 use App\Http\Controllers\Admins\Master\{
-    CatalogController, CatalogTopicController, LevelController
+    CatalogController, CatalogTopicController, LevelController, UserController
 };
 
 /*
@@ -29,11 +29,13 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 
 Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin', 'as' => 'admin.'], function () {
-    Route::get('/management/dashboard', [DashboardController::class, 'index'])->name('dashboard');    
+    Route::get('/management/dashboard', [DashboardController::class, 'index'])->name('dashboard'); 
+    Route::get('user/{id}/update_status', [UserController::class, 'update_status'])->name('update_status');   
     Route::resources([
         'catalog'       => CatalogController::class,
         'catalog_topic' => CatalogTopicController::class,
         'level'         => LevelController::class,
+        'user'          => UserController::class,
     ]);
 });
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {

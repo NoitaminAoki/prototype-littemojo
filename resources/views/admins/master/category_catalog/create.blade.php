@@ -16,7 +16,7 @@
 <div class="row">
     <div class="col-lg">
         <div class="card">
-            <form action="{{route('catalog_topic.store')}}" method="POST">
+            <form action="{{route('admin.catalog_topic.store')}}" method="POST">
                 @csrf
                 <div class="card-body">
                     @include('partials.alert')
