@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admins\DashboardController;
-use App\Http\Controllers\Admins\AuthController;
+use App\Http\Controllers\Admins\AuthController as AdminAuthController;
 use App\Http\Controllers\Admins\Master\{
     CatalogController, CatalogTopicController, LevelController
 };
@@ -28,7 +28,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 
 
-Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin', 'name' => 'admin.'], function () {
+Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/management/dashboard', [DashboardController::class, 'index'])->name('dashboard');    
     Route::resources([
         'catalog'       => CatalogController::class,
@@ -37,10 +37,13 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin', 'name' => 'admi
     ]);
 });
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
-    Route::get('/register', [AuthController::class, 'registerForm'])->name('register.form');
-    Route::post('/register', [AuthController::class, 'register'])->name('register');
+    Route::get('/register', [AdminAuthController::class, 'registerForm'])->name('register.form');
+    Route::post('/register', [AdminAuthController::class, 'register'])->name('register');
 
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/login', [AdminAuthController::class, 'loginForm'])->name('login.form');
+    Route::post('/login', [AdminAuthController::class, 'login'])->name('login');
+
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 });
 
 

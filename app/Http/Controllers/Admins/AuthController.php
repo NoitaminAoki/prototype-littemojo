@@ -13,6 +13,21 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
+    public function login(Request $request)
+    {
+        $credentials = $request->only('email', 'password');;
+
+        if (Auth::guard('admin')->attempt($credentials)) {
+            return redirect()->route('admin.dashboard');
+        }
+        return redirect()->route('admin.login')->withError(['error' => 'Email or password not valid!']);
+    }
+
+    public function loginForm()
+    {
+        return view('auth.admins.login-admin');
+    }
+
     public function register(Request $request)
     {
         Validator::make($request->input(), [
