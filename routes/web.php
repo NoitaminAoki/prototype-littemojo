@@ -1,10 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admins\DashboardController;
+use App\Http\Controllers\Admins\DashboardController as AdminDashboard;
 use App\Http\Controllers\Admins\AuthController as AdminAuthController;
 use App\Http\Controllers\Admins\Master\{
     CatalogController, CatalogTopicController, LevelController, UserController
+};
+use App\Http\Controllers\Partners\{
+    DashboardController as PartnerDashboard,
+    AuthController as PartnerAuthController,
+    CourseController as PartnerCourseController,
 };
 
 /*
@@ -28,8 +33,8 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 
 
-Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin', 'as' => 'admin.'], function () {
-    Route::get('/management/dashboard', [DashboardController::class, 'index'])->name('dashboard'); 
+Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin/management', 'as' => 'admin.'], function () {
+    Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard'); 
     Route::get('user/{id}/update_status', [UserController::class, 'update_status'])->name('update_status');   
     Route::resources([
         'catalog'       => CatalogController::class,
@@ -37,15 +42,36 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin', 'as' => 'admin.
         'level'         => LevelController::class,
         'user'          => UserController::class,
     ]);
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 });
+
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/register', [AdminAuthController::class, 'registerForm'])->name('register.form');
     Route::post('/register', [AdminAuthController::class, 'register'])->name('register');
 
-    Route::get('/login', [AdminAuthController::class, 'loginForm'])->name('login.form');
-    Route::post('/login', [AdminAuthController::class, 'login'])->name('login');
+    Route::middleware('guest:admin')->get('/login', [AdminAuthController::class, 'loginForm'])->name('login.form');
+    Route::middleware('guest:admin')->post('/login', [AdminAuthController::class, 'login'])->name('login');
 
-    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+});
+
+
+Route::group(['middleware' => 'auth:partner', 'prefix' => 'partner/management', 'as' => 'partner.'], function () {
+    Route::get('/dashboard', [PartnerDashboard::class, 'index'])->name('dashboard');
+
+    Route::post('/logout', [PartnerAuthController::class, 'logout'])->name('logout');
+
+    Route::group(['as' => 'manage.' ], function () {
+        Route::get('/course', [PartnerCourseController::class, 'index'])->name('course');
+    });
+});
+
+Route::group(['prefix' => 'partner', 'as' => 'partner.'], function () {
+    Route::get('/register', [PartnerAuthController::class, 'registerForm'])->name('register.form');
+    Route::post('/register', [PartnerAuthController::class, 'register'])->name('register');
+
+    Route::middleware('guest:partner')->get('/login', [PartnerAuthController::class, 'loginForm'])->name('login.form');
+    Route::middleware('guest:partner')->post('/login', [PartnerAuthController::class, 'login'])->name('login');
+
 });
 
 
