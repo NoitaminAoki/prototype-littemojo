@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admins\Master;
+namespace App\Http\Controllers\Admins\Manage;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ class UserController extends Controller
     {
         $users = User::select('name', 'email', 'status', 'id')
                     ->orderBy('id', 'DESC')->get();
-        return view('admins/master/user.index', compact('users'));
+        return view('admins/manage/user.index', compact('users'));
     }
 
     /**
@@ -61,7 +61,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $catalog = User::findOrFail($id);
-        return view('admins/master/user.edit', compact('id', 'catalog'));
+        return view('admins/manage/user.edit', compact('id', 'catalog'));
     }
 
     /**
@@ -84,7 +84,7 @@ class UserController extends Controller
             return back()->withErrors($validator->errors()->getMessages())->withInput();
         }else{
             User::findOrFail($id)->update($request->except('_token'));
-            return redirect('admin/user')->with('alert-message', 'Berhasil Mengubah Data');
+            return redirect('admin/management/user')->with('alert-message', 'Berhasil Mengubah Data');
         }    
     }
 
@@ -98,6 +98,6 @@ class UserController extends Controller
     {
         $check = User::where('id', $id)->first();
         User::where('id', $id)->update(['status' => ($check->status == 'A' ? 'D' : 'A')]);
-        return redirect('admin/user')->with('alert-message', 'Berhasil Mengupdate Data');
+        return redirect('admin/management/user')->with('alert-message', 'Berhasil '.($check->status == 'A' ? 'Menonaktifkan' : 'Mengaktifkan').' User');
     }
 }

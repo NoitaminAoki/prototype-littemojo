@@ -4,25 +4,30 @@
 {{-- kosong --}}
 @endsection
 
-@section('Page-Header', 'Tambah Catalog')
+@section('Page-Header', 'Ubah User')
 
 @section('breadcrumbs')
-<li class="breadcrumb-item"><a href="#">Master</a></li>
-<li class="breadcrumb-item">Catalog</li>
-<li class="breadcrumb-item active">Tambah</li>
+<li class="breadcrumb-item"><a href="#">Manage</a></li>
+<li class="breadcrumb-item">User</li>
+<li class="breadcrumb-item active">Ubah</li>
 @endsection
 
 @section('content')
 <div class="row">
     <div class="col-lg">
         <div class="card">
-            <form action="{{route('admin.catalog.store')}}" method="POST">
+            <form action="{{route('admin.user.update', $id)}}" method="POST">
                 @csrf
+                {{ method_field('PATCH') }}
                 <div class="card-body">
                     @include('partials.alert')
                     <div class="form-group">
                         <label>Nama</label>
-                        <input type="text" class="form-control" name="name" value="{{old('name')}}" placeholder="Masukkan Nama Catalog" required>
+                        <input type="text" class="form-control" name="name" placeholder="Masukkan Nama User" value="{{$catalog->name}}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="text" class="form-control" name="email" placeholder="Masukkan Email" value="{{$catalog->email}}" required>
                     </div>
                     <button type="submit" class="btn btn-outline-primary btn-sm">Simpan</button>
                 </div>
@@ -37,7 +42,7 @@
         if ($('input').val() != '') {
             $(this).attr('disabled', true)
             $(this).text('Load..')
-        } 
+        }        
     })
 </script>
 @endsection

@@ -4,8 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admins\DashboardController as AdminDashboard;
 use App\Http\Controllers\Admins\AuthController as AdminAuthController;
 use App\Http\Controllers\Admins\Master\{
-    CatalogController, CatalogTopicController, LevelController, UserController
+    CatalogController, CatalogTopicController, LevelController
 };
+use App\Http\Controllers\Admins\Manage\UserController;
 use App\Http\Controllers\Partners\{
     DashboardController as PartnerDashboard,
     AuthController as PartnerAuthController,

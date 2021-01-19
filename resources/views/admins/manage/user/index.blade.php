@@ -4,10 +4,10 @@
 {{-- kosong --}}
 @endsection
 
-@section('Page-Header', 'Master User')
+@section('Page-Header', 'Manage User')
 
 @section('breadcrumbs')
-<li class="breadcrumb-item"><a href="#">Master</a></li>
+<li class="breadcrumb-item"><a href="#">Manage</a></li>
 <li class="breadcrumb-item active">User</li>
 @endsection
 
