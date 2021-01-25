@@ -29,7 +29,7 @@
                 </li>
                 <li class="nav-header">MANAGE</li>
                 <li class="nav-item">
-                    <a href="{{ route('partner.manage.course') }}" class="nav-link {{ (Request::routeIs('partner.manage.course') || Request::routeIs('partner.manage.course.*'))? 'active' : '' }}">
+                    <a href="{{ route('partner.manage.course.index') }}" class="nav-link {{ (Request::routeIs('partner.manage.course') || Request::routeIs('partner.manage.course.*'))? 'active' : '' }}">
                         <i class="nav-icon fas fa-book"></i>
                         <p>Courses</p>
                     </a>

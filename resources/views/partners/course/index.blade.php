@@ -17,6 +17,7 @@
     <div class="col-lg">
         <div class="card">
             <div class="card-body">
+                <a href="{{\Request::url().'/create'}}" class="btn btn-outline-primary btn-sm my-2">Tambah Data</a>
                 <table id="example1" class="table table-bordered table-striped table-hover">
                     @include('partials.alert')
                     <thead>
@@ -33,10 +34,16 @@
                         <tr>
                             <td width="40px;">{{($loop->index+1)}}</td>
                             <td>{{$course->title}}</td>
-                            <td> {{$course->catalog_id}} - {{$course->catalog_topic_id}} </td>
+                            <td> {{$course->nama_catalog}} - {{$course->nama_catalog_topic}} </td>
                             <td>{{$course->price}}</td>
                             <td width="100px;" class="text-center">
                                 <div class="d-flex justify-content-center">
+                                    <div class="mx-1">
+                                        <a href="{{\Request::url().'/'.$course->id}}" class="btn btn-outline-warning btn-sm">
+                                            <!-- <i class="fas fa-trash"></i> -->
+                                            Detail
+                                        </a>
+                                    </div>
                                     <div class="mx-1">
                                         <a href="#" class="btn btn-outline-warning btn-sm">
                                             Edit

@@ -62,7 +62,7 @@ Route::group(['middleware' => 'auth:partner', 'prefix' => 'partner/management', 
     Route::post('/logout', [PartnerAuthController::class, 'logout'])->name('logout');
 
     Route::group(['as' => 'manage.' ], function () {
-        Route::get('/course', [PartnerCourseController::class, 'index'])->name('course');
+        Route::resource('course', PartnerCourseController::class);
     });
 });
 
