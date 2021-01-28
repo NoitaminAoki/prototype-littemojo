@@ -39,14 +39,13 @@
                             <td width="100px;" class="text-center">
                                 <div class="d-flex justify-content-center">
                                     <div class="mx-1">
-                                        <a href="{{\Request::url().'/'.$course->id}}" class="btn btn-outline-warning btn-sm">
-                                            <!-- <i class="fas fa-trash"></i> -->
-                                            Detail
+                                        <a href="{{\Request::url().'/'.$course->id}}" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-search"></i>
                                         </a>
                                     </div>
                                     <div class="mx-1">
                                         <a href="#" class="btn btn-outline-warning btn-sm">
-                                            Edit
+                                            <i class="fas fa-edit"></i>
                                         </a>
                                     </div>
                                     <div class="mx-1">

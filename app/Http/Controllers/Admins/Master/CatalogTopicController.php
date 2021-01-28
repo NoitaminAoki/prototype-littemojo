@@ -15,12 +15,12 @@ class CatalogTopicController extends Controller
      */
     public function index()
     {
-        $category_catalogs = CatalogTopic::select('catalog_topics.id', 'catalog_topics.name', 'catalog_topics.catalog_id', 'catalogs.name as nama_catalog', 'users.name as created_by')
+        $catalog_topics = CatalogTopic::select('catalog_topics.id', 'catalog_topics.name', 'catalog_topics.catalog_id', 'catalogs.name as nama_catalog', 'users.name as created_by')
         ->orderBy('id', 'DESC')
         ->leftJoin('users', 'users.id', 'catalog_topics.created_by')
         ->leftJoin('catalogs', 'catalogs.id', 'catalog_topics.catalog_id')
         ->get();
-        return view('admins/master/category_catalog.index', compact('category_catalogs'));
+        return view('admins/master/catalog_topic.index', compact('catalog_topics'));
     }
 
     /**
@@ -31,7 +31,7 @@ class CatalogTopicController extends Controller
     public function create()
     {
         $catalogs = Catalog::all();
-        return view('admins/master/category_catalog.create', compact('catalogs'));
+        return view('admins/master/catalog_topic.create', compact('catalogs'));
     }
 
     /**
@@ -54,7 +54,7 @@ class CatalogTopicController extends Controller
         }else{            
             $request['created_by'] = \Auth::user()->id;
             CatalogTopic::create($request->except('_token'));
-            return redirect('admin/catalog_topic')->with('alert-message', 'Berhasil Menambah Data');
+            return redirect('admin/management/catalog_topic')->with('alert-message', 'Berhasil Menambah Data');
         }
     }
 
@@ -79,7 +79,7 @@ class CatalogTopicController extends Controller
     {
         $catalog_topic = CatalogTopic::findOrFail($id);
         $catalogs = Catalog::all();
-        return view('admins/master/category_catalog.edit', compact('id', 'catalog_topic', 'catalogs'));
+        return view('admins/master/catalog_topic.edit', compact('id', 'catalog_topic', 'catalogs'));
     }
 
     /**
@@ -103,7 +103,7 @@ class CatalogTopicController extends Controller
         }else{            
             $request['updated_by'] = \Auth::user()->id;
             CatalogTopic::findOrFail($id)->update($request->except('_token'));
-            return redirect('admin/catalog_topic')->with('alert-message', 'Berhasil Mengubah Data');
+            return redirect('admin/management/catalog_topic')->with('alert-message', 'Berhasil Mengubah Data');
         }
     }
 
@@ -116,6 +116,6 @@ class CatalogTopicController extends Controller
     public function destroy($id)
     {
         CatalogTopic::findOrFail($id)->delete();
-        return redirect('admin/catalog_topic')->with('alert-message', 'Berhasil Menghapus Data');
+        return redirect('admin/management/catalog_topic')->with('alert-message', 'Berhasil Menghapus Data');
     }
 }

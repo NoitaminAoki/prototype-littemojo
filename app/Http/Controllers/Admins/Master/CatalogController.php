@@ -50,7 +50,7 @@ class CatalogController extends Controller
         }else{            
             $request['created_by'] = \Auth::user()->id;
             Catalog::create($request->except('_token'));
-            return redirect('admin/catalog')->with('alert-message', 'Berhasil Menambah Data');
+            return redirect('admin/management/catalog')->with('alert-message', 'Berhasil Menambah Data');
         }
     }
 
@@ -96,7 +96,7 @@ class CatalogController extends Controller
         }else{
             $request['updated_by'] = \Auth::user()->id;
             Catalog::findOrFail($id)->update($request->except('_token'));
-            return redirect('admin/catalog')->with('alert-message', 'Berhasil Mengubah Data');
+            return redirect('admin/management/catalog')->with('alert-message', 'Berhasil Mengubah Data');
         }        
     }
 
@@ -109,6 +109,6 @@ class CatalogController extends Controller
     public function destroy($id)
     {
         Catalog::findOrFail($id)->delete();
-        return redirect('admin/catalog')->with('alert-message', 'Berhasil Menghapus Data');
+        return redirect('admin/management/catalog')->with('alert-message', 'Berhasil Menghapus Data');
     }
 }

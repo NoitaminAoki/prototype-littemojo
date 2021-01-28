@@ -21,8 +21,8 @@
                     @include('partials.alert')
                     <div class="form-group">
                         <label>Nama Catalog</label>
-                        <select class="form-control" name="catalog_id">
-                            <option selected="selected" value="">Pilih Catalog</option>
+                        <select class="form-control select2" name="catalog_id">
+                            <option selected="selected" value=""></option>
                             @foreach($catalogs as $catalog)
                             <option value="{{$catalog->id}}">{{$catalog->name}}</option>
                             @endforeach
@@ -58,6 +58,10 @@
             $(this).attr('disabled', true)
             $(this).text('Load..')
         } 
+    })
+    $('.select2').select2({
+        placeholder: '-- Pilih Catalog --',
+        width: '100%'
     })
 </script>
 @endsection

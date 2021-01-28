@@ -24,7 +24,7 @@
                             <th>Nama</th>
                             <th>Email</th>
                             <th>Status</th>
-                            <th>Aksi</th>
+                            <th width="20%">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,23 +40,29 @@
                                 <span class="badge badge-danger">Deactive</span>
                                 @endif
                             </td>
-                            <td>
-                                <a href="{{\Request::url().'/'.$user->id.'/edit'}}" class="btn btn-outline-primary btn-sm">
-                                    Edit
-                                </a>
-                                <form action="{{route('admin.user.destroy', $user->id)}}" method="POST">
-                                    {{ method_field('DELETE') }}
-                                    {{ csrf_field() }}
-                                    @if($user->status == 'A')
-                                    <button type="submit" class="btn btn-outline-danger btn-sm">
-                                        Non Aktifkan
-                                    </button>
-                                    @else
-                                    <button type="submit" class="btn btn-outline-info btn-sm">
-                                        Aktifkan
-                                    </button>
-                                    @endif
-                                </form>                                
+                            <td width="100px;" class="text-center">
+                                <div class="d-flex justify-content-center">
+                                    <div class="mx-1">
+                                        <a href="{{\Request::url().'/'.$user->id.'/edit'}}" class="btn btn-outline-warning btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </div>
+                                    <div class="mx-1">
+                                        <form action="{{route('admin.user.destroy', $user->id)}}" method="POST">
+                                            {{ method_field('DELETE') }}
+                                            @csrf
+                                            @if($user->status == 'A')
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                Non Aktifkan
+                                            </button>
+                                            @else
+                                            <button type="submit" class="btn btn-outline-info btn-sm">
+                                                Aktifkan
+                                            </button>
+                                            @endif
+                                        </form>    
+                                    </div>         
+                                </div>                         
                             </td>
                         </tr>
                         @endforeach

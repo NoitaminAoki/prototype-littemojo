@@ -37,17 +37,23 @@
                             <td>{{$level->difficulty}}</td>
                             <td>{{$level->description}}</td>
                             <td>{{is_null($level->created_by) ? '-' : $level->created_by}}</td>
-                            <td>
-                                <a href="{{\Request::url().'/'.$level->id.'/edit'}}" class="btn btn-outline-primary btn-sm">
-                                    Edit
-                                </a>
-                                <form action="{{route('admin.level.destroy', $level->id)}}" method="POST">
-                                    {{ method_field('DELETE') }}
-                                    {{ csrf_field() }}
-                                    <button type="submit" class="btn btn-outline-danger btn-sm">
-                                        Hapus
-                                    </button>
-                                </form>                                
+                            <td width="100px;" class="text-center">
+                                <div class="d-flex justify-content-center">
+                                    <div class="mx-1">
+                                        <a href="{{\Request::url().'/'.$level->id.'/edit'}}" class="btn btn-outline-warning btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </div>
+                                    <div class="mx-1">
+                                        <form action="{{route('admin.level.destroy', $level->id)}}" method="POST">
+                                            {{ method_field('DELETE') }}
+                                            @csrf
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>    
+                                    </div>         
+                                </div>                         
                             </td>
                         </tr>
                         @endforeach

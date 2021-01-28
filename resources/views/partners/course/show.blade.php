@@ -21,7 +21,7 @@
                     @include('partials.alert')
                     <div class="form-group">
                         <label>Nama Catalog</label>
-                        <select class="form-control" name="catalog_id">
+                        <select class="form-control" name="catalog_id" disabled>
                             <option value="">Pilih Catalog</option>
                             @foreach($catalogs as $catalog)
                             <option value="{{$catalog->id}}" {{$catalog->id == $course->catalog_id ? 'selected' : ''}} >{{$catalog->name}}</option>
@@ -38,7 +38,7 @@
                     </div>
                     <div class="form-group">
                         <label>Deskripsi</label>
-                        <textarea class="form-control" name="description" placeholder="Masukkan Deskripsi">{{$course->description}}</textarea>
+                        <textarea class="form-control" name="description" placeholder="Masukkan Deskripsi" readonly>{{$course->description}}</textarea>
                     </div>
                     <div class="form-group">
                         <label>Harga</label>
