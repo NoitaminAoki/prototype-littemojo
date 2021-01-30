@@ -14,40 +14,18 @@ class CatalogSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('catalogs')->insert([
-            'name' => 'Arts and Humanities'
-        ]);
+
 
         DB::table('catalogs')->insert([
-            'name' => 'Business'
-        ]);
-
-        DB::table('catalogs')->insert([
-            'name' => 'Computer Science'
-        ]);
-
-        DB::table('catalogs')->insert([
-            'name' => 'Data Science'
-        ]);
-
-        DB::table('catalogs')->insert([
-            'name' => 'Information Technology'
-        ]);
-
-        DB::table('catalogs')->insert([
-            'name' => 'Health'
-        ]);
-
-        DB::table('catalogs')->insert([
-            'name' => 'Physical Science and Engineering'
-        ]);
-
-        DB::table('catalogs')->insert([
-            'name' => 'Social Sciences'
-        ]);
-
-        DB::table('catalogs')->insert([
-            'name' => 'Language Learning'
+            ['name' => 'Arts and Humanities'],
+            ['name' => 'Business'],
+            ['name' => 'Computer Science'],
+            ['name' => 'Data Science'],
+            ['name' => 'Information Technology'],
+            ['name' => 'Health'],
+            ['name' => 'Physical Science and Engineering'],
+            ['name' => 'Social Sciences'],
+            ['name' => 'Language Learning'],
         ]);
     }
 }

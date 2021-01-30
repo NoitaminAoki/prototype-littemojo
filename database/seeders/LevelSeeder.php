@@ -16,22 +16,21 @@ class LevelSeeder extends Seeder
     public function run()
     {
         DB::table('levels')->insert([
-            'name' => 'Beginner Level',
-            'difficulty' => 1,
-            'description' => 'No degree or prior experience required.'
+            [
+                'name' => 'Beginner Level',
+                'difficulty' => 1,
+                'description' => 'No degree or prior experience required.'
+            ],
+            [
+                'name' => 'Intermediate Level',
+                'difficulty' => 2,
+                'description' => 'Some related experience required.'
+            ],
+            [
+                'name' => 'Advanced Level',
+                'difficulty' => 3,
+                'description' => 'Designed for those already in the industry.'
+            ]
         ]);
-
-        DB::table('levels')->insert([
-            'name' => 'Intermediate Level',
-            'difficulty' => 2,
-            'description' => 'Some related experience required.'
-        ]);
-
-        DB::table('levels')->insert([
-            'name' => 'Advanced Level',
-            'difficulty' => 3,
-            'description' => 'Designed for those already in the industry.'
-        ]);
-
     }
 }

@@ -24,12 +24,6 @@ class CreateAdminsTable extends Migration
             $table->text('profile_photo_path')->nullable();
             $table->timestamps();
         });
-
-        \DB::table('admins')->insert([
-            'name' => "Admin 1",
-            'email' => "admin@admin.com",
-            'password' => bcrypt('Password123')
-        ]);
     }
 
     /**
