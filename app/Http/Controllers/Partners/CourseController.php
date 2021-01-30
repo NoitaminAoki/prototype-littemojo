@@ -15,7 +15,7 @@ class CourseController extends Controller
     public function index()
     {
         $data['courses'] = Course::select('courses.id', 'title', 'description', 'price', 'catalog_topics.name as nama_catalog_topic',
-        						'catalogs.name as nama_catalog')
+        					'catalogs.name as nama_catalog')
     						 ->join('catalog_topics', 'catalog_topics.id', 'courses.id')
     						 ->join('catalogs', 'catalogs.id', 'catalog_topics.catalog_id')
         					 ->orderBy('courses.id', 'DESC')->get();
@@ -62,7 +62,7 @@ class CourseController extends Controller
 
     public function show($id){
     	$catalogs = Catalog::all();
-    	$course   = Course::select('courses.id', 'courses.catalog_id', 'title', 'description', 'price', 'catalog_topics.name as nama_catalog_topic',
+    	$course   = Course::select('courses.id', 'courses.catalog_id', 'courses.catalog_topic_id', 'title', 'description', 'price', 'catalog_topics.name as nama_catalog_topic',
         						'catalogs.name as nama_catalog')
     						 ->join('catalog_topics', 'catalog_topics.id', 'courses.id')
     						 ->join('catalogs', 'catalogs.id', 'catalog_topics.catalog_id')

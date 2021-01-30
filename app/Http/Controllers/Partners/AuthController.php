@@ -47,7 +47,7 @@ class AuthController extends Controller
             return redirect()->route('partner.register');
         }
 
-        return redirect('/');
+        return redirect()->route('partner.login');
     }
 
     public function registerForm()

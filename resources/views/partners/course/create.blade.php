@@ -4,11 +4,11 @@
 {{-- kosong --}}
 @endsection
 
-@section('Page-Header', 'Tambah Course')
+@section('Page-Header', 'Add Course')
 
 @section('breadcrumbs')
 <li class="breadcrumb-item">Course</li>
-<li class="breadcrumb-item active">Tambah</li>
+<li class="breadcrumb-item active">Add</li>
 @endsection
 
 @section('content')
@@ -21,7 +21,7 @@
                     @include('partials.alert')
                     <div class="form-group">
                         <label>Nama Catalog</label>
-                        <select class="form-control select2" name="catalog_id">
+                        <select class="form-control select2" style="width: 100%;" name="catalog_id" required>
                             <option selected="selected" value=""></option>
                             @foreach($catalogs as $catalog)
                             <option value="{{$catalog->id}}">{{$catalog->name}}</option>
@@ -29,8 +29,8 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Nama Catalog Topic</label>
-                        <input type="text" class="form-control" name="name" value="{{old('name')}}" placeholder="Masukkan Nama Topic" required>
+                        <label>Topic</label>
+                        <input type="text" class="form-control" name="name" value="{{old('name')}}" placeholder="Masukkan Nama Topic" required autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label>Title</label>
@@ -44,7 +44,10 @@
                         <label>Harga</label>
                         <input type="text" class="form-control" name="price" value="{{old('price')}}" placeholder="Masukkan Harga" required>
                     </div>
-                    <button type="submit" class="btn btn-outline-primary btn-sm">Simpan</button>
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ route('partner.manage.course.index') }}" class="btn btn-warning btn-sm">Back</a>
+                        <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                    </div>
                 </div>
             </form>
         </div>
