@@ -54,7 +54,7 @@ class LevelController extends Controller
         }else{            
             $request['created_by'] = \Auth::user()->id;
             Level::create($request->except('_token'));
-            return redirect('admin/level')->with('alert-message', 'Berhasil Menambah Data');
+            return redirect('admin/management/level')->with('alert-message', 'Berhasil Menambah Data');
         }
     }
 
@@ -104,7 +104,7 @@ class LevelController extends Controller
         }else{
             $request['updated_by'] = \Auth::user()->id;
             Level::findOrFail($id)->update($request->except('_token'));
-            return redirect('admin/level')->with('alert-message', 'Berhasil Mengubah Data');
+            return redirect('admin/management/level')->with('alert-message', 'Berhasil Mengubah Data');
         }
     }
 
@@ -117,6 +117,6 @@ class LevelController extends Controller
     public function destroy($id)
     {
         Level::findOrFail($id)->delete();
-        return redirect('admin/level')->with('alert-message', 'Berhasil Menghapus Data');
+        return redirect('admin/management/level')->with('alert-message', 'Berhasil Menghapus Data');
     }
 }

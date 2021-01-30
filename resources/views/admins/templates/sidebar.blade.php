@@ -13,7 +13,7 @@
                 <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">Alexander Pierce</a>
+                <a href="#" class="d-block">{{ Auth::guard('admin')->user()->name }}</a>
             </div>
         </div>
         
@@ -22,36 +22,59 @@
             <ul class="nav nav-pills nav-sidebar flex-column nav-flat" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('admin.dashboard') }}" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <li class="nav-item has-treeview {{\Request::is('admin/catalog*') || \Request::is('admin/catalog_topic*') || \Request::is('admin/level*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link active">
-                        <i class="nav-icon fas fa-th"></i>
+                <li class="nav-item has-treeview {{\Request::is('admin/management/catalog*') || \Request::is('admin/management/level*') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{\Request::is('admin/management/catalog*') || \Request::is('admin/management/level*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-bars"></i>
                         <p>
                             Master
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
+                    <ul class="nav nav-treeview text-sm ml-3">                        
                         <li class="nav-item">
-                            <a href="{{url('admin/catalog')}}" class="nav-link {{\Request::is('admin/catalog*') && !\Request::is('admin/catalog_topic*') ? 'active' : '' }}">
+                            <a href="{{url('admin/management/catalog')}}" class="nav-link {{\Request::is('admin/management/catalog*') && !\Request::is('admin/management/catalog_topic*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Catalog</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url('admin/catalog_topic')}}" class="nav-link {{\Request::is('admin/catalog_topic*') ? 'active' : '' }}">
+                            <a href="{{url('admin/management/catalog_topic')}}" class="nav-link {{\Request::is('admin/management/catalog_topic*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Catalog Topic</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url('admin/level')}}" class="nav-link {{\Request::is('admin/level*') ? 'active' : '' }}">
+                            <a href="{{url('admin/management/level')}}" class="nav-link {{\Request::is('admin/management/level*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Level</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview {{\Request::is('admin/management/user*') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{\Request::is('admin/management/user*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-cog"></i>
+                        <p>
+                            Manage
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview text-sm ml-3">                        
+                        <li class="nav-item">
+                            <a href="{{url('admin/management/user')}}" class="nav-link {{\Request::is('admin/management/user*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>User</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{url('admin/management/parner')}}" class="nav-link {{\Request::is('admin/management/parner*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Partner</p>
                             </a>
                         </li>
                     </ul>

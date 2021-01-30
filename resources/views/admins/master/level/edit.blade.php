@@ -16,7 +16,7 @@
 <div class="row">
     <div class="col-lg">
         <div class="card">
-            <form action="{{route('level.update', $id)}}" method="POST">
+            <form action="{{route('admin.level.update', $id)}}" method="POST">
                 @csrf
                 {{ method_field('PATCH') }}
                 <div class="card-body">

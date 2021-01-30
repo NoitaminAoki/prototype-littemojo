@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admins;
+namespace App\Http\Controllers\Partners;
 
 use Illuminate\Support\Facades\Auth;
-use App\Models\Admin;
+use App\Models\Partner;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Jetstream\Jetstream;
@@ -17,15 +17,15 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');;
 
-        if (Auth::guard('admin')->attempt($credentials)) {
-            return redirect()->route('admin.dashboard');
+        if (Auth::guard('partner')->attempt($credentials)) {
+            return redirect()->route('partner.dashboard');
         }
-        return redirect()->route('admin.login')->withError(['error' => 'Email or password not valid!']);
+        return redirect()->route('partner.login')->withError(['error' => 'Email or password not valid!']);
     }
 
     public function loginForm()
     {
-        return view('auth.admins.login-admin');
+        return view('auth.partners.login-partner');
     }
 
     public function register(Request $request)
@@ -37,14 +37,14 @@ class AuthController extends Controller
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['required', 'accepted'] : '',
         ])->validate();
 
-        $admin = Admin::create([
+        $partner = Partner::create([
             'name' => $request['name'],
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
         ]);
 
-        if(!$admin) {
-            return redirect()->route('admin.register');
+        if(!$partner) {
+            return redirect()->route('partner.register');
         }
 
         return redirect('/');
@@ -52,12 +52,12 @@ class AuthController extends Controller
 
     public function registerForm()
     {
-        return view('auth.admins.register-admin');
+        return view('auth.partners.register-partner');
     }
 
     public function logout(Request $request)
     {
-        Auth::guard('admin')->logout();
+        Auth::guard('partner')->logout();
 
         $request->session()->invalidate();
 

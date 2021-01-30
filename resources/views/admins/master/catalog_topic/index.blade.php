@@ -29,23 +29,29 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($category_catalogs as $category)
+                        @foreach($catalog_topics as $catalog_topic)
                         <tr>
-                            <td width="40px;">{{$category->id}}</td>
-                            <td>{{$category->name}}</td>
-                            <td>{{$category->nama_catalog}}</td>
-                            <td>{{is_null($category->created_by) ? '-' : $category->created_by}}</td>
-                            <td>
-                                <a href="{{\Request::url().'/'.$category->id.'/edit'}}" class="btn btn-outline-primary btn-sm">
-                                    Edit
-                                </a>
-                                <form action="{{route('catalog_topic.destroy', $category->id)}}" method="POST">
-                                    {{ method_field('DELETE') }}
-                                    {{ csrf_field() }}
-                                    <button type="submit" class="btn btn-outline-danger btn-sm">
-                                        Hapus
-                                    </button>
-                                </form>                                
+                            <td width="40px;">{{$catalog_topic->id}}</td>
+                            <td>{{$catalog_topic->name}}</td>
+                            <td>{{$catalog_topic->nama_catalog}}</td>
+                            <td>{{is_null($catalog_topic->created_by) ? '-' : $catalog_topic->created_by}}</td>                            
+                            <td width="100px;" class="text-center">
+                                <div class="d-flex justify-content-center">
+                                    <div class="mx-1">
+                                        <a href="{{\Request::url().'/'.$catalog_topic->id.'/edit'}}" class="btn btn-outline-warning btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </div>
+                                    <div class="mx-1">
+                                        <form action="{{route('admin.catalog_topic.destroy', $catalog_topic->id)}}" method="POST">
+                                            {{ method_field('DELETE') }}
+                                            @csrf
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>    
+                                    </div>         
+                                </div>                         
                             </td>
                         </tr>
                         @endforeach

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admins\Master;
+namespace App\Http\Controllers\Admins\Manage;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Catalog;
+use App\Models\User;
 
-class CatalogController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,11 +15,9 @@ class CatalogController extends Controller
      */
     public function index()
     {
-        $catalogs = Catalog::select('catalogs.id', 'catalogs.name', 'users.name as created_by')
-        ->orderBy('id', 'DESC')
-        ->leftJoin('users', 'users.id', 'catalogs.created_by')
-        ->get();
-        return view('admins/master/catalog.index', compact('catalogs'));
+        $users = User::select('name', 'email', 'status', 'id')
+                    ->orderBy('id', 'DESC')->get();
+        return view('admins/manage/user.index', compact('users'));
     }
 
     /**
@@ -29,7 +27,7 @@ class CatalogController extends Controller
      */
     public function create()
     {
-        return view('admins/master/catalog.create');
+        //
     }
 
     /**
@@ -40,18 +38,7 @@ class CatalogController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = \Validator::make(request()->all(), [
-            'name' => ['required']
-        ], [
-            'name.required' => 'Nama wajib diisi'
-        ]);
-        if ($validator->fails()) {
-            return back()->withErrors($validator->errors()->getMessages())->withInput();
-        }else{            
-            $request['created_by'] = \Auth::user()->id;
-            Catalog::create($request->except('_token'));
-            return redirect('admin/management/catalog')->with('alert-message', 'Berhasil Menambah Data');
-        }
+        //
     }
 
     /**
@@ -73,8 +60,8 @@ class CatalogController extends Controller
      */
     public function edit($id)
     {
-        $catalog = Catalog::findOrFail($id);
-        return view('admins/master/catalog.edit', compact('id', 'catalog'));
+        $catalog = User::findOrFail($id);
+        return view('admins/manage/user.edit', compact('id', 'catalog'));
     }
 
     /**
@@ -87,17 +74,18 @@ class CatalogController extends Controller
     public function update(Request $request, $id)
     {
         $validator = \Validator::make(request()->all(), [
-            'name' => ['required']
+            'name'  => ['required'],
+            'email' => ['required'],
         ], [
-            'name.required' => 'Nama wajib diisi'
+            'name.required' => 'Nama wajib diisi',
+            'email.required' => 'Nama wajib diisi'
         ]);
         if ($validator->fails()) {
             return back()->withErrors($validator->errors()->getMessages())->withInput();
         }else{
-            $request['updated_by'] = \Auth::user()->id;
-            Catalog::findOrFail($id)->update($request->except('_token'));
-            return redirect('admin/management/catalog')->with('alert-message', 'Berhasil Mengubah Data');
-        }        
+            User::findOrFail($id)->update($request->except('_token'));
+            return redirect('admin/management/user')->with('alert-message', 'Berhasil Mengubah Data');
+        }    
     }
 
     /**
@@ -108,7 +96,8 @@ class CatalogController extends Controller
      */
     public function destroy($id)
     {
-        Catalog::findOrFail($id)->delete();
-        return redirect('admin/management/catalog')->with('alert-message', 'Berhasil Menghapus Data');
+        $check = User::where('id', $id)->first();
+        User::where('id', $id)->update(['status' => ($check->status == 'A' ? 'D' : 'A')]);
+        return redirect('admin/management/user')->with('alert-message', 'Berhasil '.($check->status == 'A' ? 'Menonaktifkan' : 'Mengaktifkan').' User');
     }
 }
