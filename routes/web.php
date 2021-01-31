@@ -38,7 +38,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/register', [AdminAuthController::class, 'register'])->name('register');
     Route::middleware(['gues:admin'])->group(function () {
         Route::get('login', [AdminAuthController::class, 'loginForm'])->name('login.form');
-        Route::post('login', AdminAuthController::class, 'login')->name('login');
+        Route::post('login', [AdminAuthController::class, 'login'])->name('login');
     });
 });
 
