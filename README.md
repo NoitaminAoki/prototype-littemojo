@@ -11,6 +11,6 @@
 10. Jalankan `php artisan serve` dan buka `http://localhost:8000` di browser
 
 ## Dashboard
-Admin : http://localhost:8000/admin/management/dashboard
-Partner: http://localhost:8000/partner/management/dashboard
-Customer : http://localhost:8000/dashboard
+- Admin : http://localhost:8000/admin/management/dashboard
+- Partner: http://localhost:8000/partner/management/dashboard
+- Customer : http://localhost:8000/dashboard
