@@ -4,7 +4,7 @@
 <style>
     .custom-bg-gradient-green {
         color: white;
-        background-image: linear-gradient(to right, rgba(9, 227, 140,1), rgba(9, 209, 227,1));
+        background-image: linear-gradient(to right, rgb(9, 227, 56, 1), rgba(9, 209, 227,1));
     }
     
     .custom-bg-gradient-orange {
@@ -165,9 +165,9 @@
                     <div class="card-header">
                         <h3 class="card-title text-secondary">WHAT YOU WILL LEARN</h3>
                         <div class="card-tools">
-                            <button type="button" class="btn btn-tool bg-primary">
+                            <a href="{{ route('partner.manage.course.experience.index', ['course_id' => $course->id]) }}" class="btn btn-tool bg-primary">
                                 Manage
-                            </button>
+                            </a>
                         </div>
                         <br>
                     </div>

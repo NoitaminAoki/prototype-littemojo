@@ -11,6 +11,11 @@ use App\Http\Controllers\Partners\{
     DashboardController as PartnerDashboard,
     AuthController as PartnerAuthController,
     CourseController as PartnerCourseController,
+    Courses\ExperienceController as PartnerExpController,
+};
+
+use App\Http\Livewire\Partners\{
+    Courses\Experience as PartnerExpLive,
 };
 
 /*
@@ -62,6 +67,9 @@ Route::group(['middleware' => 'auth:partner', 'prefix' => 'partner/management', 
     Route::post('/logout', [PartnerAuthController::class, 'logout'])->name('logout');
 
     Route::group(['as' => 'manage.' ], function () {
+        Route::group(['as' => 'course.', 'prefix' => 'course'], function () {
+            Route::get('/experiences/{course_id}', PartnerExpLive::class)->name('experience.index');
+        });
         Route::resource('course', PartnerCourseController::class);
     });
 });
@@ -69,12 +77,11 @@ Route::group(['middleware' => 'auth:partner', 'prefix' => 'partner/management', 
 Route::group(['prefix' => 'partner', 'as' => 'partner.'], function () {
     Route::get('/register', [PartnerAuthController::class, 'registerForm'])->name('register.form');
     Route::post('/register', [PartnerAuthController::class, 'register'])->name('register');
-
+    
     Route::middleware('guest:partner')->get('/login', [PartnerAuthController::class, 'loginForm'])->name('login.form');
     Route::middleware('guest:partner')->post('/login', [PartnerAuthController::class, 'login'])->name('login');
-
+    
 });
-
 
 
 

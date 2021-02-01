@@ -35,7 +35,7 @@
                             <td width="40px;">{{($loop->index+1)}}</td>
                             <td>{{$course->title}}</td>
                             <td> {{$course->nama_catalog}} - {{$course->nama_catalog_topic}} </td>
-                            <td>{{$course->price}}</td>
+                            <td>Rp {{number_format($course->price, 0)}}</td>
                             <td width="100px;" class="text-center">
                                 <div class="d-flex justify-content-center">
                                     <div class="mx-1">
