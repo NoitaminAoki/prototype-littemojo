@@ -35,20 +35,8 @@
                             <td>{{is_null($catalog->created_by) ? '-' : $catalog->created_by}}</td>
                             <td width="100px;" class="text-center">
                                 <div class="d-flex justify-content-center">
-                                    <div class="mx-1">
-                                        <a href="{{\Request::url().'/'.$catalog->id.'/edit'}}" class="btn btn-outline-warning btn-sm">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                    </div>
-                                    <div class="mx-1">
-                                        <form action="{{route('admin.catalog.destroy', $catalog->id)}}" method="POST">
-                                            {{ method_field('DELETE') }}
-                                            @csrf
-                                            <button type="submit" class="btn btn-outline-danger btn-sm">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>    
-                                    </div>         
+                                    @include('partials.button', ['action' => ['edit'], 'id' => $catalog->id ])
+                                    @include('partials.button', ['action' => ['delete'], 'id' => $catalog->id ])      
                                 </div>                         
                             </td>
                         </tr>

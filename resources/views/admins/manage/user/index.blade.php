@@ -42,11 +42,7 @@
                             </td>
                             <td width="100px;" class="text-center">
                                 <div class="d-flex justify-content-center">
-                                    <div class="mx-1">
-                                        <a href="{{\Request::url().'/'.$user->id.'/edit'}}" class="btn btn-outline-warning btn-sm">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                    </div>
+                                    @include('partials.button', ['action' => ['edit'], 'id' => $user->id ])
                                     <div class="mx-1">
                                         <form action="{{route('admin.user.destroy', $user->id)}}" method="POST">
                                             {{ method_field('DELETE') }}

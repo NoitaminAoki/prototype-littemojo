@@ -42,25 +42,9 @@
                             <td>Rp {{number_format($course->price, 0)}}</td>
                             <td width="100px;" class="text-center">
                                 <div class="d-flex justify-content-center">
-                                    <div class="mx-1">
-                                        <a href="{{\Request::url().'/'.$course->id}}" class="btn btn-outline-primary btn-sm">
-                                            <i class="fas fa-search"></i>
-                                        </a>
-                                    </div>
-                                    <div class="mx-1">
-                                        <a href="#" class="btn btn-outline-warning btn-sm">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                    </div>
-                                    <div class="mx-1">
-                                        <form action="#" method="POST">
-                                            {{ method_field('DELETE') }}
-                                            @csrf
-                                            <button type="submit" class="btn btn-outline-danger btn-sm">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>    
-                                    </div>         
+                                    @include('partials.button', ['action' => ['show'], 'id' => $course->id ])
+                                    @include('partials.button', ['action' => ['edit'], 'id' => $course->id ])
+                                    @include('partials.button', ['action' => ['delete'], 'id' => $course->id ])
                                 </div>                         
                             </td>
                         </tr>

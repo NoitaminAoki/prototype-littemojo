@@ -39,20 +39,8 @@
                             <td>{{is_null($level->created_by) ? '-' : $level->created_by}}</td>
                             <td width="100px;" class="text-center">
                                 <div class="d-flex justify-content-center">
-                                    <div class="mx-1">
-                                        <a href="{{\Request::url().'/'.$level->id.'/edit'}}" class="btn btn-outline-warning btn-sm">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                    </div>
-                                    <div class="mx-1">
-                                        <form action="{{route('admin.level.destroy', $level->id)}}" method="POST">
-                                            {{ method_field('DELETE') }}
-                                            @csrf
-                                            <button type="submit" class="btn btn-outline-danger btn-sm">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>    
-                                    </div>         
+                                    @include('partials.button', ['action' => ['edit'], 'id' => $level->id ])
+                                    @include('partials.button', ['action' => ['delete'], 'id' => $level->id ])      
                                 </div>                         
                             </td>
                         </tr>
