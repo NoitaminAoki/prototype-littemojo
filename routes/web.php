@@ -60,13 +60,13 @@ Route::group(['middleware' => 'auth:partner', 'prefix' => 'partner/management', 
         Route::resource('course', PartnerCourseController::class);
     });
 
-Route::prefix('partner')->name('partner.')->group(function () {
-    Route::get('/register', [PartnerAuthController::class, 'registerForm'])->name('register.form');
-    Route::post('/register', [PartnerAuthController::class, 'register'])->name('register');
-    Route::middleware('guest:partner')->get('/login', [PartnerAuthController::class, 'loginForm'])->name('login.form');
-    Route::middleware('guest:partner')->post('/login', [PartnerAuthController::class, 'login'])->name('login');
-    
-});
+    Route::prefix('partner')->name('partner.')->group(function () {
+        Route::get('/register', [PartnerAuthController::class, 'registerForm'])->name('register.form');
+        Route::post('/register', [PartnerAuthController::class, 'register'])->name('register');
+        Route::middleware('guest:partner')->get('/login', [PartnerAuthController::class, 'loginForm'])->name('login.form');
+        Route::middleware('guest:partner')->post('/login', [PartnerAuthController::class, 'login'])->name('login');
+        
+    });
 
 
 
@@ -75,16 +75,7 @@ Route::prefix('partner')->name('partner.')->group(function () {
 
 
 });
-Route::get('pass-login-partner', function () {
-    $credentials = ['email' => 'partner1@mail.com', 'password' => 'Password123'];
 
-    if (Auth::guard('partner')->attempt($credentials)) {
-        // if success login
-        return redirect('partner/management/dashboard');
-        //return redirect()->intended('/details');
-    }
-    return redirect('login');
-});
 Route::get('pass-login-admin', function () {
     $credentials = ['email' => 'admin@admin.com', 'password' => 'Password123'];
 
