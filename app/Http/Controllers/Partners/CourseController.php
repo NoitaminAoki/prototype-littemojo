@@ -7,17 +7,18 @@ use Illuminate\Http\Request;
 use App\Models\{
 	Course,
 	Catalog,
-	CatalogTopic
+	CatalogTopic,
+    Level
 };
 
 class CourseController extends Controller
 {
     public function index()
     {
-        $data['courses'] = Course::select('courses.id', 'title', 'description', 'price', 'catalog_topics.name as nama_catalog_topic',
-        					'catalogs.name as nama_catalog')
+        $data['courses'] = Course::select('courses.id', 'courses.title', 'courses.description', 'price', 'duration', 'catalog_topics.name as nama_catalog_topic', 'catalogs.name as nama_catalog', 'levels.name as nama_level')
     						 ->join('catalog_topics', 'catalog_topics.id', 'courses.id')
     						 ->join('catalogs', 'catalogs.id', 'catalog_topics.catalog_id')
+                             ->join('levels', 'levels.id', 'courses.level_id')
         					 ->orderBy('courses.id', 'DESC')->get();
         return view('partners.course.index')->with($data);
     }
@@ -25,23 +26,28 @@ class CourseController extends Controller
     public function create()
     {
     	$catalogs = Catalog::all();
-        return view('partners.course.create', compact('catalogs'));
+        $levels   = Level::all();
+        return view('partners.course.create', compact('catalogs', 'levels'));
     }
 
     public function store(Request $request)
     {
         $validator = \Validator::make(request()->all(), [
             'catalog_id'  => ['required'],
+            'level_id'    => ['required'],
             'name' 		  => ['required'],
             'title' 	  => ['required', 'max:100'],
             'description' => ['required'],
-            'price'       => ['required']
+            'price'       => ['required'],
+            'duration'    => ['required']
         ], [
             'catalog_id.required'  => 'Nama Catalog wajib diisi',
+            'level_id.required'    => 'Level wajib diisi',
             'name.required' 	   => 'Nama Catalog Topic wajib diisi',
             'title.required' 	   => 'Title wajib diisi',
             'description.required' => 'Deskripsi wajib diisi',
             'price.required' 	   => 'Harga wajib diisi',
+            'duration.required'    => 'Durasi wajib diisi',
         ]);
         if ($validator->fails()) {
             return back()->withErrors($validator->errors()->getMessages())->withInput();

@@ -25,6 +25,8 @@
                             <th>No</th>
                             <th>Title</th>
                             <th>Catalog</th>
+                            <th>Level</th>
+                            <th>Durasi</th>
                             <th>Price</th>
                             <th>Action</th>
                         </tr>
@@ -35,6 +37,8 @@
                             <td width="40px;">{{($loop->index+1)}}</td>
                             <td>{{$course->title}}</td>
                             <td> {{$course->nama_catalog}} - {{$course->nama_catalog_topic}} </td>
+                            <td>{{$course->nama_level}}</td>
+                            <td>{{ ($course->duration == "month" ? '30 Hari' : '7 Hari') }}</td>
                             <td>Rp {{number_format($course->price, 0)}}</td>
                             <td width="100px;" class="text-center">
                                 <div class="d-flex justify-content-center">

@@ -33,6 +33,15 @@
                         <input type="text" class="form-control" name="name" value="{{old('name')}}" placeholder="Masukkan Nama Topic" required autocomplete="off">
                     </div>
                     <div class="form-group">
+                        <label>Level</label>
+                        <select class="form-control select2" style="width: 100%;" name="level_id" required>
+                            <option selected="selected" value=""></option>
+                            @foreach($levels as $level)
+                            <option value="{{$level->id}}">{{$level->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label>Title</label>
                         <input type="text" class="form-control" name="title" value="{{old('title')}}" placeholder="Masukkan Title" required>
                     </div>
@@ -43,6 +52,14 @@
                     <div class="form-group">
                         <label>Harga</label>
                         <input type="text" class="form-control" name="price" value="{{old('price')}}" placeholder="Masukkan Harga" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Durasi</label>
+                        <select class="form-control select2" style="width: 100%;" name="duration" required>
+                            <option selected="selected" value=""></option>
+                            <option value="week">7 Hari</option>
+                            <option value="month">30 Hari</option>
+                        </select>
                     </div>
                     <div class="d-flex justify-content-between">
                         <a href="{{ route('partner.manage.course.index') }}" class="btn btn-warning btn-sm">Back</a>
@@ -56,8 +73,16 @@
 @endsection
 @section('script')
 <script>
-    $('.select2').select2({
+    $('[name="catalog_id"]').select2({
         placeholder: '-- Pilih Catalog --',
+        width: '100%'
+    })
+    $('[name="level_id"]').select2({
+        placeholder: '-- Pilih Level --',
+        width: '100%'
+    })
+    $('[name="duration"]').select2({
+        placeholder: '-- Pilih Durasi --',
         width: '100%'
     })
 </script>

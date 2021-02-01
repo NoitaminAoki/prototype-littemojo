@@ -18,9 +18,11 @@ class CreateCoursesTable extends Migration
             $table->integer('user_id')->unsigned()->nullable();
             $table->integer('catalog_id')->unsigned()->nullable();
             $table->integer('catalog_topic_id')->unsigned()->nullable();
+            $table->integer('level_id')->unsigned()->nullable();
             $table->string('title', 100);
             $table->text('description');
             $table->bigInteger('price');
+            $table->enum('duration', ['week', 'month']);
             $table->timestamps();
         });
     }

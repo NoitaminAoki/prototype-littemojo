@@ -75,7 +75,16 @@ Route::prefix('partner')->name('partner.')->group(function () {
 
 
 });
+Route::get('pass-login-partner', function () {
+    $credentials = ['email' => 'partner1@mail.com', 'password' => 'Password123'];
 
+    if (Auth::guard('partner')->attempt($credentials)) {
+        // if success login
+        return redirect('partner/management/dashboard');
+        //return redirect()->intended('/details');
+    }
+    return redirect('login');
+});
 Route::get('pass-login-admin', function () {
     $credentials = ['email' => 'admin@admin.com', 'password' => 'Password123'];
 
