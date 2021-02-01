@@ -24,12 +24,6 @@ class CreatePartnersTable extends Migration
             $table->text('profile_photo_path')->nullable();
             $table->timestamps();
         });
-
-        \DB::table('partners')->insert([
-            'name' => "Partner 1",
-            'email' => "partner1@mail.com",
-            'password' => bcrypt('Password123')
-        ]);
     }
 
     /**
