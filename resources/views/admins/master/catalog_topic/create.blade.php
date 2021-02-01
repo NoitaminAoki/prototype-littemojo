@@ -33,20 +33,10 @@
                         <label>Nama Topic</label>
                         <input type="text" class="form-control" name="name" value="{{old('name')}}" placeholder="Masukkan Nama Topic" required>
                     </div>
-                    <button type="submit" class="btn btn-outline-primary btn-sm">Simpan</button>
+                    @include('partials.button', ['action' => ['save']])
                 </div>
             </form>
         </div>
     </div>        
 </div>
-@endsection
-@section('script')
-<script>
-    $('button').click(function(){
-        if ($('input').val() != '') {
-            $(this).attr('disabled', true)
-            $(this).text('Load..')
-        } 
-    })
-</script>
 @endsection

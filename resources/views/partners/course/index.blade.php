@@ -17,7 +17,7 @@
     <div class="col-lg">
         <div class="card">
             <div class="card-body">
-                <a href="{{\Request::url().'/create'}}" class="btn btn-outline-primary btn-sm my-2">Tambah Data</a>
+                @include('partials.button', ['action' => ['add']])
                 <table id="example1" class="table table-bordered table-striped table-hover">
                     @include('partials.alert')
                     <thead>

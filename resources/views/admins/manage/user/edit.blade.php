@@ -29,20 +29,10 @@
                         <label>Email</label>
                         <input type="text" class="form-control" name="email" placeholder="Masukkan Email" value="{{$catalog->email}}" required>
                     </div>
-                    <button type="submit" class="btn btn-outline-primary btn-sm">Simpan</button>
+                    @include('partials.button', ['action' => ['update']])
                 </div>
             </form>
         </div>
     </div>        
 </div>
-@endsection
-@section('script')
-<script>
-    $('button').click(function(){
-        if ($('input').val() != '') {
-            $(this).attr('disabled', true)
-            $(this).text('Load..')
-        }        
-    })
-</script>
 @endsection

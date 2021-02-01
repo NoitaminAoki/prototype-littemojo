@@ -46,7 +46,7 @@
                     </div>
                     <div class="d-flex justify-content-between">
                         <a href="{{ route('partner.manage.course.index') }}" class="btn btn-warning btn-sm">Back</a>
-                        <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                        @include('partials.button', ['action' => ['save']])
                     </div>
                 </div>
             </form>
@@ -56,12 +56,6 @@
 @endsection
 @section('script')
 <script>
-    $('button').click(function(){
-        if ($('input').val() != '') {
-            $(this).attr('disabled', true)
-            $(this).text('Load..')
-        } 
-    })
     $('.select2').select2({
         placeholder: '-- Pilih Catalog --',
         width: '100%'
