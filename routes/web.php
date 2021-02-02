@@ -59,21 +59,14 @@ Route::group(['middleware' => 'auth:partner', 'prefix' => 'partner/management', 
         });
         Route::resource('course', PartnerCourseController::class);
     });
+});
 
-    Route::prefix('partner')->name('partner.')->group(function () {
-        Route::get('/register', [PartnerAuthController::class, 'registerForm'])->name('register.form');
-        Route::post('/register', [PartnerAuthController::class, 'register'])->name('register');
-        Route::middleware('guest:partner')->get('/login', [PartnerAuthController::class, 'loginForm'])->name('login.form');
-        Route::middleware('guest:partner')->post('/login', [PartnerAuthController::class, 'login'])->name('login');
-        
-    });
-
-
-
-
-
-
-
+Route::prefix('partner')->name('partner.')->group(function () {
+    Route::get('/register', [PartnerAuthController::class, 'registerForm'])->name('register.form');
+    Route::post('/register', [PartnerAuthController::class, 'register'])->name('register');
+    Route::middleware('guest:partner')->get('/login', [PartnerAuthController::class, 'loginForm'])->name('login.form');
+    Route::middleware('guest:partner')->post('/login', [PartnerAuthController::class, 'login'])->name('login');
+    
 });
 
 Route::get('pass-login-admin', function () {
