@@ -16,9 +16,9 @@ class CourseController extends Controller
     public function index()
     {
         $data['courses'] = Course::select('courses.id', 'courses.title', 'courses.description', 'price', 'duration', 'catalog_topics.name as nama_catalog_topic', 'catalogs.name as nama_catalog', 'levels.name as nama_level')
-    						 ->join('catalog_topics', 'catalog_topics.id', 'courses.id')
-    						 ->join('catalogs', 'catalogs.id', 'catalog_topics.catalog_id')
-                             ->join('levels', 'levels.id', 'courses.level_id')
+    						 ->leftJoin('catalog_topics', 'catalog_topics.id', 'courses.id')
+    						 ->leftJoin('catalogs', 'catalogs.id', 'catalog_topics.catalog_id')
+                             ->leftJoin('levels', 'levels.id', 'courses.level_id')
         					 ->orderBy('courses.id', 'DESC')->get();
         return view('partners.course.index')->with($data);
     }
@@ -68,11 +68,14 @@ class CourseController extends Controller
 
     public function show($id){
     	$catalogs = Catalog::all();
-    	$course   = Course::select('courses.id', 'courses.catalog_id', 'courses.catalog_topic_id', 'title', 'description', 'price', 'catalog_topics.name as nama_catalog_topic',
-        						'catalogs.name as nama_catalog')
-    						 ->join('catalog_topics', 'catalog_topics.id', 'courses.id')
-    						 ->join('catalogs', 'catalogs.id', 'catalog_topics.catalog_id')
-        					 ->findOrFail($id);
+        $course   = Course::select('courses.id', 'courses.catalog_id', 'courses.catalog_topic_id', 'courses.title', 'courses.description', 'courses.price', 'courses.duration',
+                            'catalog_topics.name as nama_catalog_topic',
+                            'catalogs.name as nama_catalog',
+                            'levels.name as nama_level', 'levels.description as desc_level')
+    						->leftJoin('catalog_topics', 'catalog_topics.id', 'courses.id')
+    						->leftJoin('catalogs', 'catalogs.id', 'catalog_topics.catalog_id')
+                            ->leftJoin('levels', 'levels.id', 'courses.level_id')
+        					->findOrFail($id);
         return view('partners.course.show', compact('catalogs', 'course'));
     }
 }

@@ -11,15 +11,27 @@ use Illuminate\Support\Arr;
 
 class Experience extends Component
 {
-    protected $listeners = ['liveInsert' => 'insert'];
+    protected $listeners = [
+        'liveInsert' => 'insert', 
+        'liveSetExperience' => 'setExperience',
+        'liveUpdate' => 'update',
+    ];
+
+    protected $rules = [
+        'selected_exp.name' => 'string'
+    ];
 
     public $name = '';
     
     public $experiences = [];
     
+    public $selected_exp;
+
     public $course_id;
 
     public $isInserted = false;
+    public $isUpdated = false;
+    public $isDeleted = false;
     
     public function mount($course_id)
     {
@@ -35,7 +47,7 @@ class Experience extends Component
         ->findOrFail($this->course_id);
 
         $this->experiences = Experiences::where('course_id', $this->course_id)->get();
-
+        
         return view('partners.course.experience.index')
         ->with(['course' => $course, 'experiences' => $this->experiences])
         ->layout('partners.layouts.app-main');
@@ -50,4 +62,23 @@ class Experience extends Component
         $this->isInserted = true;
         $this->reset('name');
     }
+
+    public function setExperience(Experiences $experience)
+    {
+        $this->selected_exp = $experience;
+    }
+
+    public function update()
+    {
+        $this->selected_exp->save();
+        $this->isUpdated = true;
+    }
+
+    public function delete($id)
+    {
+        $this->isDeleted = true;
+        $experience = Experiences::find($id);
+        $experience->delete();
+    }
+
 }

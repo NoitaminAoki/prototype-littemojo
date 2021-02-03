@@ -71,16 +71,26 @@
 
 @section('breadcrumbs')
 <li class="breadcrumb-item"><a href="#">Course</a></li>
-<li class="breadcrumb-item"><a href="#">{{$course->title}}</a></li>
+<li class="breadcrumb-item"><a href="{{ route('partner.manage.course.show', ['course' => $course->id]) }}">{{$course->title}}</a></li>
 <li class="breadcrumb-item active">Experience</li>
 @endsection
 
 <div class="row">
     <div class="col-12">
-        <div id="message-success" class="alert alert-success alert-dismissible" style="display: none">
+        <div wire:ignore.self id="message-success" class="alert alert-success alert-dismissible" style="display: none">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             <h5><i class="icon fas fa-check"></i> Message!</h5>
-            successfully added data.
+            successfully adding data.
+        </div>
+        <div wire:ignore.self id="message-success-updated" class="alert alert-success alert-dismissible" style="display: none">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fas fa-check"></i> Message!</h5>
+            successfully updating data.
+        </div>
+        <div wire:ignore.self id="message-success-deleted" class="alert alert-success alert-dismissible" style="display: none">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fas fa-check"></i> Message!</h5>
+            successfully deleting data.
         </div>
     </div>
     <div class="col-12">
@@ -102,7 +112,7 @@
             <div class="card-header">
                 <h3 class="card-title">Experiences | WHAT YOU WILL LEARN</h3>
                 <div class="card-tools">
-                    <button type="button" data-toggle="modal" data-target="#modal-default" class="btn btn-tool bg-primary">
+                    <button type="button" data-toggle="modal" data-target="#modal-insert" class="btn btn-tool bg-primary">
                         Add Experience(s)
                     </button>
                 </div>
@@ -111,23 +121,29 @@
             <div class="card-body">
                 <table class="table">
                     <tbody>
+                        @if ($experiences->isEmpty())
+                        <tr class="border bg-light">
+                            <td class="text-center text-secondary">No Data</td>
+                        </tr>
+                        @else
                         @foreach ($experiences as $exp)
                         <tr>
                             <td>{{$exp->name}}</td>
                             <td class="text-right py-0 align-middle">
                                 <div class="btn-group btn-group-sm">
-                                    <a href="#" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                                    <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                    <button data-toggle="modal" wire:click="$emit('liveSetExperience', {{$exp}})" data-target="#modal-update" class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                                    <button onclick="confirm('Confirm delete?') || event.stopImmediatePropagation()" wire:click="delete({{$exp->id}})" wire:loading.attr="disabled" class="btn btn-danger btn-delete"><i class="fas fa-trash"></i></button>
                                 </div>
                             </td>
                         </tr>
                         @endforeach
+                        @endif
                     </tbody>
                 </table>
             </div>
         </div>        
     </div>
-    <div wire:ignore.self class="modal fade" tabindex="-1" id="modal-default">
+    <div wire:ignore.self class="modal fade" tabindex="-1" id="modal-insert">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -138,11 +154,39 @@
                 </div>
                 <form wire:submit.prevent="$emit('liveInsert')">
                     <div class="modal-body">
-                        <input wire:model="name" class="form-control" type="text" required>
+                        <label for="name">Name</label>
+                        <textarea wire:model.defer="name" name="name" class="form-control" style="min-height: 80px;" required>
+                        </textarea>
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="submit" id="btn-insert" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+    <div wire:ignore.self class="modal fade" tabindex="-1" id="modal-update">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Update Experience</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form wire:submit.prevent="$emit('liveUpdate')">
+                    <div class="modal-body">
+                        <label for="name">Name</label>
+                        <textarea id="edit_textarea_name" wire:model.defer="selected_exp.name" name="name" class="form-control" style="min-height: 80px;" required>
+                        </textarea>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" id="btn-update" class="btn btn-primary">Update</button>
                     </div>
                 </form>
             </div>
@@ -158,14 +202,39 @@
 <script>
     document.addEventListener('livewire:load', function () {
         Livewire.on('liveInsert', () => {
-            console.log(@this.isInserted); 
+            $('#btn-insert').attr("disabled", true);
+        });
+        Livewire.on('liveSetExperience', () => {
+            $('#edit_textarea_name').val('');
+            $('#btn-update').attr("disabled", true);
+        });
+        Livewire.on('liveUpdate', () => {
+            $('#btn-update').attr("disabled", true);
         });
         Livewire.hook('message.processed', (message, component) => {
             if(@this.isInserted) {
-                $('#modal-default').modal('hide');    
+                @this.isInserted = false;
+                $('#btn-insert').removeAttr("disabled");
+                $('#modal-insert').modal('hide');    
                 $('#message-success').slideDown();
                 setTimeout(() => {
                     $('#message-success').slideUp();
+                }, 3000)
+            }
+            else if(@this.isUpdated) {
+                @this.isUpdated = false;
+                $('#btn-update').removeAttr("disabled");
+                $('#modal-update').modal('hide');    
+                $('#message-success-updated').slideDown();
+                setTimeout(() => {
+                    $('#message-success-updated').slideUp();
+                }, 3000)
+            }
+            else if(@this.isDeleted) {
+                @this.isDeleted = false;  
+                $('#message-success-deleted').slideDown();
+                setTimeout(() => {
+                    $('#message-success-deleted').slideUp();
                 }, 3000)
             }
         });

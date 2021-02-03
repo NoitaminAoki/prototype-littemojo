@@ -110,7 +110,11 @@
                             
                             <div class="info-box-content">
                                 <span class="info-box-text"><h5 class="mb-0">Duration</h5></span>
+                                @if ($course->duration == 'week')
                                 <span class="info-box-text"> 7 days / 1 week </span>
+                                @elseif($course->duration == 'month')
+                                <span class="info-box-text"> 30 days / 1 month </span>
+                                @endif
                             </div>
                             <!-- /.info-box-content -->
                         </div>
@@ -132,8 +136,8 @@
                             </div>
                             
                             <div class="info-box-content">
-                                <span class="info-box-text"><h5 class="mb-0">Beginner Level</h5></span>
-                                <span class="info-box-text">No degree or prior experience required</span>
+                                <span class="info-box-text"><h5 class="mb-0"> {{$course->nama_level}} </h5></span>
+                                <span class="info-box-text">{{$course->desc_level}}</span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
@@ -172,50 +176,19 @@
                         <br>
                     </div>
                     <div class="row mt-4">
+                        @foreach ($course->experiences as $exp_item)
                         <div class="col-lg-6">
                             <div class="info-box custom-info-box shadow-none p-0">
                                 <span class="custom-info-box-icon custom-icon-top border-0 text-success"><i class="fas fa-check"></i></span>
                                 
                                 
                                 <div class="info-box-content custom-content-top pl-0">
-                                    <span class="custom-info-box-text">Gain skills required to succeed in an entry-level IT capacity</span>
+                                    <span class="custom-info-box-text">{{$exp_item->name}}</span>
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="info-box custom-info-box shadow-none p-0">
-                                <span class="custom-info-box-icon custom-icon-top border-0 text-success"><i class="fas fa-check"></i></span>
-                                
-                                
-                                <div class="info-box-content custom-content-top pl-0">
-                                    <span class="custom-info-box-text">Learn how to provide end-to-end customer support, ranging from identifying problems to troubleshooting and debugging</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="info-box custom-info-box shadow-none p-0">
-                                <span class="custom-info-box-icon custom-icon-top border-0 text-success"><i class="fas fa-check"></i></span>
-                                
-                                
-                                <div class="info-box-content custom-content-top pl-0">
-                                    <span class="custom-info-box-text">Learn to perform day-to-day IT support tasks including computer assembly, wireless networking, installing programs, and customer service</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="info-box custom-info-box shadow-none p-0">
-                                <span class="custom-info-box-icon custom-icon-top border-0 text-success"><i class="fas fa-check"></i></span>
-                                
-                                
-                                <div class="info-box-content custom-content-top pl-0">
-                                    <span class="custom-info-box-text">Learn to use systems including Linux, Domain Name Systems, Command-Line Interface, and Binary Code</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
                 <div class="card-body px-2 pt-0 mt-3 border">
