@@ -47,7 +47,8 @@
                     </div>
                     <div class="form-group">
                         <label>Deskripsi</label>
-                        <textarea class="form-control" name="description" placeholder="Masukkan Deskripsi">{{old('description')}}</textarea>
+                        <textarea name="description" id="summernote" placeholder="Masukkan Deskripsi">{{old('description')}}</textarea>
+                        <!-- <div id="summernote" name="description"></div> -->
                     </div>
                     <div class="form-group">
                         <label>Harga</label>
@@ -85,5 +86,6 @@
         placeholder: '-- Pilih Durasi --',
         width: '100%'
     })
+    $('#summernote').summernote()
 </script>
 @endsection

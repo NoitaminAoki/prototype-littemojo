@@ -99,7 +99,7 @@
                     <div class="col-lg-8">
                         <h4>About this Course</h4>
                         <div class="pr-1">
-                            {{$course->description}}
+                            {!! $course->description !!}
                         </div>
                     </div>
                     <div class="col-lg-4 border-left">

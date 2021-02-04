@@ -9,4 +9,5 @@
 <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
 <script src="{{ asset('plugins/select2/js/select2.js')}} "></script>
+<script src="{{ asset('plugins/summernote/summernote.js')}} "></script>
 @yield('script')

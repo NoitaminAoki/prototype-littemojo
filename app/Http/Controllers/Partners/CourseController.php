@@ -61,7 +61,7 @@ class CourseController extends Controller
             //ini buat course
             $request['user_id'] 	  		= \Auth::user()->id;
             $request['catalog_topic_id'] 	= $sv_catTopic->id;
-            Course::create($request->except('_token', 'name'));
+            Course::create($request->except('_token', 'name', 'files'));
             return redirect('partner/management/course/')->with('alert-message', 'Berhasil Menambah Data');
         }
     }

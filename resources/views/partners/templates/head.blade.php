@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}} ">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}} ">
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote.css') }}">
     
     <!-- Theme style (harus dibawah)-->
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
