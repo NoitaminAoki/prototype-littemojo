@@ -176,6 +176,12 @@
                         <br>
                     </div>
                     <div class="row mt-4">
+                        @if ($course->experiences->isEmpty())
+                        <div class="col-12 text-center">
+                            <h3 class="text-sm text-secondary">No Experience.</h3>
+                        </div>
+                        @else
+                        
                         @foreach ($course->experiences as $exp_item)
                         <div class="col-lg-6">
                             <div class="info-box custom-info-box shadow-none p-0">
@@ -189,32 +195,35 @@
                             </div>
                         </div>
                         @endforeach
+                        
+                        @endif
                     </div>
                 </div>
                 <div class="card-body px-2 pt-0 mt-3 border">
                     <div class="card-header">
                         <h3 class="card-title text-secondary">SKILLS YOU WILL GAIN</h3>
                         <div class="card-tools">
-                            <button type="button" class="btn btn-tool bg-primary">
+                            <a href="{{ route('partner.manage.course.skill.index', ['course_id' => $course->id]) }}" class="btn btn-tool bg-primary">
                                 Manage
-                            </button>
+                            </a>
                         </div>
                         <br>
                     </div>
-                    <div class="d-flex flex-wrap mt-3">
-                        <div class="rounded bg-secondary py-1 px-2 my-1 mx-2">Debugging</div>
-                        <div class="rounded bg-secondary py-1 px-2 my-1 mx-2">Encryption Algorithms and Techniques</div>
-                        <div class="rounded bg-secondary py-1 px-2 my-1 mx-2">Customer Service</div>
-                        <div class="rounded bg-secondary py-1 px-2 my-1 mx-2">Network Protocols</div>
-                        <div class="rounded bg-secondary py-1 px-2 my-1 mx-2">Cloud Computing</div>
-                        <div class="rounded bg-secondary py-1 px-2 my-1 mx-2">Binary Code</div>
-                        <div class="rounded bg-secondary py-1 px-2 my-1 mx-2">Customer Support</div>
-                        <div class="rounded bg-secondary py-1 px-2 my-1 mx-2">Linux</div>
-                        <div class="rounded bg-secondary py-1 px-2 my-1 mx-2">Troubleshooting</div>
-                        <div class="rounded bg-secondary py-1 px-2 my-1 mx-2">Domain Name System (DNS)</div>
-                        <div class="rounded bg-secondary py-1 px-2 my-1 mx-2">Ipv4</div>
-                        <div class="rounded bg-secondary py-1 px-2 my-1 mx-2">Network Model</div>
+                    @if ($course->skills->isEmpty())
+                    <div class="row mt-4">
+                        <div class="col-12 text-center">
+                            <h3 class="text-sm text-secondary">No Skill.</h3>
+                        </div>
                     </div>
+                    @else
+                    
+                    <div class="d-flex flex-wrap mt-3">
+                        @foreach ($course->skills as $skill_item)
+                        <div class="rounded bg-secondary py-1 px-2 my-1 mx-2">{{$skill_item->name}}</div>
+                        @endforeach
+                    </div>
+                    
+                    @endif
                 </div>
             </div>
         </div>

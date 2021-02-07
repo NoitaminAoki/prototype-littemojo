@@ -27,7 +27,7 @@
                             <th>Catalog</th>
                             <th>Level</th>
                             <th>Durasi</th>
-                            <th>Price</th>
+                            <th>Price (Rp)</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -39,7 +39,7 @@
                             <td> {{$course->nama_catalog}} - {{$course->nama_catalog_topic}} </td>
                             <td>{{$course->nama_level}}</td>
                             <td>{{ ($course->duration == "month" ? '30 Hari' : '7 Hari') }}</td>
-                            <td>Rp {{number_format($course->price, 0)}}</td>
+                            <td style="width: 100px"><p>{{number_format($course->price, 0)}}</p></td>
                             <td width="100px;" class="text-center">
                                 <div class="d-flex justify-content-center">
                                     @include('partials.button', ['action' => ['show'], 'id' => $course->id ])
