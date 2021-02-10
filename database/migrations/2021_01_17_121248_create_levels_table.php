@@ -18,8 +18,8 @@ class CreateLevelsTable extends Migration
             $table->string('name');
             $table->integer('difficulty');
             $table->string('description');
-            $table->integer('created_by')->nullable();
-            $table->integer('updated_by')->nullable();
+            $table->bigInteger('created_by')->nullable();
+            $table->bigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

@@ -15,7 +15,7 @@ class CreateLessonQuizzesTable extends Migration
     {
         Schema::create('lesson_quizzes', function (Blueprint $table) {
             $table->id();
-            $table->integer('lesson_id')->unsigned()->nullable();
+            $table->bigInteger('lesson_id')->unsigned()->nullable();
             $table->integer('orders');
             $table->string('title');
             $table->integer('total_question');

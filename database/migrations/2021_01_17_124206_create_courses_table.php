@@ -15,10 +15,10 @@ class CreateCoursesTable extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->unsigned()->nullable();
-            $table->integer('catalog_id')->unsigned()->nullable();
-            $table->integer('catalog_topic_id')->unsigned()->nullable();
-            $table->integer('level_id')->unsigned()->nullable();
+            $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->bigInteger('catalog_id')->unsigned()->nullable();
+            $table->bigInteger('catalog_topic_id')->unsigned()->nullable();
+            $table->bigInteger('level_id')->unsigned()->nullable();
             $table->string('title', 100);
             $table->text('description');
             $table->bigInteger('price');

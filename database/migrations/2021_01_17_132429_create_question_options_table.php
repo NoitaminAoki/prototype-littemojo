@@ -15,7 +15,7 @@ class CreateQuestionOptionsTable extends Migration
     {
         Schema::create('question_options', function (Blueprint $table) {
             $table->id();
-            $table->integer('question_id')->unsigned()->nullable();
+            $table->bigInteger('question_id')->unsigned()->nullable();
             $table->integer('orders');
             $table->string('title');
             $table->enum('type', ['image', 'text']);

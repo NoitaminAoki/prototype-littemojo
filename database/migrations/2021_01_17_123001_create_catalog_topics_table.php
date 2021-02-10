@@ -15,10 +15,10 @@ class CreateCatalogTopicsTable extends Migration
     {
         Schema::create('catalog_topics', function (Blueprint $table) {
             $table->id();
-            $table->integer('catalog_id')->unsigned()->nullable();
+            $table->bigInteger('catalog_id')->unsigned()->nullable();
             $table->string('name');
-            $table->integer('created_by')->nullable();
-            $table->integer('updated_by')->nullable();
+            $table->bigInteger('created_by')->nullable();
+            $table->bigInteger('updated_by')->nullable();
             $table->integer('is_approved')->default(0);
             $table->timestamps();
         });

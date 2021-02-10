@@ -15,9 +15,10 @@ class CreateLessonBooksTable extends Migration
     {
         Schema::create('lesson_books', function (Blueprint $table) {
             $table->id();
-            $table->integer('lesson_id')->unsigned()->nullable();
+            $table->bigInteger('lesson_id')->unsigned()->nullable();
+            $table->uuid('uuid');
             $table->integer('orders');
-            $table->string('path');
+            $table->string('filename');
             $table->timestamps();
         });
     }

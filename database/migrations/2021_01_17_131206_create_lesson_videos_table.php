@@ -15,7 +15,7 @@ class CreateLessonVideosTable extends Migration
     {
         Schema::create('lesson_videos', function (Blueprint $table) {
             $table->id();
-            $table->integer('lesson_id')->unsigned()->nullable();
+            $table->bigInteger('lesson_id')->unsigned()->nullable();
             $table->integer('orders');
             $table->string('path');
             $table->timestamps();

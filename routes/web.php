@@ -13,12 +13,18 @@ use App\Http\Controllers\Partners\{
     DashboardController as PartnerDashboard,
     AuthController as PartnerAuthController,
     CourseController as PartnerCourseController,
+
     Courses\ExperienceController as PartnerExpController,
+
+    Courses\Lessons\BookController as BookController,
+
 };
 
 use App\Http\Livewire\Partners\{
     Courses\Experience as PartnerExpLive,
     Courses\Skill as PartnerSkillLive,
+
+    Courses\Lessons\Book as BookLive,
 };
 use Illuminate\Support\Facades\Auth;
 
@@ -70,6 +76,10 @@ Route::prefix('partner')->name('partner.')->group(function () {
     Route::middleware('guest:partner')->post('/login', [PartnerAuthController::class, 'login'])->name('login');
     
 });
+
+Route::get('lesson/books', BookLive::class);
+
+Route::middleware('auth:partner')->get('lesson/books/get/{uuid}/pdf', [BookController::class, 'index'])->name('lesson.books');
 
 Route::get('pass-login-admin', function () {
     $credentials = ['email' => 'admin@admin.com', 'password' => 'Password123'];

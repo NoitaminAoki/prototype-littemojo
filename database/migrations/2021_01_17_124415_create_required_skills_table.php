@@ -15,7 +15,7 @@ class CreateRequiredSkillsTable extends Migration
     {
         Schema::create('required_skills', function (Blueprint $table) {
             $table->id();
-            $table->integer('course_id')->unsigned()->nullable();
+            $table->bigInteger('course_id')->unsigned()->nullable();
             $table->string('name');
             $table->timestamps();
         });

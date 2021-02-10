@@ -112,7 +112,7 @@
             </div>
         </li>
         <li class="nav-item">
-            <form action="{{ route('admin.logout') }}" method="post">
+            <form action="{{ route('partner.logout') }}" method="post">
                 @csrf
                 <button type="submit" class="btn btn-link nav-link">
                     <i class="fas fa-power-off"></i>

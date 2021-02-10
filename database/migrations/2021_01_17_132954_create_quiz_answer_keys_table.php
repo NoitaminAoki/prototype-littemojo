@@ -15,9 +15,9 @@ class CreateQuizAnswerKeysTable extends Migration
     {
         Schema::create('quiz_answer_keys', function (Blueprint $table) {
             $table->id();
-            $table->integer('quiz_id')->unsigned()->nullable();
-            $table->integer('question_id')->unsigned()->nullable();
-            $table->integer('option_id')->unsigned()->nullable();
+            $table->bigInteger('quiz_id')->unsigned()->nullable();
+            $table->bigInteger('question_id')->unsigned()->nullable();
+            $table->bigInteger('option_id')->unsigned()->nullable();
             $table->timestamps();
         });
     }
