@@ -233,9 +233,9 @@
         <div class="card">
             <div class="card-header">
                 <div class="card-tools">
-                    <button type="button" class="btn btn-tool bg-primary">
+                    <a href="{{ route('partner.manage.course.lesson.index', ['course_id' => $course->id]) }}" class="btn btn-tool bg-primary">
                         Manage
-                    </button>
+                    </a>
                 </div>
                 <h4 class="text-center">Syllabus - What you will learn from this course</h4>
             </div>
@@ -244,44 +244,24 @@
                     <br>
                 </div>
                 <div class="row">
-                    <div class="col-12 mt-3 row">
-                        <div class="col-lg-2">
-                            <div class="text-center" style="display: inline-block">
-                                <span>LESSON</span>
-                                <br>
-                                <span class="custom-header-text-lesson">1</span>
-                            </div>
-                        </div>
-                        <div class="col-lg-10 border-bottom">
-                            <h2 class="font-weight-bold custom-headline-text-lesson mb-3">What is System Administration?</h2>
-                            
-                            <p>Welcome to the System Administration course of the IT Support Professional Certificate! In the first week of this course, we will cover the basics of system administration. We'll cover organizational policies, IT infrastructure services, user and hardware provisioning, routine maintenance, troubleshooting, and managing potential issues. By the end of this module, you will understand the roles and responsibilities of a System Administrator. So let's get started!</p>
-                            
-                            <div class="info-box custom-info-box shadow-none p-0 mb-5">
-                                <div class="custom-info-box-content pr-1">
-                                    <span class="custom-info-box-icon border-0 custom-icon-sm custom-bg-gradient-green rounded-circle text-white"><i class="fas fa-book"></i></span>
-                                </div>
-                                
-                                <div class="info-box-content">
-                                    <span class="info-box-text text-secondary">16 videos (Total 44 min), 6 readings, 5 quizzes</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                        </div>
+                    @if ($course->lessons->isEmpty())
+                    <div class="col-12 text-center">
+                        <h3 class="text-sm text-secondary">No Lesson.</h3>
                     </div>
-                    <!-- /.col-12 row (div lesson) -->
+                    @else
+                    @foreach($course->lessons as $key => $lesson)
                     <div class="col-12 mt-3 row">
                         <div class="col-lg-2">
                             <div class="text-center" style="display: inline-block">
                                 <span>LESSON</span>
                                 <br>
-                                <span class="custom-header-text-lesson">2</span>
+                                <span class="custom-header-text-lesson">{{$key+1}}</span>
                             </div>
                         </div>
                         <div class="col-lg-10 border-bottom">
-                            <h2 class="font-weight-bold custom-headline-text-lesson mb-3">Network and Infrastructure Services</h2>
+                            <h2 class="font-weight-bold custom-headline-text-lesson mb-3">{{$lesson->title}}</h2>
                             
-                            <p>In the second week of this course, we'll learn about network and infrastructure services. We will cover what IT infrastructure services are and what their role is in system administration. We'll also learn about server operating systems, virtualization, network services, DNS for web services, and how to troubleshoot network services. By the end of this module, you will know the most common IT infrastructure services you'll encounter when handling system administration tasks.</p>
+                            <p>{{$lesson->description}}</p>
                             
                             <div class="info-box custom-info-box shadow-none p-0 mb-5">
                                 <div class="custom-info-box-content pr-1">
@@ -295,111 +275,8 @@
                             </div>
                         </div>
                     </div>
-                    <!-- /.col-12 row (div lesson) -->
-                    <div class="col-12 mt-3 row">
-                        <div class="col-lg-2">
-                            <div class="text-center" style="display: inline-block">
-                                <span>LESSON</span>
-                                <br>
-                                <span class="custom-header-text-lesson">3</span>
-                            </div>
-                        </div>
-                        <div class="col-lg-10 border-bottom">
-                            <h2 class="font-weight-bold custom-headline-text-lesson mb-3">Software and Platform Services</h2>
-                            
-                            <p>In the third week of this course, we'll explore software and platform services. We'll cover what types of software and platform services you may encounter in a tech role and how to manage them. We'll learn how to configure email services, security services, file services, print services, and platform services. We'll explore ways to troubleshoot platform services and common issues to look out for. By the end of this module, you'll understand how to setup and manage the IT infrastructure services to help a business stay productive, keep information secure, and deliver applications to its users.</p>
-                            
-                            <div class="info-box custom-info-box shadow-none p-0 mb-5">
-                                <div class="custom-info-box-content pr-1">
-                                    <span class="custom-info-box-icon border-0 custom-icon-sm custom-bg-gradient-green rounded-circle text-white"><i class="fas fa-book"></i></span>
-                                </div>
-                                
-                                <div class="info-box-content">
-                                    <span class="info-box-text text-secondary">16 videos (Total 45 min), 10 readings, 8 quizzes</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.col-12 row (div lesson) -->
-                    <div class="col-12 mt-3 row">
-                        <div class="col-lg-2">
-                            <div class="text-center" style="display: inline-block">
-                                <span>LESSON</span>
-                                <br>
-                                <span class="custom-header-text-lesson">4</span>
-                            </div>
-                        </div>
-                        <div class="col-lg-10 border-bottom">
-                            <h2 class="font-weight-bold custom-headline-text-lesson mb-3">Directory Services</h2>
-                            
-                            <p>In the fourth week of this course, we'll learn about directory services. Specifically, we'll cover how two of the most popular directory services, Active Directory and OpenLDAP, work in action. We'll explore the concept of centralized management and how this can help SysAdmins maintain and support all the different parts of an IT infrastructure. By the end of this module, you will know how to add users, passwords, and use group policies in Active Directory and OpenLDAP.</p>
-                            
-                            <div class="info-box custom-info-box shadow-none p-0 mb-5">
-                                <div class="custom-info-box-content pr-1">
-                                    <span class="custom-info-box-icon border-0 custom-icon-sm custom-bg-gradient-green rounded-circle text-white"><i class="fas fa-book"></i></span>
-                                </div>
-                                
-                                <div class="info-box-content">
-                                    <span class="info-box-text text-secondary">19 videos (Total 100 min), 11 readings, 6 quizzes</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.col-12 row (div lesson) -->
-                    <div class="col-12 mt-3 row">
-                        <div class="col-lg-2">
-                            <div class="text-center" style="display: inline-block">
-                                <span>LESSON</span>
-                                <br>
-                                <span class="custom-header-text-lesson">5</span>
-                            </div>
-                        </div>
-                        <div class="col-lg-10 border-bottom">
-                            <h2 class="font-weight-bold custom-headline-text-lesson mb-3">Data Recovery & Backups</h2>
-                            
-                            <p>In the fifth week of this course, we'll learn about data recovery and backups. In any tech role, it's important to know how to backup and recover data -- it's even more important for system administration. We will also learn about common corporate practices like designing a disaster recovery plan and writing post-mortem documentation. By the end of this module, you'll know the tradeoffs between on-site and off-site backups, understand the value and importance of backup and recovery testing, know different options for data backup (as well as the risks) and understand the purpose and contents of a disaster recovery plan.</p>
-                            
-                            <div class="info-box custom-info-box shadow-none p-0 mb-5">
-                                <div class="custom-info-box-content pr-1">
-                                    <span class="custom-info-box-icon border-0 custom-icon-sm custom-bg-gradient-green rounded-circle text-white"><i class="fas fa-book"></i></span>
-                                </div>
-                                
-                                <div class="info-box-content">
-                                    <span class="info-box-text text-secondary">13 videos (Total 43 min), 3 readings, 6 quizzes</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.col-12 row (div lesson) -->
-                    <div class="col-12 mt-3 row">
-                        <div class="col-lg-2">
-                            <div class="text-center" style="display: inline-block">
-                                <span>LESSON</span>
-                                <br>
-                                <span class="custom-header-text-lesson">6</span>
-                            </div>
-                        </div>
-                        <div class="col-lg-10 border-bottom">
-                            <h2 class="font-weight-bold custom-headline-text-lesson mb-3">Final Project</h2>
-                            
-                            <p>Congratulations, you've made it to the final week in the course! The last week of this course is dedicated to the final project. For the final project, you will apply all the skills you've learned in this course by providing systems administration consultation. You will assess the IT infrastructure of three fictitious (but very real-life based!) companies and provide recommendations and advice about how to support their IT infrastructure. By the end of this project, you will demonstrate the skills and problem-solving techniques of a SysAdmin. Good luck!</p>
-                            
-                            <div class="info-box custom-info-box shadow-none p-0 mb-5">
-                                <div class="custom-info-box-content pr-1">
-                                    <span class="custom-info-box-icon border-0 custom-icon-sm custom-bg-gradient-green rounded-circle text-white"><i class="fas fa-book"></i></span>
-                                </div>
-                                
-                                <div class="info-box-content">
-                                    <span class="info-box-text text-secondary">3 videos (Total 4 min)</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.col-12 row (div lesson) -->
+                    @endforeach
+                    @endif
                 </div>
             </div>
         </div>

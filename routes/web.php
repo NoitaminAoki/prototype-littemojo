@@ -23,6 +23,7 @@ use App\Http\Controllers\Partners\{
 use App\Http\Livewire\Partners\{
     Courses\Experience as PartnerExpLive,
     Courses\Skill as PartnerSkillLive,
+    Courses\Lesson as PartnerLessonLive,
 
     Courses\Lessons\Book as BookLive,
 };
@@ -64,6 +65,7 @@ Route::group(['middleware' => 'auth:partner', 'prefix' => 'partner/management', 
         Route::group(['as' => 'course.', 'prefix' => 'course'], function () {
             Route::get('/experiences/{course_id}', PartnerExpLive::class)->name('experience.index');
             Route::get('/skills/{course_id}', PartnerSkillLive::class)->name('skill.index');
+            Route::get('/lessons/{course_id}', PartnerLessonLive::class)->name('lesson.index');
         });
         Route::resource('course', PartnerCourseController::class);
     });

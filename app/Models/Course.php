@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\{
     GainedExperience as Experiences,
     ObtainSkill as Skills,
+    CourseLesson as Lesson
 };
 
 class Course extends Model
@@ -22,5 +23,10 @@ class Course extends Model
     public function skills()
     {
         return $this->hasMany(Skills::class, 'course_id');
+    }
+
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class, 'course_id');
     }
 }
