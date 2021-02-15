@@ -14,13 +14,20 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Books</h3>
+                <h3 class="card-title">Books @if($isOpenOrder) - Ordering @endif</h3>
                 <div class="card-tools">
+                    <button type="button" wire:click="openOrder" class="btn btn-tool bg-primary">
+                        Manage Ordering
+                    </button>
                     <button type="button" wire:click="resetInput" data-toggle="modal" data-target="#modal-insert" class="btn btn-tool bg-primary">
                         Add Book(s)
                     </button>
                 </div>
             </div>
+            
+            @if($isOpenOrder)
+            @include('partners.course.lesson.book.component-order')
+            @else
             <div class="card-body">
                 <table class="table">
                     <tbody>
@@ -52,8 +59,16 @@
                     </tbody>
                 </table>
             </div>
+            @endif
+            @if ($isOpenOrder)
+            <div class="card-footer clearfix">
+                <button id="btn-submit-order" type="button" class="btn btn-info float-right">Save</button>
+                <button type="button" wire:click="openOrder(false)" class="btn btn-secondary mr-2 float-right">Close</button>
+            </div>
+            @endif
         </div>        
     </div>
+    
     
     <div wire:ignore.self class="modal fade" tabindex="-1" id="modal-insert">
         <div class="modal-dialog">
@@ -86,7 +101,7 @@
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" wire:loading.target="upload" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" wire:loading.target="upload" id="btn-insert btn-process" class="btn btn-primary">Save</button>
+                        <button type="submit" wire:loading.target="upload" id="btn-insert" class="btn btn-primary">Save</button>
                     </div>
                 </form>
             </div>
@@ -128,7 +143,7 @@
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" wire:loading.target="update" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" wire:loading.target="update" id="btn-insert btn-process" class="btn btn-primary">Update</button>
+                        <button type="submit" wire:loading.target="update" id="btn-update" class="btn btn-primary">Update</button>
                     </div>
                 </form>
             </div>
@@ -139,11 +154,23 @@
     <!-- /.modal -->
 </div>
 
-
+@section('script-top')
+<script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+@endsection
 @push('script')
 <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js')}} "></script>
 <script>
+    // jQuery UI sortable for the todo list
+</script>
+<script>
     document.addEventListener('livewire:load', function () {
+        $(document).on('click', '#btn-submit-order', function() {
+            let orders_id = $('input.orders-id').map(function() {
+                return $(this).val();
+            }).get();
+            console.log(orders_id);
+            @this.submitOrder(orders_id);
+        });
         $(document).on('click', '.btn-delete', function () {
             Swal.fire({
                 title: 'Are you sure?',
@@ -160,7 +187,6 @@
             }); 
         });
         Livewire.hook('message.sent', (message, component) => {
-            console.log("sent");
             $(".btn-process").attr("disabled", true);
             $(".form-control").attr("readonly", true);
         });
@@ -173,6 +199,14 @@
                     Swal.fire( 'Success!', @this.notification.message, 'success' );
                     @this.resetNotif();
                 }, 300);
+            }
+            if(@this.isOpenOrder) {
+                $('.todo-list').sortable({
+                    placeholder         : 'sort-highlight',
+                    handle              : '.handle',
+                    forcePlaceholderSize: true,
+                    zIndex              : 999999
+                });
             }
         });
     });

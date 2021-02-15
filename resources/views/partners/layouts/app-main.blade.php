@@ -68,6 +68,7 @@
     <!-- ./wrapper -->
     
     <!-- REQUIRED SCRIPTS -->
+    @stack('script-top')
     @include('partners.layouts.scripts')
     @livewireScripts
     @stack('script')

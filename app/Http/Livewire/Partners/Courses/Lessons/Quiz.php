@@ -3,44 +3,27 @@
 namespace App\Http\Livewire\Partners\Courses\Lessons;
 
 use Livewire\Component;
-use Livewire\WithFileUploads;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
-use App\Models\{
-    CourseLesson as Lesson,
-    LessonBook as MsBook
-};
-use App\Helpers\Converter;
 
-class Book extends Component
+class Quiz extends Component
 {
-    use WithFileUploads;
-
     protected $rules = [
-        'title' => 'required|string',
-        'file' => 'required|mimes:pdf|max:5120',
         'book.title' => 'required|string',
         'update_file' => 'mimes:pdf|max:5120',
     ];
-    
-    public $orders_id;
+
 
     public $notification = [
         'isOpen' => false, 
         'message' => "",
     ];
-
-    public $isOpenOrder = false;
-
+    
     public $lesson;
     public $book;
-    public $books;
 
     public $title;
     public $file;
     public $update_file;
     public $iteration;
-
 
     public function Mount(Lesson $lesson)
     {
@@ -49,9 +32,9 @@ class Book extends Component
 
     public function render()
     {
-        $this->books = MsBook::where('lesson_id', $this->lesson->id)->orderBy('orders', 'asc')->get();
+        $books = MsBook::where('lesson_id', $this->lesson->id)->get();
         return view('partners.course.lesson.book.live-index')
-        ->with(['books' => $this->books])
+        ->with(['books' => $books])
         ->layout('partners.layouts.app-main');
     }
 
@@ -146,28 +129,4 @@ class Book extends Component
         'message' => ""
         ];
     }
-
-    public function openOrder($state = true)
-    {
-        $this->isOpenOrder = $state;
-    }
-
-    public function submitOrder($orders_id)
-    {
-        // dd($orders_id);
-        $this->orders_id = $orders_id;
-        $this->validate([
-            'orders_id.*' => 'integer',
-        ]);
-        foreach ($this->books as $book) {
-            $order = array_search($book->id, $this->orders_id) + 1;
-            if($book->orders <> $order) {
-                $book->orders = $order;
-                $book->save();
-            }
-        }
-        $this->setNotif('Successfully reordering data.');
-    }
-
-    
 }

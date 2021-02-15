@@ -7,7 +7,6 @@ use App\Models\{
     ObtainSkill as Skills,
 	Course,
 };
-use Illuminate\Support\Arr;
 
 class Skill extends Component
 {
