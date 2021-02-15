@@ -6,7 +6,8 @@
 @section('Page-Header', 'Detail Lesson')
 
 @section('breadcrumbs')
-<li class="breadcrumb-item"><a href="{{ route('partner.manage.course.index') }}" class="text-info">Lesson</a></li>
+<li class="breadcrumb-item"><a href="{{ route('partner.manage.course.show', ['course' => $lesson->course_id]) }}" class="text-info">Course</a></li>
+<li class="breadcrumb-item active">Lesson</li>
 <li class="breadcrumb-item active">Detail</li>
 @endsection
 
@@ -25,27 +26,30 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    @if (true)
+                    @if ($lesson->books->isEmpty())
                     <div class="col-12 text-center">
                         <h3 class="text-sm text-secondary">No Book.</h3>
                     </div>
                     
                     @else
+                    <table class="table">
+                        <tbody>
+                            @foreach ($lesson->books as $book)
+                            <tr>
+                                <td>
+                                    <div>
+                                        <a target="_blank" href="{{ route('lesson.books', ['uuid'=>$book->uuid]) }}" class="btn-link text-secondary"><i class="far fa-fw fa-file-pdf"></i> {{$book->title}}</a>
+                                        
+                                        <span class="mailbox-attachment-size clearfix mt-1">
+                                            <span>{{$book->size}}</span>
+                                        </span>
+                                    </div> 
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                     
-                    {{-- @foreach ($course->experiences as $exp_item)
-                        <div class="col-lg-6">
-                            <div class="info-box custom-info-box shadow-none p-0">
-                                <span class="custom-info-box-icon custom-icon-top border-0 text-success"><i class="fas fa-check"></i></span>
-                                
-                                
-                                <div class="info-box-content custom-content-top pl-0">
-                                    <span class="custom-info-box-text">{{$exp_item->name}}</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                        </div>
-                        @endforeach --}}
-
                     @endif
                 </div>
             </div>

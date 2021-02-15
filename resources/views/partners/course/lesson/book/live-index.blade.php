@@ -6,7 +6,8 @@
 
 
 @section('breadcrumbs')
-<li class="breadcrumb-item"><a href="#">Course</a></li>
+<li class="breadcrumb-item"><a href="{{ route('partner.manage.course.lesson.show', ['lesson' => $lesson->id]) }}" class="text-info">Lesson</a></li>
+<li class="breadcrumb-item active">Book</li>
 @endsection
 
 <div class="row">
