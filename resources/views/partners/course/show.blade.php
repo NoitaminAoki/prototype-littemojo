@@ -240,9 +240,6 @@
                 <h4 class="text-center">Syllabus - What you will learn from this course</h4>
             </div>
             <div class="card-body">
-                <div class="my-1">
-                    <br>
-                </div>
                 <div class="row">
                     @if ($course->lessons->isEmpty())
                     <div class="col-12 text-center">

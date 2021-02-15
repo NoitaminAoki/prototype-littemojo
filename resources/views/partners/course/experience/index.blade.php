@@ -66,7 +66,7 @@
 </style>
 @endsection
 
-@section('Page-Header', 'Experiences')
+@section('Page-Header', 'Experience')
 
 
 @section('breadcrumbs')

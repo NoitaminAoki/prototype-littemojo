@@ -15,6 +15,7 @@ use App\Http\Controllers\Partners\{
     CourseController as PartnerCourseController,
 
     Courses\ExperienceController as PartnerExpController,
+    Courses\LessonController as PartnerLessonController,
 
     Courses\Lessons\BookController as BookController,
 
@@ -63,9 +64,16 @@ Route::group(['middleware' => 'auth:partner', 'prefix' => 'partner/management', 
 
     Route::group(['as' => 'manage.' ], function () {
         Route::group(['as' => 'course.', 'prefix' => 'course'], function () {
-            Route::get('/experiences/{course_id}', PartnerExpLive::class)->name('experience.index');
-            Route::get('/skills/{course_id}', PartnerSkillLive::class)->name('skill.index');
-            Route::get('/lessons/{course_id}', PartnerLessonLive::class)->name('lesson.index');
+            Route::get('/{course_id}/experiences', PartnerExpLive::class)->name('experience.index');
+            Route::get('/{course_id}/skills', PartnerSkillLive::class)->name('skill.index');
+            
+            Route::get('/{course_id}/lessons', PartnerLessonLive::class)->name('lesson.index');
+            
+            Route::group(['prefix' => 'lessons', 'as' => 'lesson.'], function () {
+                Route::get('/{lesson:id}', [PartnerLessonController::class, 'show'])->name('show');
+                Route::get('/{lesson:id}/books', BookLive::class)->name('book.index');
+
+            });
         });
         Route::resource('course', PartnerCourseController::class);
     });
@@ -79,9 +87,7 @@ Route::prefix('partner')->name('partner.')->group(function () {
     
 });
 
-Route::get('lesson/books', BookLive::class);
-
-Route::middleware('auth:partner')->get('lesson/books/get/{uuid}/pdf', [BookController::class, 'index'])->name('lesson.books');
+Route::middleware('auth:partner')->get('lessons/books/get/{uuid}/pdf', [BookController::class, 'index'])->name('lesson.books');
 
 Route::get('pass-login-admin', function () {
     $credentials = ['email' => 'admin@admin.com', 'password' => 'Password123'];

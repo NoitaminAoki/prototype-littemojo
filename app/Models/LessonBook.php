@@ -16,7 +16,9 @@ class LessonBook extends Model
     protected $fillable = [
         'lesson_id',
         'uuid',
+        'title',
         'orders',
         'filename',
+        'size',
     ];
 }

@@ -4,15 +4,15 @@ namespace App\Http\Controllers\Partners\Courses\Lessons;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\LessonBook as Books;
+use App\Models\LessonBook as Book;
 
 
 class BookController extends Controller
 {
     public function index($uuid)
     {
-        $file = Books::where('uuid', $uuid)->first();
-        $path = storage_path('app/books/'.$file->filename);
+        $file = Book::where('uuid', $uuid)->firstOrFail();
+        $path = storage_path('app/books/'.$file->lesson_id.'/'.$file->filename);
         
         if (file_exists($path)) {
             

@@ -68,7 +68,7 @@
 </style>
 @endsection
 
-@section('Page-Header', 'Lessons')
+@section('Page-Header', 'Lesson')
 
 
 @section('breadcrumbs')
@@ -95,7 +95,7 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Lessons | LESSONS YOU WILL GAIN</h3>
+                <h3 class="card-title">Lessons</h3>
                 <div class="card-tools">
                     <button type="button" wire:click="resetInput" data-toggle="modal" data-target="#modal-insert" class="btn btn-tool bg-primary">
                         Add Lesson(s)
@@ -117,6 +117,7 @@
                             <td>{{$lesson->description}}</td>
                             <td class="text-right py-0 align-middle">
                                 <div class="btn-group btn-group-sm">
+                                    <a href="{{ route('partner.manage.course.lesson.show', ['lesson'=> $lesson->id]) }}" class="btn btn-primary"><i class="fas fa-search"></i></a>
                                     <button data-toggle="modal" wire:click="setLesson({{$lesson->id}})" data-target="#modal-update" class="btn btn-warning"><i class="fas fa-edit"></i></button>
                                     <button data-id="{{$lesson->id}}" class="btn btn-danger btn-delete btn-process"><i class="fas fa-trash"></i></button>
                                 </div>

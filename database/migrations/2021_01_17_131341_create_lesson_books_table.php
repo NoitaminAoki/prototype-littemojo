@@ -17,8 +17,10 @@ class CreateLessonBooksTable extends Migration
             $table->id();
             $table->bigInteger('lesson_id')->unsigned()->nullable();
             $table->uuid('uuid');
+            $table->string('title');
             $table->integer('orders');
             $table->string('filename');
+            $table->string('size', 20);
             $table->timestamps();
         });
     }
