@@ -57,7 +57,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 });
 
-
 Route::group(['middleware' => 'auth:partner', 'prefix' => 'partner/management', 'as' => 'partner.'], function () {
     Route::get('/dashboard', [PartnerDashboard::class, 'index'])->name('dashboard');
 
