@@ -60,7 +60,7 @@
             <div class="card-header">
                 <h4 class="card-title text-secondary">Videos</h4>
                 <div class="card-tools">
-                    <a href="" class="btn btn-tool bg-primary">
+                    <a href="{{ route('partner.manage.course.lesson.video.index', ['lesson' => $lesson->id]) }}" class="btn btn-tool bg-primary">
                         Manage
                     </a>
                 </div>

@@ -27,6 +27,7 @@ use App\Http\Livewire\Partners\{
     Courses\Lesson as PartnerLessonLive,
 
     Courses\Lessons\Book as BookLive,
+    Courses\Lessons\Video as VideoLive,
 };
 use Illuminate\Support\Facades\Auth;
 
@@ -72,6 +73,7 @@ Route::group(['middleware' => 'auth:partner', 'prefix' => 'partner/management', 
             Route::group(['prefix' => 'lessons', 'as' => 'lesson.'], function () {
                 Route::get('/{lesson:id}', [PartnerLessonController::class, 'show'])->name('show');
                 Route::get('/{lesson:id}/books', BookLive::class)->name('book.index');
+                Route::get('/{lesson:id}/videos', VideoLive::class)->name('video.index');
 
             });
         });
@@ -88,6 +90,7 @@ Route::prefix('partner')->name('partner.')->group(function () {
 });
 
 Route::middleware('auth:partner')->get('lessons/books/get/{uuid}/pdf', [BookController::class, 'index'])->name('lesson.books');
+Route::middleware('auth:partner')->get('lessons/videos/get/{uuid}/video', [VideoController::class, 'index'])->name('lesson.videos');
 
 Route::get('pass-login-admin', function () {
     $credentials = ['email' => 'admin@admin.com', 'password' => 'Password123'];
