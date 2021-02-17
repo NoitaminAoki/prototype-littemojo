@@ -29,14 +29,10 @@ use App\Http\Livewire\Partners\{
 
     Courses\Lessons\Book as BookLive,
     Courses\Lessons\Video as VideoLive,
+    Courses\Lessons\Quiz as QuizLive,
 };
 use Illuminate\Support\Facades\Auth;
 
-Route::get('ea', function(){
-    $getid3 = new \getID3;
-        $duration = $getid3->analyze(storage_path('app/videos/1/20210217031438_videos.mp4'));
-        dd($duration);
-    });
 Route::view('/', 'welcome');
 Route::view('dashboard', 'dashboard')->middleware(['auth:sanctum', 'verified'])->name('dashboard');
 
@@ -79,6 +75,7 @@ Route::group(['middleware' => 'auth:partner', 'prefix' => 'partner/management', 
                 Route::get('/{lesson:id}', [PartnerLessonController::class, 'show'])->name('show');
                 Route::get('/{lesson:id}/books', BookLive::class)->name('book.index');
                 Route::get('/{lesson:id}/videos', VideoLive::class)->name('video.index');
+                Route::get('/{lesson:id}/quizzes', QuizLive::class)->name('quiz.index');
 
             });
         });

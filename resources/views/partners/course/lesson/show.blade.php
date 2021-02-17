@@ -101,7 +101,7 @@
             <div class="card-header">
                 <h4 class="card-title text-secondary">Quizzes</h4>
                 <div class="card-tools">
-                    <a href="" class="btn btn-tool bg-primary">
+                    <a href="{{ route('partner.manage.course.lesson.quiz.index', ['lesson' => $lesson->id]) }}" class="btn btn-tool bg-primary">
                         Manage
                     </a>
                 </div>
@@ -109,10 +109,24 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    @if (true)
+                    @if ($lesson->quizzes->isEmpty())
                     <div class="col-12 text-center">
                         <h3 class="text-sm text-secondary">No Quiz.</h3>
                     </div>
+                    @else
+                    <table class="table">
+                        <tbody>
+                            @foreach ($lesson->quizzes as $quiz)
+                            <tr>
+                                <td>
+                                    <div>
+                                        <a target="_blank" href="#" class="btn-link text-secondary"><i class="far fa-fw fa-question-circle"></i> {{$quiz->title}}<span class="float-right">{{$quiz->total_question}}</span> </a>
+                                    </div> 
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                     
                     @endif
                 </div>

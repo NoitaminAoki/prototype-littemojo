@@ -3,27 +3,42 @@
 namespace App\Http\Livewire\Partners\Courses\Lessons;
 
 use Livewire\Component;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use App\Models\{
+    CourseLesson as Lesson,
+    LessonQuiz as MsQuiz
+};
+use App\Helpers\Converter;
 
 class Quiz extends Component
 {
-    protected $rules = [
-        'book.title' => 'required|string',
-        'update_file' => 'mimes:pdf|max:5120',
-    ];
+    use WithFileUploads;
 
+    protected $rules = [
+        'title' => 'required|string',
+        'quiz.title' => 'required|string',
+        'quiz.total_question' => 'required|string',
+    ];
+    
+    public $orders_id;
 
     public $notification = [
         'isOpen' => false, 
         'message' => "",
     ];
-    
+
+    public $isOpenOrder = false;
+
     public $lesson;
-    public $book;
+    public $quiz;
+    public $quizzes;
 
     public $title;
-    public $file;
-    public $update_file;
+    public $total_question;
     public $iteration;
+
 
     public function Mount(Lesson $lesson)
     {
@@ -32,38 +47,30 @@ class Quiz extends Component
 
     public function render()
     {
-        $books = MsBook::where('lesson_id', $this->lesson->id)->get();
-        return view('partners.course.lesson.book.live-index')
-        ->with(['books' => $books])
+        $this->quizzes = MsQuiz::where('lesson_id', $this->lesson->id)->orderBy('orders', 'asc')->get();
+        return view('partners.course.lesson.quiz.live-index')
+        ->with(['quizzes' => $this->quizzes])
         ->layout('partners.layouts.app-main');
     }
 
-    public function upload()
+    public function store()
     {
         $this->validate([
             'title' => 'required|string',
-            'file' => 'required|mimes:pdf|max:5120'
+            'total_question' => 'required|string',
         ]);
-
-        $name = Date('YmdHis').'_books.'.$this->file->extension();
-
-        $path = Storage::putFileAs('books/'.$this->lesson->id, $this->file, $name);
-
-        $last_book = MsBook::where('lesson_id', $this->lesson->id)->orderBy('orders', 'desc')->first();
+        $last_quiz = MsQuiz::where('lesson_id', $this->lesson->id)->orderBy('orders', 'desc')->first();
 
         $order = 1;
 
-        if($last_book) {
-            $order += $last_book->orders;
+        if($last_quiz) {
+            $order += $last_quiz->orders;
         }
-
-        MsBook::create([
+        MsQuiz::create([
             'lesson_id' => $this->lesson->id,
-            'uuid' => Str::uuid(),
             'title' => $this->title,
             'orders' => $order,
-            'filename' => $name,
-            'size' => Converter::formatBytes($this->file->getSize())
+            'total_question' => $this->total_question
         ]);
 
         $this->resetInput();
@@ -73,44 +80,31 @@ class Quiz extends Component
     public function update()
     {
         $this->validate([
-            'book.title' => 'required|string',
-            'update_file' => 'nullable|mimes:pdf|max:5120'
+            'quiz.title' => 'required|string',
+            'quiz.total_question' => 'required|string',
         ]);
 
-        if (!is_null($this->update_file)) {
-            $uri = 'books/'.$this->lesson->id.'/'.$this->book->filename;
-            Storage::delete($uri);
-            
-            $name = Date('YmdHis').'_books.'.$this->update_file->extension();
-            $path = Storage::putFileAs('books/'.$this->lesson->id, $this->update_file, $name);
-
-            $this->book->filename = $name;
-            $this->book->size = Converter::formatBytes($this->update_file->getSize());
-
-        }
-        $this->book->save();
+        $this->quiz->save();
         $this->resetInput();
         $this->setNotif('Successfully updating data.');
     }
     
     public function delete($id)
     {
-        $this->setBook($id);
-        $uri = 'books/'.$this->lesson->id.'/'.$this->book->filename;
-        Storage::delete($uri);
-        $this->book->delete();
+        $this->setQuiz($id);
+        $this->quiz->delete();
         $this->resetInput();
         $this->setNotif('Successfully deleting data.');
     }
 
-    public function setBook($id)
+    public function setQuiz($id)
     {
-        $this->book = MsBook::find($id);
+        $this->quiz = MsQuiz::find($id);
     }
 
     public function resetInput()
     {
-        $this->reset(['title', 'file']);
+        $this->reset(['title', 'total_question']);
         $this->iteration++;
     }
 
@@ -129,4 +123,28 @@ class Quiz extends Component
         'message' => ""
         ];
     }
+
+    public function openOrder($state = true)
+    {
+        $this->isOpenOrder = $state;
+    }
+
+    public function submitOrder($orders_id)
+    {
+        // dd($orders_id);
+        $this->orders_id = $orders_id;
+        $this->validate([
+            'orders_id.*' => 'integer',
+        ]);
+        foreach ($this->quizzes as $quiz) {
+            $order = array_search($quiz->id, $this->orders_id) + 1;
+            if($quiz->orders <> $order) {
+                $quiz->orders = $order;
+                $quiz->save();
+            }
+        }
+        $this->setNotif('Successfully reordering data.');
+    }
+
+    
 }

@@ -20,7 +20,7 @@ class CreateLessonVideosTable extends Migration
             $table->string('title');
             $table->integer('orders');
             $table->string('filename');
-            $table->string('duration', 20)->nullable();
+            $table->string('duration', 6)->nullable();
             $table->string('size', 20);
             $table->timestamps();
         });

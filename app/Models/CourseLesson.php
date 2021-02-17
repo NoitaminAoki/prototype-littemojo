@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\{
     LessonBook as Books,
     LessonVideo as Videos,
+    LessonQuiz as Quizzes,
 };
 
 class CourseLesson extends Model
@@ -20,6 +21,11 @@ class CourseLesson extends Model
 
     public function videos()
     {
-        return $this->hasMany(videos::class, 'lesson_id')->orderBy('orders', 'asc');
+        return $this->hasMany(Videos::class, 'lesson_id')->orderBy('orders', 'asc');
+    }
+
+    public function quizzes()
+    {
+        return $this->hasMany(Quizzes::class, 'lesson_id')->orderBy('orders', 'asc');
     }
 }
