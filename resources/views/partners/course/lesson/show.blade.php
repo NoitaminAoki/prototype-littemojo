@@ -68,10 +68,28 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    @if (true)
+                    @if ($lesson->videos->isEmpty())
                     <div class="col-12 text-center">
                         <h3 class="text-sm text-secondary">No Video.</h3>
                     </div>
+                    @else
+                    <table class="table">
+                        <tbody>
+                            @foreach ($lesson->videos as $video)
+                            <tr>
+                                <td>
+                                    <div>
+                                        <a target="_blank" href="{{ route('lesson.videos', ['uuid'=>$video->uuid]) }}" class="btn-link text-secondary"><i class="far fa-fw fa-file-video"></i> {{$video->title}}</a>
+                                        
+                                        <span class="mailbox-attachment-size clearfix mt-1">
+                                            <span>{{$video->size}}</span>
+                                        </span>
+                                    </div> 
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                     
                     @endif
                 </div>

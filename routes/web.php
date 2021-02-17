@@ -18,6 +18,7 @@ use App\Http\Controllers\Partners\{
     Courses\LessonController as PartnerLessonController,
 
     Courses\Lessons\BookController as BookController,
+    Courses\Lessons\VideoController
 
 };
 
@@ -31,6 +32,11 @@ use App\Http\Livewire\Partners\{
 };
 use Illuminate\Support\Facades\Auth;
 
+Route::get('ea', function(){
+    $getid3 = new \getID3;
+        $duration = $getid3->analyze(storage_path('app/videos/1/20210217031438_videos.mp4'));
+        dd($duration);
+    });
 Route::view('/', 'welcome');
 Route::view('dashboard', 'dashboard')->middleware(['auth:sanctum', 'verified'])->name('dashboard');
 

@@ -73,13 +73,16 @@ class Video extends Component
         if($last_video) {
             $order += $last_video->orders;
         }
-
+        $getid3 = new \getID3;
+        $video = $getid3->analyze(storage_path('app/videos/'.$this->lesson->id.'/'.$name));
+        
         MsVideo::create([
             'lesson_id' => $this->lesson->id,
             'uuid' => Str::uuid(),
             'title' => $this->title,
             'orders' => $order,
             'filename' => $name,
+            'duration' => $video['playtime_string'],
             'size' => Converter::formatBytes($this->file->getSize())
         ]);
 

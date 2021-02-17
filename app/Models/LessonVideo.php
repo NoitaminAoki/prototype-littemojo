@@ -19,6 +19,7 @@ class LessonVideo extends Model
         'title',
         'orders',
         'filename',
+        'duration',
         'size',
     ];
 }
