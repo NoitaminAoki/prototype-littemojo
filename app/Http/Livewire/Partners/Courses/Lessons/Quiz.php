@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Partners\Courses\Lessons;
 
 use Livewire\Component;
-use Livewire\WithFileUploads;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use App\Models\{
@@ -14,7 +13,6 @@ use App\Helpers\Converter;
 
 class Quiz extends Component
 {
-    use WithFileUploads;
 
     protected $rules = [
         'title' => 'required|string',
@@ -131,7 +129,6 @@ class Quiz extends Component
 
     public function submitOrder($orders_id)
     {
-        // dd($orders_id);
         $this->orders_id = $orders_id;
         $this->validate([
             'orders_id.*' => 'integer',
