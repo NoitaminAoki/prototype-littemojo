@@ -27,7 +27,8 @@ class CourseSeeder extends Seeder
     		'title' => 'Ini title business',
     		'description' => '<h1>Deskripsi 1</h1><h2>Deskripsi 2</h2><h3>Deskripsi 3</h3><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam doloremque dignissimos accusamus nesciunt neque, adipisci, dolor vero assumenda quisquam laudantium libero ea, voluptas expedita ipsa veritatis, fuga nisi quia mollitia.<br></p>',
     		'price' => 100000,
-    		'duration' => 'month'
+    		'duration' => 'month',
+            'cover' => Date('YmdHis').'Ini title business_covers.jpg'
     	]);
 
     	\DB::table('course_lessons')->insert([

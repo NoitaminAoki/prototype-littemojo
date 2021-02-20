@@ -23,6 +23,7 @@ class CreateCoursesTable extends Migration
             $table->text('description');
             $table->bigInteger('price');
             $table->enum('duration', ['week', 'month']);
+            $table->string('cover');
             $table->timestamps();
         });
     }

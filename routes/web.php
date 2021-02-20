@@ -90,7 +90,7 @@ Route::prefix('partner')->name('partner.')->group(function () {
     Route::middleware('guest:partner')->post('/login', [PartnerAuthController::class, 'login'])->name('login');
     
 });
-
+Route::middleware('auth:partner')->get('course/{nama_file}/covers', [PartnerCourseController::class, 'getFile'])->name('course.covers');
 Route::middleware('auth:partner')->get('lessons/books/get/{uuid}/pdf', [BookController::class, 'index'])->name('lesson.books');
 Route::middleware('auth:partner')->get('lessons/videos/get/{uuid}/video', [VideoController::class, 'index'])->name('lesson.videos');
 
