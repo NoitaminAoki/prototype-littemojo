@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class QuestionOption extends Model
 {
     use HasFactory;
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'question_id',
+        'orders',
+        'uuid',
+        'image',
+        'title',
+        'type',
+    ];
 }

@@ -3,8 +3,6 @@
 namespace App\Http\Livewire\Partners\Courses\Lessons;
 
 use Livewire\Component;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 use App\Models\{
     CourseLesson as Lesson,
     LessonQuiz as MsQuiz

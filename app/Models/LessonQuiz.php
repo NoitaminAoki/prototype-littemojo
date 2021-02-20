@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\{
+    CourseLesson as Lesson,
+};
 
 class LessonQuiz extends Model
 {
@@ -15,4 +18,9 @@ class LessonQuiz extends Model
         'orders',
         'total_question',
     ];
+    
+    public function lesson()
+    {
+        return $this->belongsTo(Lesson::class, 'lesson_id');
+    }
 }

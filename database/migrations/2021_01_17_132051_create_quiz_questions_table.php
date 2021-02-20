@@ -16,8 +16,10 @@ class CreateQuizQuestionsTable extends Migration
         Schema::create('quiz_questions', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('quiz_id')->unsigned()->nullable();
-            $table->string('quiz_img')->nullable();
-            $table->string('question');
+            $table->uuid('uuid');
+            $table->string('image')->nullable();
+            $table->string('title')->nullable();
+            $table->integer('orders');
             $table->timestamps();
         });
     }

@@ -82,7 +82,7 @@
                                         <a target="_blank" href="{{ route('lesson.videos', ['uuid'=>$video->uuid]) }}" class="btn-link text-secondary"><i class="far fa-fw fa-file-video"></i> {{$video->title}}</a>
                                         
                                         <span class="mailbox-attachment-size clearfix mt-1">
-                                            <span>{{$video->size}}</span>
+                                            <span>{{floor($video->duration/60)}} Mins - {{$video->size}}</span>
                                         </span>
                                     </div> 
                                 </td>

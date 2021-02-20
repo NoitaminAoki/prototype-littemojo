@@ -90,7 +90,7 @@
                         @enderror
                         <div class="w-100 mt-2">
                             <label for="">File</label>
-                            <input type="file" wire:model="file" class="form-control" id="upload{{$iteration}}" required>
+                            <input type="file" wire:model="file" accept=".pdf" class="form-control" id="upload{{$iteration}}" required>
                         </div>
                         @error('file')
                         <span class="text-danger">{{$message}}</span>
@@ -132,7 +132,7 @@
                         <div class="w-100 mt-2">
                             <label for="">File</label>
                             <small class="text-secondary">no need to be filled if you don't want to change the file.</small>
-                            <input type="file" wire:model="update_file" class="form-control" id="upload_update_{{$iteration}}">
+                            <input type="file" wire:model="update_file" accept=".pdf" class="form-control" id="upload_update_{{$iteration}}">
                         </div>
                         @error('update_file')
                         <span class="text-danger">{{$message}}</span>

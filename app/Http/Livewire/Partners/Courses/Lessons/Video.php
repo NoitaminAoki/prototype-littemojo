@@ -18,7 +18,7 @@ class Video extends Component
 
     protected $rules = [
         'title' => 'required|string',
-        'file' => 'required|mimes:mp4,mkv|max:102400',
+        'file' => 'required|file|mimes:mp4,mkv|max:102400',
         'video.title' => 'required|string',
         'update_file' => 'mimes:mp4,mkv|max:102400',
     ];
@@ -40,7 +40,6 @@ class Video extends Component
     public $file;
     public $update_file;
     public $iteration;
-
 
     public function Mount(Lesson $lesson)
     {
@@ -82,7 +81,7 @@ class Video extends Component
             'title' => $this->title,
             'orders' => $order,
             'filename' => $name,
-            'duration' => $video['playtime_string'],
+            'duration' => round($video['playtime_seconds']),
             'size' => Converter::formatBytes($this->file->getSize())
         ]);
 
@@ -104,7 +103,10 @@ class Video extends Component
             $name = Date('YmdHis').'_videos.'.$this->update_file->extension();
             $path = Storage::putFileAs('videos/'.$this->lesson->id, $this->update_file, $name);
 
+            $getid3 = new \getID3;
+            $video = $getid3->analyze(storage_path('app/videos/'.$this->lesson->id.'/'.$name));
             $this->video->filename = $name;
+            $this->video->duration = round($video['playtime_seconds']);
             $this->video->size = Converter::formatBytes($this->update_file->getSize());
 
         }

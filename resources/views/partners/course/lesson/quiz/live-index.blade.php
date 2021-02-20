@@ -20,7 +20,7 @@
                         Manage Ordering
                     </button>
                     <button type="button" wire:click="resetInput" data-toggle="modal" data-target="#modal-insert" class="btn btn-tool bg-primary">
-                        Add Quizze(s)
+                        Add Quiz(s)
                     </button>
                 </div>
             </div>
@@ -42,6 +42,7 @@
                             <td>{{$quiz->total_question}}</td>
                             <td class="text-right py-0 align-middle">
                                 <div class="btn-group btn-group-sm">
+                                    <a href="{{ route('partner.manage.course.lesson.quiz.question.index', ['quiz'=> $quiz->id]) }}" class="btn btn-primary"><i class="fas fa-search"></i></a>
                                     <button data-toggle="modal" wire:click="setQuiz({{$quiz->id}})" data-target="#modal-update" class="btn btn-warning"><i class="fas fa-edit"></i></button>
                                     <button data-id="{{$quiz->id}}" class="btn btn-danger btn-delete btn-process"><i class="fas fa-trash"></i></button>
                                 </div>
