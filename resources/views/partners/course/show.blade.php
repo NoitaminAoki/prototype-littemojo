@@ -77,7 +77,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-12">
+    <div class="col-9">
         <div class="card custom-bg-gradient-green">
             <div class="card-body">
                 <ol class="breadcrumb pl-0" style="background-color: transparent">
@@ -90,6 +90,9 @@
                 <h2 class="font-weight-bold"> {{$course->title}} </h2>
             </div>
         </div>
+    </div>
+    <div class="col-3 mb-2">
+        <img src="{{asset('uploaded_files/courses/covers/'.$course->uuid.'/'.$course->cover)}}" class="img-fluid" alt="Responsive image" style="max-width: 180px; border-radius: 5px;height: 150px;width: 200px;">
     </div>
     
     <div class="col-lg-12">

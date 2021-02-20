@@ -15,7 +15,7 @@
 <div class="row">
     <div class="col-lg">
         <div class="card">
-            <form action="{{route('partner.manage.course.store')}}" method="POST">
+            <form action="{{route('partner.manage.course.store')}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
                     @include('partials.alert')
@@ -49,6 +49,10 @@
                         <label>Deskripsi</label>
                         <textarea name="description" id="summernote" placeholder="Masukkan Deskripsi">{{old('description')}}</textarea>
                         <!-- <div id="summernote" name="description"></div> -->
+                    </div>
+                    <div class="form-group">
+                        <label>Cover</label>
+                        <input type="file" class="form-control" name="filename" placeholder="Masukkan Cover" required>
                     </div>
                     <div class="form-group">
                         <label>Harga</label>
