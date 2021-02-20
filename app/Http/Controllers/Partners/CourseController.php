@@ -68,7 +68,9 @@ class CourseController extends Controller
             $request['user_id'] 	  		= \Auth::user()->id;
             $request['catalog_topic_id'] 	= $sv_catTopic->id;
             $request['cover']               = $nama_file;
-            \Storage::putFileAs('covers/'.\Auth::user()->id, $file , $nama_file);
+            $request['uuid']                = \Str::uuid();
+            $file->move('uploaded_files/courses/covers/'.$request['uuid'], $nama_file);
+            // \Storage::putFileAs('covers/'.\Auth::user()->id, $file , $nama_file);
             Course::create($request->except('_token', 'name', 'files', 'filename'));
             return redirect('partner/management/course/')->with('alert-message', 'Berhasil Menambah Data');
         }
@@ -76,7 +78,7 @@ class CourseController extends Controller
 
     public function show($id){
     	$catalogs = Catalog::all();
-        $course   = Course::select('courses.id', 'courses.catalog_id', 'courses.cover', 'courses.catalog_topic_id', 'courses.title', 'courses.description', 'courses.price', 'courses.duration',
+        $course   = Course::select('courses.id', 'courses.catalog_id', 'courses.uuid', 'courses.cover', 'courses.catalog_topic_id', 'courses.title', 'courses.description', 'courses.price', 'courses.duration',
                             'catalog_topics.name as nama_catalog_topic',
                             'catalogs.name as nama_catalog',
                             'levels.name as nama_level', 'levels.description as desc_level')
@@ -85,17 +87,5 @@ class CourseController extends Controller
                             ->leftJoin('levels', 'levels.id', 'courses.level_id')
         					->findOrFail($id);
         return view('partners.course.show', compact('catalogs', 'course'));
-    }
-
-    public function getFile($nama_file){
-        $path = storage_path('app/covers/1'.'/'.$nama_file);
-        
-        if (file_exists($path)) {
-            
-            return response()
-            ->file($path, array('Cache-Control' => 'no-cache, no-store, must-revalidate', 'Pragma' => 'no-cache', 'Expires' => '0', 'Content-Type' =>'image/jpeg'));
-        }
-        
-        abort(404);
     }
 }

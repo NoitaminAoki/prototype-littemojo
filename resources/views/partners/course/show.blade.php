@@ -92,11 +92,7 @@
         </div>
     </div>
     <div class="col-3 mb-2">
-        @php
-        $url = url()->current();
-        $url2 = str_replace('partner/management/course/'.$course->id, '', $url); 
-        @endphp
-        <img src="{{$url2.'course/'.$course->cover .'/covers'}}" class="img-fluid" alt="Responsive image" style="max-width: 180px; border-radius: 5px;height: 150px;width: 200px;">
+        <img src="{{asset('uploaded_files/courses/covers/'.$course->uuid.'/'.$course->cover)}}" class="img-fluid" alt="Responsive image" style="max-width: 180px; border-radius: 5px;height: 150px;width: 200px;">
     </div>
     
     <div class="col-lg-12">
