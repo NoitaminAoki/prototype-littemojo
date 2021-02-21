@@ -18,6 +18,7 @@ class CreateQuizQuestionsTable extends Migration
             $table->bigInteger('quiz_id')->unsigned()->nullable();
             $table->uuid('uuid');
             $table->string('image')->nullable();
+            $table->string('path')->nullable();
             $table->string('title')->nullable();
             $table->integer('orders');
             $table->timestamps();

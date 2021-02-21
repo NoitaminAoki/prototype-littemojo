@@ -67,7 +67,7 @@ class LvQuestion extends Component
     public function addAnswer()
     {
         if (count($this->answers) < 5) {
-            $this->answers = Arr::add($this->answers, array_key_last($this->answers)+1, [ 'title' => null, 'is_key' => false ]);
+            $this->answers = Arr::add($this->answers, array_key_last($this->answers)+1, [ 'title' => null, 'image' => null, 'type' => 'text', 'is_key' => false ]);
         }
     }
 
@@ -96,6 +96,7 @@ class LvQuestion extends Component
                 $order += $last_question->orders;
             }
             $filename = null;
+            $path = null;
             if(!is_null($this->image)) {
                 $filename = Date('YmdHis').'_image_question.'.$this->image->extension();
                 $path = Storage::putFileAs('images/questions/lesson_'.$this->quiz->lesson_id.'/quiz_'.$this->quiz->id, $this->image, $filename);
@@ -105,17 +106,28 @@ class LvQuestion extends Component
                 'uuid' => Str::uuid(),
                 'title' => $this->title,
                 'image' => $filename,
+                'path' => $path,
                 'orders' => $order,
             ]);
 
             foreach ($this->answers as $key => $value) {
                 
+                $opt_filename = null;
+                $opt_path = null;
+                if(!is_null($value['image'])) {
+                    $opt_filename = Date('YmdHis').'_'.($key+1).'_image_question.'.$value['image']->extension();
+                    $opt_path = Storage::putFileAs('images/questions/lesson_'.$this->quiz->lesson_id.'/quiz_'.$this->quiz->id.'/question_'.$question->id, $value['image'], $opt_filename);
+                    $value['title'] = null;
+                }
+
                 $option = Option::create([
                     'question_id' => $question->id,
                     'uuid' => Str::uuid(),
                     'orders' => $key+1,
                     'title' => $value['title'],
-                    'type' => 'text'
+                    'image' => $opt_filename,
+                    'path' => $opt_path,
+                    'type' => $value['type'],
                 ]);
                 if($value['is_key']) {
                     $answer = AnswerKey::create([
@@ -145,9 +157,23 @@ class LvQuestion extends Component
         ];
     }
 
-    public function setQuestion($id)
+    public function setQuestion($id, $mode = 'standard')
     {
         $this->question = Question::find($id);
+        if($mode = 'advanced') {
+            $this->title = $this->question->title;
+            $options = $this->question->options->map(function ($item, $key)
+            {
+                $is_key = false;
+                if ($this->question->answerKey->option_id == $item->id) {
+                    $is_key = true;
+                    $this->answer_key = $key;
+                }
+                return ['title' => $item->title, 'image' => $item->image, 'type' => $item->type, 'is_key' => $is_key];
+            });
+            $this->answers = $options;
+            // dd($options);
+        }
         // dd($id, $this->question);
     }
 

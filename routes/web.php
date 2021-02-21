@@ -98,6 +98,7 @@ Route::middleware('auth:partner')->get('lessons/books/get/{uuid}/pdf', [BookCont
 Route::middleware('auth:partner')->get('lessons/videos/get/{uuid}/video', [VideoController::class, 'index'])->name('lesson.videos');
 
 Route::middleware('auth:partner')->get('quizzes/questions/get/{uuid}/image', [QuestionController::class, 'index'])->name('question.images');
+Route::middleware('auth:partner')->get('quizzes/questions/options/get/{uuid}/image', [QuestionController::class, 'optionIndex'])->name('question.option.images');
 
 Route::get('pass-login-admin', function () {
     $credentials = ['email' => 'admin@admin.com', 'password' => 'Password123'];

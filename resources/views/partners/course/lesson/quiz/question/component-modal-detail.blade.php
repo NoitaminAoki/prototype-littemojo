@@ -16,7 +16,9 @@
                             <td>
                                 @if (!is_null($question->image))
                                 <div class="col-8 mb-2">
-                                    <img src="{{ route('question.images', ['uuid' => $question->uuid]) }}" class="product-image rounded" alt="Product Image">
+                                    <a target="_blank" href="{{ route('question.images', ['uuid' => $question->uuid]) }}">
+                                        <img src="{{ route('question.images', ['uuid' => $question->uuid]) }}" class="product-image rounded" alt="Question Image">
+                                    </a>
                                 </div>
                                 @endif
                                 <div class="col-12">
@@ -30,10 +32,19 @@
                                 <div class="mt-3">
                                     @foreach ($question->options as $option)
                                     <div class="col-12 py-1">
+                                        @if ($option->type == 'text')
                                         @if ($question->answerKey->option_id == $option->id)
                                         <p class="text-success">{{$style_options[$option->orders]}}. {{$option->title}} </p>
                                         @else
                                         <p>{{$style_options[$option->orders]}}. {{$option->title}} </p>
+                                        @endif
+                                        @elseif($option->type == 'image')
+                                        <div class="d-flex mb-5">
+                                            <span class="{{($question->answerKey->option_id == $option->id)? 'text-success' : ''}}">{{$style_options[$option->orders]}}.</span>
+                                            <a target="_blank" href="{{ route('question.option.images', ['uuid' => $option->uuid]) }}">
+                                                <img src="{{ route('question.option.images', ['uuid' => $option->uuid]) }}" class="product-image image-option rounded" alt="Option Image">
+                                            </a>
+                                        </div>
                                         @endif
                                     </div>
                                     @endforeach

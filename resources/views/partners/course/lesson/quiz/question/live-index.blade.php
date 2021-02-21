@@ -16,6 +16,10 @@
         border-radius: 0 !important;
         background: transparent !important;
     }
+    .image-option {
+        width: 350px;
+        height: 250px;
+    }
 </style>
 @endsection
 
@@ -61,8 +65,8 @@
                             <td class="text-right py-0 align-middle">
                                 <div class="btn-group btn-group-sm">
                                     <button class="btn btn-primary" wire:click="setQuestion({{$quest->id}})" data-toggle="modal" data-target="#modal-detail"><i class="fas fa-search"></i></button>
-                                    <button data-toggle="modal" wire:click="setQuiz({{$quest->id}})" data-target="#modal-update" class="btn btn-warning"><i class="fas fa-edit"></i></button>
-                                    <button data-id="{{$quiz->id}}" class="btn btn-danger btn-delete btn-process"><i class="fas fa-trash"></i></button>
+                                    <button data-toggle="modal" wire:click="setQuestion({{$quest->id}}, 'advanced')" data-target="#modal-update" class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                                    <button data-id="{{$quest->id}}" class="btn btn-danger btn-delete btn-process"><i class="fas fa-trash"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -102,7 +106,7 @@
                                 <div class="col-12 mb-5">
                                     <label for="title">Question</label>
                                     <div>
-                                        <small>Photo</small>
+                                        <small>Image | Max size: 5MB</small>
                                         <input type="file" wire:model="image" class="form-control file-form-control" id="question_{{$iteration}}">
                                     </div>
                                     <div class="mt-1">
@@ -143,7 +147,7 @@
                                                     @if ($answer['type'] == "text")
                                                     <textarea wire:model.defer="answers.{{$loop->index}}.title" name="title" class="form-control" rows="3" required></textarea>
                                                     @else
-                                                    <small>Max file: 5MB</small>
+                                                    <small>Max size: 5MB</small>
                                                     <input type="file" wire:model="answers.{{$loop->index}}.image" accept="image/jpeg,image/jpg,image/gif,image/png" class="form-control file-form-control" id="answers_{{$loop->index}}_{{$iteration}}" required>
                                                     @endif
                                                 </div>
@@ -197,37 +201,107 @@
     </div>
     <!-- /.modal -->
     
-    @include('partners.course.lesson.quiz.question.component-modal-detail')
-
     <div wire:ignore.self class="modal fade" tabindex="-1" id="modal-update">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Update Quiz</h4>
+                    <h4 class="modal-title">Update Question</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <form wire:submit.prevent="update">
-                    <div class="modal-body">
-                        <div class="w-100">
-                            <label for="">Title</label>
-                            <input type="text" wire:model.defer="quiz.title" class="form-control" required>
+                    <div class="modal-body tab-pane">
+                        <div class="overlay-wrapper">
+                            <div wire:loading.flex wire:target="update" class="overlay modal-overlay" style="display: none;"><i class="fas fa-3x fa-sync-alt fa-spin"></i><div class="text-bold pt-2">Loading...</div></div>
+                            <div class="row">
+                                <div class="col-12 mb-5">
+                                    <label for="title">Question</label>
+                                    <div>
+                                        <small>Image | Max size: 5MB, no need to be filled if you don't want to change the image.</small>
+                                        <input type="file" wire:model="image" class="form-control file-form-control" id="update_question_{{$iteration}}">
+                                    </div>
+                                    <div class="mt-1">
+                                        <small>Text</small>
+                                        <textarea wire:model.defer="title" name="title" class="form-control" rows="3"></textarea>
+                                    </div>
+                                    @error('image')
+                                    <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                </div>
+                                <div class="col-md-8 border-left">
+                                    <div class="w-100">
+                                        <div class="float-right">
+                                            <button type="button" wire:click="addAnswer" class="btn btn-sm bg-primary">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <p class="lead mb-2">Options:</p>
+                                        @error('answers.*.title')
+                                        <span class="text-danger">Please fill up the option.</span>
+                                        @enderror
+                                        <br>
+                                        @error('answers.*.image')
+                                        <span class="text-danger">Please select a file for the option.</span>
+                                        @enderror
+                                    </div>
+                                    <div class="row">
+                                        @foreach ($answers as $answer)
+                                        <div class="col-lg-12 my-2">
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <label for="title">Option {{$loop->index+1}} <small class="text-danger">*</small></label>
+                                                    @if ($answer['type'] == "text")
+                                                    <textarea wire:model.defer="answers.{{$loop->index}}.title" name="title" class="form-control" rows="3" required></textarea>
+                                                    @else
+                                                    <small>Max size: 5MB</small>
+                                                    <input type="file" wire:model="answers.{{$loop->index}}.image" accept="image/jpeg,image/jpg,image/gif,image/png" class="form-control file-form-control" id="update_answers_{{$loop->index}}_{{$iteration}}">
+                                                    @endif
+                                                </div>
+                                                <div class="col-md-2 text-right">
+                                                    <div class="text-left">
+                                                        <label>Type: </label>
+                                                        <div class="btn-group btn-group-sm w-100">
+                                                            <button type="button" wire:click="setType({{$loop->index}}, 'text')" class="btn btn-sm {{($answer['type'] == 'text')? 'btn-success' : 'btn-light'}}"><i class="fas fa-keyboard"></i></button>
+                                                            <button type="button" wire:click="setType({{$loop->index}}, 'image')" class="btn btn-sm {{($answer['type'] == 'image')? 'btn-success' : 'btn-light'}}"><i class="fas fa-image"></i></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-2">
+                                                        <button type="button" wire:click="deleteAnswer({{$loop->index}})" class="btn btn-sm btn-process btn-danger"><i class="fas fa-trash"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <div class="col-md-4 border-left">
+                                    <p class="lead mb-2">Answer Key:</p>
+                                    @error('answer_key')
+                                    <span class="text-danger">You need to choose the answer's key</span>
+                                    @enderror
+                                    <div class="d-flex flex-wrap mt-3">
+                                        @foreach ($answers as $answer)
+                                        <div class="my-1 mx-2 text-center">
+                                            <label class="w-100" for="r_answer_{{$loop->index}}">Option {{$loop->index+1}}</label>
+                                            <div class="icheck-success d-inline mb-2">
+                                                <input type="radio" wire:model.defer="answer_key" value="{{$loop->index}}" name="update_r_answer" id="update_r_answer_{{$loop->index}}">
+                                                <label for="update_r_answer_{{$loop->index}}">
+                                                </label>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        @error('title')
-                        <span class="text-danger">{{$message}}</span>
-                        @enderror
-                        <div class="w-100">
-                            <label for="">Total Question</label>
-                            <input type="text" wire:model.defer="quiz.total_question" class="form-control" required>
-                        </div>
-                        @error('total_question')
-                        <span class="text-danger">{{$message}}</span>
-                        @enderror
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" id="btn-update" class="btn btn-primary">Update</button>
+                        <button type="submit" id="btn-insert" class="btn btn-primary">Save</button>
                     </div>
                 </form>
             </div>
@@ -236,6 +310,8 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+    
+    @include('partners.course.lesson.quiz.question.component-modal-detail')
 </div>
 
 @section('script-top')

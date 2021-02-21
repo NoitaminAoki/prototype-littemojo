@@ -19,6 +19,7 @@ class CreateQuestionOptionsTable extends Migration
             $table->uuid('uuid');
             $table->integer('orders');
             $table->string('image')->nullable();
+            $table->string('path')->nullable();
             $table->string('title')->nullable();
             $table->enum('type', ['image', 'text']);
             $table->timestamps();

@@ -18,6 +18,7 @@ class QuestionOption extends Model
         'orders',
         'uuid',
         'image',
+        'path',
         'title',
         'type',
     ];

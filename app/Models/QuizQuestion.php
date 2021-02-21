@@ -22,6 +22,7 @@ class QuizQuestion extends Model
         'quiz_id',
         'uuid',
         'image',
+        'path',
         'title',
         'orders',
     ];
