@@ -123,6 +123,7 @@ class Book extends Component
     public function setBook($id)
     {
         $this->book = MsBook::find($id);
+        $this->iteration++;
     }
 
     public function resetInput()

@@ -128,6 +128,7 @@ class Video extends Component
     public function setVideo($id)
     {
         $this->video = MsVideo::find($id);
+        $this->iteration++;
     }
 
     public function resetInput()

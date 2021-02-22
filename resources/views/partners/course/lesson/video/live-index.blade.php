@@ -172,6 +172,7 @@
             @this.submitOrder(orders_id);
         });
         $(document).on('click', '.btn-delete', function () {
+            var id = $(this).attr('data-id');
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -182,7 +183,7 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.value) {
-                    @this.delete($(this).data('id'));
+                    @this.delete(id);
                 }
             }); 
         });
