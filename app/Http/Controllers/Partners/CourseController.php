@@ -15,7 +15,7 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $data['courses'] = Course::select('courses.id', 'courses.title', 'courses.description', 'price', 'duration', 'catalog_topics.name as nama_catalog_topic', 'catalogs.name as nama_catalog', 'levels.name as nama_level')
+        $data['courses'] = Course::select('courses.id', 'courses.title', 'courses.description', 'price', 'duration', 'courses.is_verified', 'courses.date_verified', 'catalog_topics.name as nama_catalog_topic', 'catalogs.name as nama_catalog', 'levels.name as nama_level')
     						 ->leftJoin('catalog_topics', 'catalog_topics.id', 'courses.id')
     						 ->leftJoin('catalogs', 'catalogs.id', 'catalog_topics.catalog_id')
                              ->leftJoin('levels', 'levels.id', 'courses.level_id')

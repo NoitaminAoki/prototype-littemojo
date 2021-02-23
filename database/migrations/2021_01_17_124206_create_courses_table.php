@@ -25,6 +25,8 @@ class CreateCoursesTable extends Migration
             $table->enum('duration', ['week', 'month']);
             $table->uuid('uuid');
             $table->string('cover');
+            $table->boolean('is_verified')->default(false);
+            $table->datetime('date_verified')->nullable();
             $table->timestamps();
         });
     }
