@@ -1,15 +1,14 @@
-@extends('partners.templates.main')
+@extends('admins.templates.main')
 
 @section('css')
 {{-- kosong --}}
 @endsection
 
-@section('Page-Header', 'Course')
+@section('Page-Header', 'Partner Verif Course')
 
 @section('breadcrumbs')
-<li class="breadcrumb-item"><a href="#">Home</a></li>
-<li class="breadcrumb-item active">Manage</li>
-<li class="breadcrumb-item active">Course</li>
+<li class="breadcrumb-item"><a href="#">Partner</a></li>
+<li class="breadcrumb-item active">Verif Course</li>
 @endsection
 
 @section('content')
@@ -17,8 +16,7 @@
     <div class="col-lg">
         <div class="card">
             <div class="card-body">
-                @include('partials.button', ['action' => ['add']])
-                <table id="example1" class="table table-bordered table-striped table-hover">
+                <table id="example1" class="table table-bordered table-striped table-hover" role="grid" aria-describedby="example1_info">
                     @include('partials.alert')
                     <thead>
                         <tr role="row">
@@ -55,12 +53,16 @@
                             <td width="100px;" class="text-center">
                                 @if($course->is_verified)
                                 <div class="d-flex justify-content-center">
-                                    @include('partials.button', ['action' => ['show'], 'id' => $course->id ])
-                                    @include('partials.button', ['action' => ['edit'], 'id' => $course->id ])
-                                    @include('partials.button', ['action' => ['delete'], 'id' => $course->id ])
+                                    -
                                 </div>     
                                 @else
-                                <div class="d-flex justify-content-center">-</div>
+                                <div class="d-flex justify-content-center">
+                                    <div class="mx-1">
+                                        <a href="{{\Request::url().'/'.$course->id.'/edit'}}" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Edit">
+                                            Verif
+                                        </a>
+                                    </div>
+                                </div>
                                 @endif
                             </td>
                         </tr>

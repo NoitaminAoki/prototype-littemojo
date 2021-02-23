@@ -71,11 +71,22 @@
                                 <p>User</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{url('admin/management/parner')}}" class="nav-link {{\Request::is('admin/management/parner*') ? 'active' : '' }}">
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Partner</p>
+                                <p>
+                                    Partner
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
                             </a>
+                            <ul class="nav nav-treeview pl-3">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Verif Course</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </li>

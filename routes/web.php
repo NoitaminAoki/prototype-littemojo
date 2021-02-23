@@ -11,7 +11,7 @@ use App\Http\Controllers\Admins\Master\{
     LevelController
 };
 use App\Http\Controllers\Admins\Manage\UserController;
-
+use App\Http\Controllers\Admins\Manage\Partner\CourseController;
 use App\Http\Controllers\Partners\{
     DashboardController as PartnerDashboard,
     AuthController as PartnerAuthController,
@@ -57,6 +57,9 @@ Route::middleware('auth:admin')->prefix('admin/management')->name('admin.')->gro
         'level'         => LevelController::class,
         'user'          => UserController::class,
     ]);
+    Route::prefix('partner')->group(function(){
+        Route::resource('verif_course', CourseController::class);
+    });
     Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 });
 
