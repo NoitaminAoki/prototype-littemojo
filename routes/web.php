@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Home\HomeController;
+
 use App\Http\Controllers\Admins\DashboardController as AdminDashboard;
 use App\Http\Controllers\Admins\AuthController as AdminAuthController;
 use App\Http\Controllers\Admins\Master\{
@@ -9,6 +11,7 @@ use App\Http\Controllers\Admins\Master\{
     LevelController
 };
 use App\Http\Controllers\Admins\Manage\UserController;
+
 use App\Http\Controllers\Partners\{
     DashboardController as PartnerDashboard,
     AuthController as PartnerAuthController,
@@ -34,9 +37,13 @@ use App\Http\Livewire\Partners\{
     Courses\Lessons\Quiz as QuizLive,
     Courses\Lessons\Quizzes\LvQuestion as QuestionLive,
 };
+
 use Illuminate\Support\Facades\Auth;
 
-Route::view('/', 'welcome');
+// Route::view('/', 'homepage.pages.index');
+
+Route::get('/', [HomeController::class, 'index'])->name('home.index');
+
 Route::view('dashboard', 'dashboard')->middleware(['auth:sanctum', 'verified'])->name('dashboard');
 
 Route::middleware('auth:admin')->prefix('admin/management')->name('admin.')->group(function () {
