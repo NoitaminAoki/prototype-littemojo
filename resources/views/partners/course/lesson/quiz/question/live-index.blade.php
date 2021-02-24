@@ -32,9 +32,6 @@
 @endsection
 
 <div class="row">
-    <div class="col-12">
-        {{$this->tester}}
-    </div>
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">

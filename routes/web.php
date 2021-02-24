@@ -42,9 +42,9 @@ Route::view('dashboard', 'dashboard')->middleware(['auth:sanctum', 'verified'])-
 
 Route::middleware('auth:admin')->prefix('admin/management')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
-    Route::get('user/{id}/update_status', [UserController::class, 'update_status'])->name(
-        'update_status'
-    );
+    Route::get('user/{id}/update_status', [
+        UserController::class, 'update_status'
+    ])->name('update_status');
     Route::resources([
         'catalog'       => CatalogController::class,
         'catalog_topic' => CatalogTopicController::class,
@@ -66,7 +66,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 });
 
-Route::group(['middleware' => 'auth:partner', 'prefix' => 'partner/management', 'as' => 'partner.'], function () {
+Route::group([
+    'middleware' => 'auth:partner',
+    'prefix' => 'partner/management',
+    'as' => 'partner.'
+], function () {
     Route::get('/dashboard', [PartnerDashboard::class, 'index'])->name('dashboard');
 
     Route::post('/logout', [PartnerAuthController::class, 'logout'])->name('logout');
@@ -83,7 +87,9 @@ Route::group(['middleware' => 'auth:partner', 'prefix' => 'partner/management', 
                 Route::get('/{lesson:id}/books', BookLive::class)->name('book.index');
                 Route::get('/{lesson:id}/videos', VideoLive::class)->name('video.index');
                 Route::get('/{lesson:id}/quizzes', QuizLive::class)->name('quiz.index');
-                Route::get('/quiz/{quiz:id}/questions', QuestionLive::class)->name('quiz.question.index');
+                Route::get('/quiz/{quiz:id}/questions', QuestionLive::class)->name(
+                    'quiz.question.index'
+                );
 
             });
         });
@@ -94,15 +100,28 @@ Route::group(['middleware' => 'auth:partner', 'prefix' => 'partner/management', 
 Route::prefix('partner')->name('partner.')->group(function () {
     Route::get('/register', [PartnerAuthController::class, 'registerForm'])->name('register.form');
     Route::post('/register', [PartnerAuthController::class, 'register'])->name('register');
-    Route::middleware('guest:partner')->get('/login', [PartnerAuthController::class, 'loginForm'])->name('login.form');
-    Route::middleware('guest:partner')->post('/login', [PartnerAuthController::class, 'login'])->name('login');
+    Route::middleware(['guest:partner'])->group(function () {
+        Route::get('/login', [PartnerAuthController::class, 'loginForm'])->name('login.form');
+        Route::post('/login', [PartnerAuthController::class, 'login'])->name('login');
+    });
     
 });
-Route::middleware('auth:partner')->get('lessons/books/get/{uuid}/pdf', [BookController::class, 'index'])->name('lesson.books');
-Route::middleware('auth:partner')->get('lessons/videos/get/{uuid}/video', [VideoController::class, 'index'])->name('lesson.videos');
 
-Route::middleware('auth:partner')->get('quizzes/questions/get/{uuid}/image', [QuestionController::class, 'index'])->name('question.images');
-Route::middleware('auth:partner')->get('quizzes/questions/options/get/{uuid}/image', [QuestionController::class, 'optionIndex'])->name('question.option.images');
+
+Route::middleware(['auth:partner'])->group(function (){
+    Route::get('lessons/books/get/{uuid}/pdf', [
+        BookController::class, 'index'
+    ])->name('lesson.books');
+    Route::get('lessons/videos/get/{uuid}/video', [
+        VideoController::class, 'index'
+    ])->name('lesson.videos');
+    Route::get('quizzes/questions/get/{uuid}/image', [
+        QuestionController::class, 'index'
+    ])->name('question.images');
+    Route::get('quizzes/questions/options/get/{uuid}/image', [
+        QuestionController::class, 'optionIndex'
+    ])->name('question.option.images');
+});
 
 Route::get('pass-login-admin', function () {
     $credentials = ['email' => 'admin@admin.com', 'password' => 'Password123'];
