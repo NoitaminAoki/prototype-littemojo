@@ -52,7 +52,19 @@ Route::middleware('auth:admin')->prefix('admin/management')->name('admin.')->gro
         'user'          => UserController::class,
     ]);
     Route::prefix('partner')->group(function(){
+        Route::get('verif_course/{course_id}/lessons', [CourseController::class, 'lesson'])->name('verif_course.lesson.index');
         Route::resource('verif_course', CourseController::class);
+        Route::get('lessons/{lesson:id}', [CourseController::class, 'detailLesson'])->name('lessons.show');
+        Route::get('lessons/{lesson:id}/quizzes', [CourseController::class, 'quiz'])->name('quiz.show');
+        Route::get('lessons/quiz/{quiz:id}/questions', [CourseController::class, 'detailQuiz'])->name(
+                    'quiz.detail'
+                );
+        Route::get('lessons/books/get/{uuid}/pdf', [
+            CourseController::class, 'book'
+        ])->name('lesson.books');
+        Route::get('lessons/videos/get/{uuid}/video', [
+            CourseController::class, 'video'
+        ])->name('lesson.videos');
     });
     Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 });
