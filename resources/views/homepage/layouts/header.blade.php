@@ -29,8 +29,14 @@
                                 </ul>
                             </li>					                		
                         </ul>
-                    </li>					          					          		          
-                    <li><a href="contact.html">Contact</a></li>
+                    </li>			
+                    @auth('web')
+                    <li><a class="genric-btn primary small border-0 text-capitalize" href="contact.html">My Dashboard</a></li>
+                    @endauth		          					          		          
+                    @guest
+                    <li><a href="{{ route('login') }}">Sign In</a></li>
+                    <li><a class="genric-btn primary small border-0 text-capitalize" href="contact.html">Join for Free</a></li>
+                    @endguest
                 </ul>
             </nav><!-- #nav-menu-container -->		    		
         </div>

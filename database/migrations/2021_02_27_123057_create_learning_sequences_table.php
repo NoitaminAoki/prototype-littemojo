@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLessonVideosTable extends Migration
+class CreateLearningSequencesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,10 @@ class CreateLessonVideosTable extends Migration
      */
     public function up()
     {
-        Schema::create('lesson_videos', function (Blueprint $table) {
+        Schema::create('learning_sequences', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('lesson_id')->unsigned()->nullable();
-            $table->bigInteger('sequence_id')->unsigned()->nullable();
-            $table->uuid('uuid');
             $table->string('title');
-            $table->integer('orders');
-            $table->integer('learning_order')->default(0);
-            $table->string('filename');
-            $table->string('duration', 20)->nullable();
-            $table->string('size', 20);
             $table->timestamps();
         });
     }
@@ -35,6 +28,6 @@ class CreateLessonVideosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lesson_videos');
+        Schema::dropIfExists('learning_sequences');
     }
 }
