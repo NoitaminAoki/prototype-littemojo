@@ -56,8 +56,8 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item has-treeview {{\Request::is('admin/management/user*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{\Request::is('admin/management/user*') ? 'active' : '' }}">
+                <li class="nav-item has-treeview {{\Request::is('admin/management/user*') || \Request::is('admin/management/partner/verif_course*') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{\Request::is('admin/management/user*') || \Request::is('admin/management/partner/verif_course*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-cog"></i>
                         <p>
                             Manage
@@ -71,7 +71,7 @@
                                 <p>User</p>
                             </a>
                         </li>
-                        <li class="nav-item has-treeview">
+                        <li class="nav-item has-treeview {{\Request::is('admin/management/partner/verif_course*') ? 'menu-open' : ''}}">
                             <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>
@@ -81,7 +81,7 @@
                             </a>
                             <ul class="nav nav-treeview pl-3">
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{{url('admin/management/partner/verif_course')}}" class="nav-link {{\Request::is('admin/management/partner/verif_course*') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Verif Course</p>
                                     </a>

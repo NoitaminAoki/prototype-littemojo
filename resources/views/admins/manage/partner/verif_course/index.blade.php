@@ -51,19 +51,16 @@
                                 @endif
                             </td>
                             <td width="100px;" class="text-center">
-                                @if($course->is_verified)
                                 <div class="d-flex justify-content-center">
-                                    -
-                                </div>     
-                                @else
-                                <div class="d-flex justify-content-center">
+                                    @include('partials.button', ['action' => ['show'], 'id' => $course->id ])
+                                    @if(!$course->is_verified)
                                     <div class="mx-1">
                                         <a href="{{\Request::url().'/'.$course->id.'/edit'}}" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Edit">
                                             Verif
                                         </a>
                                     </div>
+                                    @endif
                                 </div>
-                                @endif
                             </td>
                         </tr>
                         @endforeach
