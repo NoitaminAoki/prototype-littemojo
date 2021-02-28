@@ -117,14 +117,14 @@
                             <label for="">Title</label>
                             <input type="text" wire:model.defer="quiz.title" class="form-control" required>
                         </div>
-                        @error('title')
+                        @error('quiz.title')
                         <span class="text-danger">{{$message}}</span>
                         @enderror
                         <div class="w-100">
                             <label for="">Total Question</label>
                             <input type="text" wire:model.defer="quiz.total_question" class="form-control" required>
                         </div>
-                        @error('total_question')
+                        @error('quiz.total_question')
                         <span class="text-danger">{{$message}}</span>
                         @enderror
                     </div>

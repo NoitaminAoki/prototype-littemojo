@@ -32,6 +32,7 @@ use App\Http\Livewire\Partners\{
     Courses\Skill as PartnerSkillLive,
     Courses\Lesson as PartnerLessonLive,
 
+    Courses\Lessons\LvLearningSequence as LearningSequenceLive,
     Courses\Lessons\Book as BookLive,
     Courses\Lessons\Video as VideoLive,
     Courses\Lessons\Quiz as QuizLive,
@@ -48,9 +49,7 @@ Route::view('dashboard', 'dashboard')->middleware(['auth:sanctum', 'verified'])-
 
 Route::middleware('auth:admin')->prefix('admin/management')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
-    Route::get('user/{id}/update_status', [
-        UserController::class, 'update_status'
-    ])->name('update_status');
+    Route::get('user/{id}/update_status', [UserController::class, 'update_status'])->name('update_status');
     Route::resources([
         'catalog'       => CatalogController::class,
         'catalog_topic' => CatalogTopicController::class,
@@ -102,6 +101,7 @@ Route::group([
             
             Route::group(['prefix' => 'lessons', 'as' => 'lesson.'], function () {
                 Route::get('/{lesson:id}', [PartnerLessonController::class, 'show'])->name('show');
+                Route::get('/{lesson:id}/learning-sequences', LearningSequenceLive::class)->name('learning.sequence.index');
                 Route::get('/{lesson:id}/books', BookLive::class)->name('book.index');
                 Route::get('/{lesson:id}/videos', VideoLive::class)->name('video.index');
                 Route::get('/{lesson:id}/quizzes', QuizLive::class)->name('quiz.index');

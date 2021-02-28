@@ -16,6 +16,51 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
+                <h4 class="card-title text-secondary">Learning Sequence</h4>
+                <div class="card-tools">
+                    <a href="{{ route('partner.manage.course.lesson.learning.sequence.index', ['lesson' => $lesson->id]) }}" class="btn btn-tool bg-primary">
+                        Manage
+                    </a>
+                </div>
+                <br>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    @if (true)
+                    <div class="col-12 text-center">
+                        <h3 class="text-sm text-secondary">No Sequence.</h3>
+                    </div>
+                    
+                    @else
+                    <table class="table">
+                        <tbody>
+                            @foreach ($lesson->books as $book)
+                            <tr>
+                                <td>
+                                    <div>
+                                        <a target="_blank" href="{{ route('lesson.books', ['uuid'=>$book->uuid]) }}" class="btn-link text-secondary"><i class="far fa-fw fa-file-pdf"></i> {{$book->title}}</a>
+                                        
+                                        <span class="mailbox-attachment-size clearfix mt-1">
+                                            <span>{{$book->size}}</span>
+                                        </span>
+                                    </div> 
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 mb-2">
+        <hr style="border-top: 2px solid rgb(132 132 132);">
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
                 <h4 class="card-title text-secondary">Books</h4>
                 <div class="card-tools">
                     <a href="{{ route('partner.manage.course.lesson.book.index', ['lesson' => $lesson->id]) }}" class="btn btn-tool bg-primary">

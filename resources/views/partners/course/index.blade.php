@@ -53,15 +53,11 @@
                                 @endif
                             </td>
                             <td width="100px;" class="text-center">
-                                @if($course->is_verified)
                                 <div class="d-flex justify-content-center">
                                     @include('partials.button', ['action' => ['show'], 'id' => $course->id ])
                                     @include('partials.button', ['action' => ['edit'], 'id' => $course->id ])
                                     @include('partials.button', ['action' => ['delete'], 'id' => $course->id ])
                                 </div>     
-                                @else
-                                <div class="d-flex justify-content-center">-</div>
-                                @endif
                             </td>
                         </tr>
                         @endforeach
