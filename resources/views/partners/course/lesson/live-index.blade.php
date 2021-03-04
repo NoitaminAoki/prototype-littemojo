@@ -244,7 +244,7 @@
                 setTimeout(() => {
                     Swal.fire( 'Success!', @this.notification.message, 'success' );
                     @this.resetNotif();
-                }, 300);
+                }, 600);
             }
         });
     });

@@ -16,11 +16,9 @@ class CreateLessonVideosTable extends Migration
         Schema::create('lesson_videos', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('lesson_id')->unsigned()->nullable();
-            $table->bigInteger('sequence_id')->unsigned()->nullable();
             $table->uuid('uuid');
             $table->string('title');
             $table->integer('orders');
-            $table->integer('learning_order')->default(0);
             $table->string('filename');
             $table->string('duration', 20)->nullable();
             $table->string('size', 20);

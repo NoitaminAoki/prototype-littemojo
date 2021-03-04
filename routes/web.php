@@ -32,7 +32,7 @@ use App\Http\Livewire\Partners\{
     Courses\Skill as PartnerSkillLive,
     Courses\Lesson as PartnerLessonLive,
 
-    Courses\Lessons\LvLearningSequence as LearningSequenceLive,
+    Courses\Lessons\LvLearningSequenceProto as LearningSequenceLive,
     Courses\Lessons\Book as BookLive,
     Courses\Lessons\Video as VideoLive,
     Courses\Lessons\Quiz as QuizLive,

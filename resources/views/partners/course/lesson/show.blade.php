@@ -121,13 +121,16 @@
                     <table class="table">
                         <tbody>
                             @foreach ($lesson->videos as $video)
+                            @php
+                                $video_duration = floor($video->duration/60);
+                            @endphp
                             <tr>
                                 <td>
                                     <div>
                                         <a target="_blank" href="{{ route('lesson.videos', ['uuid'=>$video->uuid]) }}" class="btn-link text-secondary"><i class="far fa-fw fa-file-video"></i> {{$video->title}}</a>
                                         
                                         <span class="mailbox-attachment-size clearfix mt-1">
-                                            <span>{{floor($video->duration/60)}} Mins - {{$video->size}}</span>
+                                            <span>{{($video_duration > 1)? "$video_duration Mins" :  "$video_duration Min"}} - {{$video->size}}</span>
                                         </span>
                                     </div> 
                                 </td>
