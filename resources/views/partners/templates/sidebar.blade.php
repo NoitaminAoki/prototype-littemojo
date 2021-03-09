@@ -34,6 +34,12 @@
                         <p>Courses</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('partner.manage.corporation.index') }}" class="nav-link {{ (Request::routeIs('partner.manage.corporation') || Request::routeIs('partner.manage.corporation.*'))? 'active' : '' }}">
+                        <i class="nav-icon fas fa-home"></i>
+                        <p>Profile Corporation</p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

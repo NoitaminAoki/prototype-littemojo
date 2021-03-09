@@ -26,6 +26,7 @@ class CreateCoursesTable extends Migration
             $table->uuid('uuid');
             $table->string('cover');
             $table->boolean('is_verified')->default(false);
+            $table->boolean('is_published')->default(false);
             $table->datetime('date_verified')->nullable();
             $table->timestamps();
         });

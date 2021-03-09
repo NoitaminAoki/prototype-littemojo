@@ -51,12 +51,28 @@
                                 @else
                                 <span class="badge badge-danger">Unverified</span>
                                 @endif
+                                @if($course->is_published)
+                                <span class="badge badge-primary">Published</span>
+                                @else
+                                <span class="badge badge-danger">Unpublished</span>
+                                @endif
                             </td>
                             <td width="100px;" class="text-center">
                                 <div class="d-flex justify-content-center">
                                     @include('partials.button', ['action' => ['show'], 'id' => $course->id ])
                                     @include('partials.button', ['action' => ['edit'], 'id' => $course->id ])
                                     @include('partials.button', ['action' => ['delete'], 'id' => $course->id ])
+                                    @if($course->lessons->isEmpty())
+                                    <div class="mx-1">
+                                        -
+                                    </div>
+                                    @elseif(!$course->is_published)
+                                    <div class="mx-1">
+                                        <a href="{{\Request::url().'/publish/'.$course->id}}" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="bottom" title="Publish">
+                                            <i class="fas fa-check"></i>
+                                        </a>
+                                    </div>
+                                    @endif
                                 </div>     
                             </td>
                         </tr>
