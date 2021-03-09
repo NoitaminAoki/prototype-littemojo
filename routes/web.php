@@ -106,6 +106,7 @@ Route::group([
 
             });
         });
+        Route::get('course/publish/{id}', [PartnerCourseController::class, 'publish'])->name('publish');
         Route::resource('course', PartnerCourseController::class);
         Route::resource('corporation', PartnerCorporationController::class);
     });

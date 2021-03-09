@@ -15,7 +15,7 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $data['courses'] = Course::select('courses.id', 'courses.title', 'courses.description', 'price', 'duration', 'courses.is_verified', 'courses.date_verified', 'catalog_topics.name as nama_catalog_topic', 'catalogs.name as nama_catalog', 'levels.name as nama_level')
+        $data['courses'] = Course::with('lessons')->select('courses.id', 'courses.is_published', 'courses.title', 'courses.description', 'price', 'duration', 'courses.is_verified', 'courses.date_verified', 'catalog_topics.name as nama_catalog_topic', 'catalogs.name as nama_catalog', 'levels.name as nama_level')
     						 ->leftJoin('catalog_topics', 'catalog_topics.id', 'courses.id')
     						 ->leftJoin('catalogs', 'catalogs.id', 'catalog_topics.catalog_id')
                              ->leftJoin('levels', 'levels.id', 'courses.level_id')
@@ -87,5 +87,12 @@ class CourseController extends Controller
                             ->leftJoin('levels', 'levels.id', 'courses.level_id')
         					->findOrFail($id);
         return view('partners.course.show', compact('catalogs', 'course'));
+    }
+
+    public function publish($id){
+        $upd = Course::findOrFail($id);
+        $upd->is_published = true;
+        $upd->save();
+        return redirect('partner/management/course/')->with('alert-message', 'Berhasil Publish Course');
     }
 }
