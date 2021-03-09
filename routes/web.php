@@ -14,6 +14,7 @@ use App\Http\Controllers\Partners\{
     DashboardController as PartnerDashboard,
     AuthController as PartnerAuthController,
     CourseController as PartnerCourseController,
+    CorporationController as PartnerCorporationController,
 
     Courses\ExperienceController as PartnerExpController,
     Courses\LessonController as PartnerLessonController,
@@ -106,6 +107,7 @@ Route::group([
             });
         });
         Route::resource('course', PartnerCourseController::class);
+        Route::resource('corporation', PartnerCorporationController::class);
     });
 });
 
