@@ -22,6 +22,8 @@ class CreateQuizQuestionsTable extends Migration
             $table->string('title')->nullable();
             $table->integer('orders');
             $table->timestamps();
+
+            $table->foreign('quiz_id')->references('id')->on('lesson_quizzes')->onDelete('cascade');
         });
     }
 

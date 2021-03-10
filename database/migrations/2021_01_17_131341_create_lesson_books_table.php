@@ -22,6 +22,8 @@ class CreateLessonBooksTable extends Migration
             $table->string('filename');
             $table->string('size', 20);
             $table->timestamps();
+
+            $table->foreign('lesson_id')->references('id')->on('course_lessons')->onDelete('cascade');
         });
     }
 

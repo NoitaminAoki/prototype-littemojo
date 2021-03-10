@@ -62,11 +62,11 @@
                                     @include('partials.button', ['action' => ['show'], 'id' => $course->id ])
                                     @include('partials.button', ['action' => ['edit'], 'id' => $course->id ])
                                     @include('partials.button', ['action' => ['delete'], 'id' => $course->id ])
-                                    @if($course->lessons->isEmpty())
+                                    @if($course->lessons->isEmpty() || !$course->is_verified)
                                     <div class="mx-1">
                                         -
                                     </div>
-                                    @elseif(!$course->is_published)
+                                    @elseif(!$course->is_published && $course->is_verified)
                                     <div class="mx-1">
                                         <a href="{{\Request::url().'/publish/'.$course->id}}" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="bottom" title="Publish">
                                             <i class="fas fa-check"></i>

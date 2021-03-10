@@ -18,6 +18,8 @@ class CreateLearningSequencesTable extends Migration
             $table->bigInteger('lesson_id')->unsigned()->nullable();
             $table->string('title');
             $table->timestamps();
+
+            $table->foreign('lesson_id')->references('id')->on('course_lessons')->onDelete('cascade');
         });
     }
 

@@ -22,6 +22,8 @@ class CreateListSequencesTable extends Migration
             $table->enum('type', ['book', 'video', 'quiz']);
             $table->integer('order');
             $table->timestamps();
+
+            $table->foreign('sequence_id')->references('id')->on('learning_sequences')->onDelete('cascade');
         });
     }
 
