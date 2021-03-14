@@ -19,6 +19,8 @@ class CreateQuizAnswerKeysTable extends Migration
             $table->bigInteger('question_id')->unsigned()->nullable();
             $table->bigInteger('option_id')->unsigned()->nullable();
             $table->timestamps();
+
+            $table->foreign('quiz_id')->references('id')->on('lesson_quizzes')->onDelete('cascade');
         });
     }
 

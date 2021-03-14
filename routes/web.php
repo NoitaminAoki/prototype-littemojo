@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Home\HomeController;
+
 use App\Http\Controllers\Admins\DashboardController as AdminDashboard;
 use App\Http\Controllers\Admins\AuthController as AdminAuthController;
 use App\Http\Controllers\Admins\Master\{
@@ -14,6 +16,7 @@ use App\Http\Controllers\Partners\{
     DashboardController as PartnerDashboard,
     AuthController as PartnerAuthController,
     CourseController as PartnerCourseController,
+    CorporationController as PartnerCorporationController,
 
     Courses\ExperienceController as PartnerExpController,
     Courses\LessonController as PartnerLessonController,
@@ -30,21 +33,24 @@ use App\Http\Livewire\Partners\{
     Courses\Skill as PartnerSkillLive,
     Courses\Lesson as PartnerLessonLive,
 
+    Courses\Lessons\LvLearningSequenceProto as LearningSequenceLive,
     Courses\Lessons\Book as BookLive,
     Courses\Lessons\Video as VideoLive,
     Courses\Lessons\Quiz as QuizLive,
     Courses\Lessons\Quizzes\LvQuestion as QuestionLive,
 };
+
 use Illuminate\Support\Facades\Auth;
 
-Route::view('/', 'welcome');
+// Route::view('/', 'homepage.pages.index');
+
+Route::get('/', [HomeController::class, 'index'])->name('home.index');
+
 Route::view('dashboard', 'dashboard')->middleware(['auth:sanctum', 'verified'])->name('dashboard');
 
 Route::middleware('auth:admin')->prefix('admin/management')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
-    Route::get('user/{id}/update_status', [
-        UserController::class, 'update_status'
-    ])->name('update_status');
+    Route::get('user/{id}/update_status', [UserController::class, 'update_status'])->name('update_status');
     Route::resources([
         'catalog'       => CatalogController::class,
         'catalog_topic' => CatalogTopicController::class,
@@ -52,7 +58,19 @@ Route::middleware('auth:admin')->prefix('admin/management')->name('admin.')->gro
         'user'          => UserController::class,
     ]);
     Route::prefix('partner')->group(function(){
+        Route::get('verif_course/{course_id}/lessons', [CourseController::class, 'lesson'])->name('verif_course.lesson.index');
         Route::resource('verif_course', CourseController::class);
+        Route::get('lessons/{lesson:id}', [CourseController::class, 'detailLesson'])->name('lessons.show');
+        Route::get('lessons/{lesson:id}/quizzes', [CourseController::class, 'quiz'])->name('quiz.show');
+        Route::get('lessons/quiz/{quiz:id}/questions', [CourseController::class, 'detailQuiz'])->name(
+                    'quiz.detail'
+                );
+        Route::get('lessons/books/get/{uuid}/pdf', [
+            CourseController::class, 'book'
+        ])->name('lesson.books');
+        Route::get('lessons/videos/get/{uuid}/video', [
+            CourseController::class, 'video'
+        ])->name('lesson.videos');
     });
     Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 });
@@ -84,6 +102,7 @@ Route::group([
             
             Route::group(['prefix' => 'lessons', 'as' => 'lesson.'], function () {
                 Route::get('/{lesson:id}', [PartnerLessonController::class, 'show'])->name('show');
+                Route::get('/{lesson:id}/learning-sequences', LearningSequenceLive::class)->name('learning.sequence.index');
                 Route::get('/{lesson:id}/books', BookLive::class)->name('book.index');
                 Route::get('/{lesson:id}/videos', VideoLive::class)->name('video.index');
                 Route::get('/{lesson:id}/quizzes', QuizLive::class)->name('quiz.index');
@@ -93,7 +112,9 @@ Route::group([
 
             });
         });
+        Route::get('course/publish/{id}', [PartnerCourseController::class, 'publish'])->name('publish');
         Route::resource('course', PartnerCourseController::class);
+        Route::resource('corporation', PartnerCorporationController::class);
     });
 });
 

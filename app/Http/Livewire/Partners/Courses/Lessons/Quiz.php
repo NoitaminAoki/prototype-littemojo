@@ -15,7 +15,7 @@ class Quiz extends Component
     protected $rules = [
         'title' => 'required|string',
         'quiz.title' => 'required|string',
-        'quiz.total_question' => 'required|string',
+        'quiz.total_question' => 'required|integer',
     ];
     
     public $orders_id;
@@ -77,7 +77,7 @@ class Quiz extends Component
     {
         $this->validate([
             'quiz.title' => 'required|string',
-            'quiz.total_question' => 'required|string',
+            'quiz.total_question' => 'required|integer',
         ]);
 
         $this->quiz->save();

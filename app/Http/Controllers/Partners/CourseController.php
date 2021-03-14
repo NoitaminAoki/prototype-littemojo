@@ -15,7 +15,7 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $data['courses'] = Course::select('courses.id', 'courses.title', 'courses.description', 'price', 'duration', 'courses.is_verified', 'courses.date_verified', 'catalog_topics.name as nama_catalog_topic', 'catalogs.name as nama_catalog', 'levels.name as nama_level')
+        $data['courses'] = Course::with('lessons')->select('courses.id', 'courses.is_published', 'courses.title', 'courses.description', 'price', 'duration', 'courses.is_verified', 'courses.date_verified', 'catalog_topics.name as nama_catalog_topic', 'catalogs.name as nama_catalog', 'levels.name as nama_level')
     						 ->leftJoin('catalog_topics', 'catalog_topics.id', 'courses.id')
     						 ->leftJoin('catalogs', 'catalogs.id', 'catalog_topics.catalog_id')
                              ->leftJoin('levels', 'levels.id', 'courses.level_id')
@@ -87,5 +87,42 @@ class CourseController extends Controller
                             ->leftJoin('levels', 'levels.id', 'courses.level_id')
         					->findOrFail($id);
         return view('partners.course.show', compact('catalogs', 'course'));
+    }
+
+    public function publish($id){
+        $upd = Course::findOrFail($id);
+        $upd->is_published = true;
+        $upd->save();
+        return redirect('partner/management/course/')->with('alert-message', 'Berhasil Publish Course');
+    }
+
+    public function destroy($id){
+        $data = Course::with(['lessons.books', 'lessons.videos', 'lessons.quizzes'])->select('courses.id', 'courses.uuid')->findOrFail($id);
+        // delete cover 
+        if (\File::exists('uploaded_files/courses/covers/'.$data->uuid)) {
+            \File::deleteDirectory(public_path('uploaded_files/courses/covers/'.$data->uuid));
+        }
+        foreach ($data->lessons as $value) {
+            // delete books
+            foreach ($value->books as $book) {
+                if (\Storage::exists('books/'.$book->id)) {
+                    \Storage::deleteDirectory('app/books/'.$book->id);
+                }
+            }
+            // delete video
+            foreach ($value->videos as $video) {
+                if (\Storage::exists('videos/'.$video->id)) {
+                    \Storage::deleteDirectory('app/videos/'.$video->id);
+                }
+            }
+            // delete all image guizze
+            foreach ($value->quizzes as $quiz) {
+                if (\Storage::exists('images/questions/lesson_'.$quiz->lesson_id)) {
+                    \Storage::deleteDirectory('images/questions/lesson_'.$quiz->lesson_id);
+                }
+            }
+        }
+        $data->delete();
+        return redirect('partner/management/course/')->with('alert-message', 'Berhasil Menghapus Course');
     }
 }

@@ -18,6 +18,8 @@ class CreateGainedExperiencesTable extends Migration
             $table->bigInteger('course_id')->unsigned()->nullable();
             $table->string('name');
             $table->timestamps();
+
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
         });
     }
 

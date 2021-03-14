@@ -23,6 +23,8 @@ class CreateQuestionOptionsTable extends Migration
             $table->string('title')->nullable();
             $table->enum('type', ['image', 'text']);
             $table->timestamps();
+
+            $table->foreign('question_id')->references('id')->on('quiz_questions')->onDelete('cascade');
         });
     }
 

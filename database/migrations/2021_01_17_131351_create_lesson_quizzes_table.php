@@ -20,6 +20,8 @@ class CreateLessonQuizzesTable extends Migration
             $table->string('title');
             $table->integer('total_question');
             $table->timestamps();
+
+            $table->foreign('lesson_id')->references('id')->on('course_lessons')->onDelete('cascade');
         });
     }
 

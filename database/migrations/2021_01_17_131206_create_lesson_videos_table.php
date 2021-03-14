@@ -23,6 +23,8 @@ class CreateLessonVideosTable extends Migration
             $table->string('duration', 20)->nullable();
             $table->string('size', 20);
             $table->timestamps();
+
+            $table->foreign('lesson_id')->references('id')->on('course_lessons')->onDelete('cascade');
         });
     }
 

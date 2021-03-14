@@ -1,0 +1,1 @@
+ini detail quizzes
