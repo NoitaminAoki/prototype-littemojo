@@ -21,12 +21,16 @@
                 <div class="card-body">
                     @include('partials.alert')
                     <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" name="name" placeholder="Masukkan Name" required value="{{$corporation->name}}">
+                    </div>
+                    <div class="form-group">
                         <label>Image</label>
-                        <input type="file" class="form-control" name="image" placeholder="Masukkan Image" required>
+                        <input type="file" class="form-control" name="image" placeholder="Masukkan Image">
                     </div>
                     <div class="form-group">
                         <label>Logo</label>
-                        <input type="file" class="form-control" name="logo" placeholder="Masukkan Logo" required>
+                        <input type="file" class="form-control" name="logo" placeholder="Masukkan Logo">
                     </div>
                     <div class="d-flex justify-content-between">
                         <a href="{{ route('partner.manage.corporation.index') }}" class="btn btn-warning btn-sm">Back</a>

@@ -77,6 +77,14 @@ class Lesson extends Component
     public function delete($id)
     {
         $this->setLesson($id);
+        if (\Storage::exists('books/'.$this->lesson->course_id.'/'.$this->lesson->id))
+        	\Storage::deleteDirectory('books/'.$this->lesson->course_id.'/'.$this->lesson->id);
+
+        if (\Storage::exists('videos/'.$this->lesson->course_id.'/'.$this->lesson->id))
+        	\Storage::deleteDirectory('videos/'.$this->lesson->course_id.'/'.$this->lesson->id);
+
+        if (\Storage::exists('images/questions/'.$this->lesson->course_id.'/lesson_'.$this->lesson->id))
+        	\Storage::deleteDirectory('images/questions/'.$this->lesson->course_id.'/lesson_'.$this->lesson->id);
         $this->lesson->delete();
         $this->resetInput();
         $this->setNotif('Successfully deleting data.');

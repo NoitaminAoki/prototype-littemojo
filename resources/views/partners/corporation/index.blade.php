@@ -23,6 +23,7 @@
                     <thead>
                         <tr role="row">
                             <th>No</th>
+                            <th>Name</th>
                             <th>Image</th>
                             <th>Logo</th>
                             <th>Thumbnail</th>
@@ -33,6 +34,7 @@
                         @foreach($corporations as $corporation)
                         <tr>
                             <td width="40px;">{{($loop->index+1)}}</td>
+                            <td>{{$corporation->name}}</td>
                             <td><img src="{{url('uploaded_files/corporation/'.$corporation->image)}}" class="img-fluid" alt="" style="width: 150px;height: 150px;"></td>
                             <td><img src="{{url('uploaded_files/corporation/'.$corporation->logo)}}" class="img-fluid" alt=""></td>
                             <td><img src="{{url('uploaded_files/corporation/'.$corporation->thumbnail)}}" class="img-fluid" alt=""></td>

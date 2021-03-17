@@ -62,8 +62,9 @@ class Video extends Component
         ]);
 
         $name = Date('YmdHis').'_videos.'.$this->file->extension();
+        $course_id = Lesson::where('id', $this->lesson->id)->value('course_id');
 
-        $path = Storage::putFileAs('videos/'.$this->lesson->id, $this->file, $name);
+        $path = Storage::putFileAs('videos/'.$course_id.'/'.$this->lesson->id, $this->file, $name);
 
         $last_video = MsVideo::where('lesson_id', $this->lesson->id)->orderBy('orders', 'desc')->first();
 
@@ -73,7 +74,7 @@ class Video extends Component
             $order += $last_video->orders;
         }
         $getid3 = new \getID3;
-        $video = $getid3->analyze(storage_path('app/videos/'.$this->lesson->id.'/'.$name));
+        $video = $getid3->analyze(storage_path('app/videos/'.$course_id.'/'.$this->lesson->id.'/'.$name));
         
         MsVideo::create([
             'lesson_id' => $this->lesson->id,
@@ -104,7 +105,8 @@ class Video extends Component
             $path = Storage::putFileAs('videos/'.$this->lesson->id, $this->update_file, $name);
 
             $getid3 = new \getID3;
-            $video = $getid3->analyze(storage_path('app/videos/'.$this->lesson->id.'/'.$name));
+            $course_id = Lesson::where('id', $this->lesson->id)->value('course_id');
+            $video = $getid3->analyze(storage_path('app/videos/'.$course_id.'/'.$this->lesson->id.'/'.$name));
             $this->video->filename = $name;
             $this->video->duration = round($video['playtime_seconds']);
             $this->video->size = Converter::formatBytes($this->update_file->getSize());
@@ -118,7 +120,8 @@ class Video extends Component
     public function delete($id)
     {
         $this->setVideo($id);
-        $uri = 'videos/'.$this->lesson->id.'/'.$this->video->filename;
+        $course_id = Lesson::where('id', $this->lesson->id)->value('course_id');
+        $uri = 'videos/'.$course_id.'/'.$this->lesson->id.'/'.$this->video->filename;
         Storage::delete($uri);
         $this->video->delete();
         $this->resetInput();

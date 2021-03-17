@@ -88,6 +88,8 @@ class Quiz extends Component
     public function delete($id)
     {
         $this->setQuiz($id);
+        $course_id = Lesson::where('id', $this->quiz->lesson_id)->value('course_id');
+        \Storage::deleteDirectory('images/questions/'.$course_id.'/lesson_'.$this->quiz->lesson_id);
         $this->quiz->delete();
         $this->resetInput();
         $this->setNotif('Successfully deleting data.');
