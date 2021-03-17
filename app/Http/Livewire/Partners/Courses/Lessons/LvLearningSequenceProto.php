@@ -26,6 +26,7 @@ class LvLearningSequenceProto extends Component
     public $quizzes;
 
     public $sequences;
+    public $title_sequences;
 
     public function Mount(Lesson $lesson)
     {
@@ -63,7 +64,8 @@ class LvLearningSequenceProto extends Component
         ->havingRaw('is_listed = 0')
         ->orderBy('orders', 'asc')->get();
 
-        $this->sequences = Sequence::where('lesson_id', $this->lesson->id)->get();
+        $this->sequences = Sequence::select('id', 'lesson_id', 'title')->where('lesson_id', $this->lesson->id)->get();
+        $this->title_sequences = $this->sequences->toArray();
     }
 
     public function addSequence()
@@ -73,6 +75,8 @@ class LvLearningSequenceProto extends Component
             'title' => 'Title',
         ]);
         $this->sequences->push($sequence);
+        array_push($this->title_sequences, ['id' => $sequence->id, 'lesson_id' => $sequence->lesson_id, 'title' => $sequence->title]);
+        $this->dispatchBrowserEvent('sortable:load');
         $this->setNotif('Successfully adding data.');
     }
 
@@ -80,6 +84,13 @@ class LvLearningSequenceProto extends Component
     {
         $is_changed = false;
         foreach ($item as $key => $parent) {
+            $sequence = $this->sequences[$key];
+            $changed_title = $this->title_sequences[$key]['title'];
+            if($sequence->id == $this->title_sequences[$key]['id'] && $sequence->title != $changed_title) {
+                $sequence->title = $changed_title;
+                $sequence->save();
+                $is_changed = true;
+            }
             foreach ($parent as $child_key => $child) {
                 if(isset($child['list_id'])) {
 
@@ -128,6 +139,7 @@ class LvLearningSequenceProto extends Component
                 }
             }
         }
+        
         if($is_changed) {
             $this->refreshData();
             $this->setNotif('Successfully saving changes.');

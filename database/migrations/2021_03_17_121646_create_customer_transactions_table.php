@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateObtainSkillsTable extends Migration
+class CreateCustomerTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,9 @@ class CreateObtainSkillsTable extends Migration
      */
     public function up()
     {
-        Schema::create('obtain_skills', function (Blueprint $table) {
+        Schema::create('customer_transactions', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('catalog_id')->unsigned()->nullable();
-            $table->string('name');
             $table->timestamps();
-
-            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
         });
     }
 
@@ -30,6 +26,6 @@ class CreateObtainSkillsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('obtain_skills');
+        Schema::dropIfExists('customer_transactions');
     }
 }

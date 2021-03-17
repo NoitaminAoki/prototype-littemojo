@@ -14,6 +14,15 @@
         border-radius: 0;
         box-shadow: inherit;
     }
+    .border-highlight {
+        border: 4px dashed #dee2e6;
+    }
+    .margin-child-highlight {
+        /* margin: -4px; */
+        margin-top: -4px;
+        margin-left: -4px;
+        width: calc(100% + 8px) !important;
+    }
 </style>
 @endsection
 
@@ -47,7 +56,7 @@
                                     <p class="text-center text-secondary">No Data</p>
                                     @else
                                     @foreach ($books as $book)
-                                    <div class="px-1 py-2 border my-1 rounded list_sequence_child" data-id="{{$book->id}}" data-type="book">
+                                    <div class="px-1 py-2 border my-1 rounded list_sequence_child" id="sort_item_book_{{$book->id}}" data-id="{{$book->id}}" data-type="book">
                                         <div class="ui-draggable">
                                             <span class="text-secondary"><i class="far fa-fw fa-file-pdf"></i> {{$book->title}}</span>
                                             
@@ -151,9 +160,9 @@
                             <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        {{-- <div class="px-0 col-10 card-title">
-                                            <input type="text" class="p-0 form-control form-control-border" placeholder="title">
-                                        </div> --}}
+                                        <div class="w-100 card-title edit-title" style="display: none;">
+                                            <input type="text" class="p-0 form-control form-control-border" wire:model.defer="title_sequences.{{$loop->index}}.title">
+                                        </div>
                                         <h4 class="card-title">{{$sequence->title}}</h4>
                                         <div class="card-tools">
                                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -164,7 +173,7 @@
                                                     <i class="fas fa-wrench"></i>
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-right" role="menu" style="">
-                                                    <button class="dropdown-item">Change Title</button>
+                                                    <button class="dropdown-item btn-tool__change-title">Change Title</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -173,18 +182,18 @@
                                         <div data-id="{{$sequence->id}}" class="w-100 list_sequence connected_sequence_sortable connected_main_sortable">
                                             @foreach ($sequence->items() as $key => $item_list)
                                             <div class="px-1 py-2 border my-1 rounded list_sequence_child" data-list-id="{{$item_list->list_id}}" data-id="{{$item_list->id}}" data-type="{{$item_list->type}}">
-                                                <div class="ui-draggable">
-                                                    <span class="text-secondary">
-                                                        @if ($item_list->type == 'book')
-                                                        <i class="far fa-fw fa-file-pdf"></i> 
-                                                        @elseif($item_list->type == 'video')
-                                                        <i class="far fa-fw fa-file-video"></i> 
-                                                        @elseif($item_list->type == 'quiz')
-                                                        <i class="far fa-fw fa-question-circle"></i> 
-                                                        @endif
-                                                        {{$item_list->title}}
-                                                    </span>
-                                                </div>    
+                                                <div class="ui-draggable tab-pane">
+                                                        <span class="text-secondary">
+                                                            @if ($item_list->type == 'book')
+                                                            <i class="far fa-fw fa-file-pdf"></i> 
+                                                            @elseif($item_list->type == 'video')
+                                                            <i class="far fa-fw fa-file-video"></i> 
+                                                            @elseif($item_list->type == 'quiz')
+                                                            <i class="far fa-fw fa-question-circle"></i> 
+                                                            @endif
+                                                            {{$item_list->title}}
+                                                        </span>
+                                                </div>
                                             </div> 
                                             @endforeach
                                         </div>
@@ -222,7 +231,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="w-100 connected_sequence_sortable connected_main_sortable"></div>
+                            <div id="sortable_trash" class="w-100 connected_sequence_sortable connected_main_sortable"></div>
                         </div>
                     </div>    
                 </div>   
@@ -240,6 +249,32 @@
 <script>
     $(document).ready(function() {
     });
+    function showChanges() {
+        $("#containerSave").show();
+        $("#containerAdd").hide();
+    }
+    document.addEventListener('sortable:load', function() {
+        $(".connected_sequence_sortable").sortable({
+            connectWith: ".connected_main_sortable",
+            handle: ".ui-draggable",
+            placeholder: "sort-highlight",
+            forcePlaceholderSize: true,
+            zIndex              : 999999,
+            update: function( event, ui ) {
+                showChanges();
+            },
+        });
+    });
+    $(document).on('click', '.btn-tool__change-title', function() {
+        var parent = $(this).parents('.card-header');
+        var title = parent.find('h4.card-title');
+        var input = parent.find('div.card-title');
+        parent.find('div.card-tools').hide();
+        title.hide();
+        input.show();
+        showChanges();
+        // console.info(title);
+    });
     document.addEventListener('livewire:load', function () {
         $("#btnSave").on('click', function() {
             $(this).attr('disabled', 'disabled');
@@ -253,8 +288,11 @@
                     // console.log(idx, child_idx);
                 })
             });
+            var trash_lists = $("#sortable_trash").find(".list_sequence_child");
+            console.log(trash_lists);
+            
             // console.log(data_list);
-            @this.saveList(data_list);
+            // @this.saveList(data_list);
         });
         $("#btnCancel").on('click', function() {
             @this.refreshData();
@@ -265,6 +303,14 @@
             placeholder: "sort-highlight",
             forcePlaceholderSize: true,
             zIndex              : 999999,
+            start: function(event, ui) {
+                // $('.connected_main_sortable').parent().addClass('border-highlight');
+                // $('.connected_sequence_sortable').addClass('margin-child-highlight');
+            },
+            stop: function(event, ui) {
+                // $('.connected_main_sortable').parent().removeClass('border-highlight');
+                // $('.connected_sequence_sortable').removeClass('margin-child-highlight');
+            },
         });
         $(".connected_sequence_sortable").sortable({
             connectWith: ".connected_main_sortable",
@@ -273,9 +319,23 @@
             forcePlaceholderSize: true,
             zIndex              : 999999,
             update: function( event, ui ) {
-                $("#containerSave").show();
-                $("#containerAdd").hide();
-
+                var self = $(this);
+                var item = ui.item;
+                if(self.attr('id') == "sortable_trash") {
+                    if(item.attr('data-list-id') == undefined) {
+                        if(item.attr('data-type') == 'book') {
+                            document.getElementById('sortable_book').appendChild(item[0]);
+                        }
+                        else if(item.attr('data-type') == 'video') {
+                            document.getElementById('sortable_video').appendChild(item[0]);
+                        }
+                        else if(item.attr('data-type') == 'quiz') {
+                            document.getElementById('sortable_quiz').appendChild(item[0]);
+                        }
+                    }
+                } else {
+                    showChanges();
+                }
             },
         });
         $(document).on('click', '.btn-delete', function () {
