@@ -97,30 +97,20 @@ class CourseController extends Controller
     }
 
     public function destroy($id){
-        $data = Course::with(['lessons.books', 'lessons.videos', 'lessons.quizzes'])->select('courses.id', 'courses.uuid')->findOrFail($id);
-        // delete cover 
+        $data = Course::with('lessons')->select('courses.id', 'courses.uuid')->findOrFail($id);
+        // delete cover
         if (\File::exists('uploaded_files/courses/covers/'.$data->uuid)) {
             \File::deleteDirectory(public_path('uploaded_files/courses/covers/'.$data->uuid));
         }
         foreach ($data->lessons as $value) {
-            // delete books
-            foreach ($value->books as $book) {
-                if (\Storage::exists('books/'.$book->id)) {
-                    \Storage::deleteDirectory('app/books/'.$book->id);
-                }
-            }
-            // delete video
-            foreach ($value->videos as $video) {
-                if (\Storage::exists('videos/'.$video->id)) {
-                    \Storage::deleteDirectory('app/videos/'.$video->id);
-                }
-            }
-            // delete all image guizze
-            foreach ($value->quizzes as $quiz) {
-                if (\Storage::exists('images/questions/lesson_'.$quiz->lesson_id)) {
-                    \Storage::deleteDirectory('images/questions/lesson_'.$quiz->lesson_id);
-                }
-            }
+            if (\Storage::exists('books/'.$value->course_id))
+                \Storage::deleteDirectory('books/'.$value->course_id);
+
+            if (\Storage::exists('videos/'.$value->course_id))
+                \Storage::deleteDirectory('videos/'.$value->course_id);
+
+            if (\Storage::exists('images/questions/'.$value->course_id))
+                \Storage::deleteDirectory('images/questions/'.$value->course_id);
         }
         $data->delete();
         return redirect('partner/management/course/')->with('alert-message', 'Berhasil Menghapus Course');

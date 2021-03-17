@@ -63,8 +63,9 @@ class Book extends Component
         ]);
 
         $name = Date('YmdHis').'_books.'.$this->file->extension();
+        $course_id = Lesson::where('id', $this->lesson->id)->value('course_id');
 
-        $path = Storage::putFileAs('books/'.$this->lesson->id, $this->file, $name);
+        $path = Storage::putFileAs('books/'.$course_id.'/'.$this->lesson->id, $this->file, $name);
 
         $last_book = MsBook::where('lesson_id', $this->lesson->id)->orderBy('orders', 'desc')->first();
 
@@ -113,7 +114,8 @@ class Book extends Component
     public function delete($id)
     {
         $this->setBook($id);
-        $uri = 'books/'.$this->lesson->id.'/'.$this->book->filename;
+        $course_id = Lesson::where('id', $this->lesson->id)->value('course_id');
+        $uri = 'books/'.$course_id.'/'.$this->lesson->id.'/'.$this->book->filename;
         Storage::delete($uri);
         $this->book->delete();
         $this->resetInput();

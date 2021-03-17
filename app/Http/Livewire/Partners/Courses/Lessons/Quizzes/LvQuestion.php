@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use App\Models\{
+    CourseLesson as Lesson,
     LessonQuiz as Quiz,
     QuizAnswerKey as AnswerKey,
     QuizQuestion as Question,
@@ -138,7 +139,8 @@ class LvQuestion extends Component
             $path = null;
             if(!is_null($this->image)) {
                 $filename = Date('YmdHis').'_image_question.'.$this->image->extension();
-                $path = Storage::putFileAs('images/questions/lesson_'.$this->quiz->lesson_id.'/quiz_'.$this->quiz->id, $this->image, $filename);
+                $course_id = Lesson::where('id', $this->quiz->lesson_id)->value('course_id');
+                $path = Storage::putFileAs('images/questions/'.$course_id.'/lesson_'.$this->quiz->lesson_id.'/quiz_'.$this->quiz->id, $this->image, $filename);
             }
             $question = Question::create([
                 'quiz_id' => $this->quiz->id,
