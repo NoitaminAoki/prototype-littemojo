@@ -17,7 +17,7 @@ class CorporationController extends Controller
      */
     public function index()
     {
-        $corporations = Corporation::select('id', 'image', 'logo', 'thumbnail')
+        $corporations = Corporation::select('id', 'name', 'image', 'logo', 'thumbnail')
         ->latest()
         ->get();
         return view('partners.corporation.index', compact('corporations'));
@@ -43,12 +43,14 @@ class CorporationController extends Controller
     {
         $validator = \Validator::make(request()->all(), [
             'logo'   => ['required', 'mimes:jpg,png,jpeg'],      
-            'image'  => ['required', 'mimes:jpg,png,jpeg']
+            'image'  => ['required', 'mimes:jpg,png,jpeg'],
+            'name'   => ['required']
         ], [
             'logo.required'  => 'Logo wajib diisi',
             'logo.mimes'     => 'Extension logo harus .jpg, .png, .jpeg',
             'image.required' => 'Image wajib diisi',
             'image.mimes'    => 'Extension image harus .jpg, .png, .jpeg',
+            'name.required'  => 'Nama wajib diisi',
         ]);
         if ($validator->fails()) {
             return back()->withErrors($validator->errors()->getMessages());
@@ -74,6 +76,8 @@ class CorporationController extends Controller
             });
             $img->save($thumbnailpath);
 
+            $new['uuid']        = \Str::uuid();
+            $new['name']        = $request['name'];
             $new['logo']        = $nama_logo;
             $new['image']       = $nama_image;
             $new['thumbnail']   = $nama_thumbnail;
@@ -102,7 +106,7 @@ class CorporationController extends Controller
      */
     public function edit($id)
     {
-        $corporation = Corporation::select('id', 'image', 'logo', 'thumbnail')
+        $corporation = Corporation::select('id', 'name', 'image', 'logo', 'thumbnail')
         ->findOrFail($id);
         return view('partners.corporation.edit', compact('corporation'));
     }
@@ -117,27 +121,37 @@ class CorporationController extends Controller
     public function update(Request $request, $id)
     {
         $validator = \Validator::make(request()->all(), [
-            'logo'   => ['required', 'mimes:jpg,png,jpeg'],      
-            'image'  => ['required', 'mimes:jpg,png,jpeg']
+            'logo'   => ['mimes:jpg,png,jpeg'],      
+            'image'  => ['mimes:jpg,png,jpeg'],
+            'name'   => ['required']
         ], [
-            'logo.required'  => 'Logo wajib diisi',
             'logo.mimes'     => 'Extension logo harus .jpg, .png, .jpeg',
-            'image.required' => 'Image wajib diisi',
             'image.mimes'    => 'Extension image harus .jpg, .png, .jpeg',
+            'name.required'  => 'Nama wajib diisi',
         ]);
         if ($validator->fails()) {
             return back()->withErrors($validator->errors()->getMessages());
         }else{
             $upd = Corporation::findOrFail($id);
-            $nama_logo      = Date('YmdHis').'_logo.'.$request->file('logo')->getClientOriginalExtension();
-            $nama_image     = Date('YmdHis').'_image.'.$request->file('image')->getClientOriginalExtension();
-            $nama_thumbnail = Date('YmdHis').'_thumbnail.'.$request->file('image')->getClientOriginalExtension();
-            unlink(public_path('uploaded_files/corporation/'.$upd->logo));
-            unlink(public_path('uploaded_files/corporation/'.$upd->image));
-            unlink(public_path('uploaded_files/corporation/'.$upd->thumbnail));
-            $request->file('logo')->move('uploaded_files/corporation/', $nama_logo);
-            $request->file('image')->move('uploaded_files/corporation/', $nama_image);
-            copy('uploaded_files/corporation/'.$nama_image, public_path('uploaded_files/corporation/'.$nama_thumbnail));
+            $nama_logo = ($request->file('logo') ? Date('YmdHis').'_logo.'.$request->file('logo')->getClientOriginalExtension() : $upd->logo);
+            $nama_image = ($request->file('image') ? Date('YmdHis').'_image.'.$request->file('image')->getClientOriginalExtension() : $upd->image);
+            $nama_thumbnail = ($request->file('image') ? Date('YmdHis').'_thumbnail.'.$request->file('image')->getClientOriginalExtension() : $upd->thumbnail);
+            if ($request->file('logo')) {
+                if (file_exists(public_path('uploaded_files/corporation/'.$upd->logo)))
+                    unlink(public_path('uploaded_files/corporation/'.$upd->logo));
+
+                $request->file('logo')->move('uploaded_files/corporation/', $nama_logo);
+            }
+            if ($request->file('image')) {
+                if (file_exists(public_path('uploaded_files/corporation/'.$upd->image)))
+                    unlink(public_path('uploaded_files/corporation/'.$upd->image));
+
+                if (file_exists(public_path('uploaded_files/corporation/'.$upd->thumbnail)))
+                    unlink(public_path('uploaded_files/corporation/'.$upd->thumbnail));
+
+                $request->file('image')->move('uploaded_files/corporation/', $nama_image);
+                copy('uploaded_files/corporation/'.$nama_image, public_path('uploaded_files/corporation/'.$nama_thumbnail));
+            }                                                        
             
             $logopath = public_path('uploaded_files/corporation/'.$nama_logo);
             $img = Image::make($logopath);
@@ -153,6 +167,8 @@ class CorporationController extends Controller
             });
             $img->save($thumbnailpath);
 
+            $upd->uuid        = \Str::uuid();
+            $upd->name        = $request['name'];
             $upd->logo        = $nama_logo;
             $upd->image       = $nama_image;
             $upd->thumbnail   = $nama_thumbnail;
