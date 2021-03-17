@@ -15,6 +15,15 @@ class CreateCustomerTransactionsTable extends Migration
     {
         Schema::create('customer_transactions', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('customer_id')->unsigned()->nullable();
+            $table->bigInteger('course_id')->unsigned()->nullable();
+            $table->string('transaction_code', 200);
+            $table->integer('price');
+            $table->integer('admin_fee');
+            $table->integer('total_price');
+            $table->bigInteger('promo_id')->unsigned()->nullable();
+            $table->string('snap_token')->nullable();
+            $table->enum('status_payment', ['waiting', 'pending', 'success', 'failed', 'expired']);
             $table->timestamps();
         });
     }
