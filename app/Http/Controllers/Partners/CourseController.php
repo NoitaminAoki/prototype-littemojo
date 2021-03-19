@@ -78,7 +78,7 @@ class CourseController extends Controller
 
     public function show($id){
     	$catalogs = Catalog::all();
-        $course   = Course::select('courses.id', 'courses.catalog_id', 'courses.uuid', 'courses.cover', 'courses.catalog_topic_id', 'courses.title', 'courses.description', 'courses.price', 'courses.duration',
+        $course   = Course::with('skills.skill')->select('courses.id', 'courses.catalog_id', 'courses.uuid', 'courses.cover', 'courses.catalog_topic_id', 'courses.title', 'courses.description', 'courses.price', 'courses.duration',
                             'catalog_topics.name as nama_catalog_topic',
                             'catalogs.name as nama_catalog',
                             'levels.name as nama_level', 'levels.description as desc_level')

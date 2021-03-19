@@ -172,7 +172,7 @@
                     <div class="modal-body">
                         <div class="w-100">
                             <label for="name">Name</label>
-                            <textarea id="edit_textarea_name" wire:model.defer="skill.id" name="name" class="form-control" style="min-height: 80px;" required>
+                            <textarea id="edit_textarea_name" wire:model.defer="skill.name" name="name" class="form-control" style="min-height: 80px;" required>
                             </textarea>
                         </div>
                         @error('skill.name')

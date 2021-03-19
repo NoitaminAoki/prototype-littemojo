@@ -72,7 +72,9 @@ class Skill extends Component
         $this->validate([
             'skill.name' => 'required|string',
         ]);
-        $this->skill->save();
+        $skill = Skills::where('id', $this->skill->skill_id)->first();
+        $skill->name = $this->skill->name;
+        $skill->save();
         $this->resetInput();
         $this->setNotif('Successfully updating data.');
     }

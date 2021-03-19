@@ -222,7 +222,7 @@
                     
                     <div class="d-flex flex-wrap mt-3">
                         @foreach ($course->skills as $skill_item)
-                        <div class="rounded bg-secondary py-1 px-2 my-1 mx-2">{{$skill_item->name}}</div>
+                        <div class="rounded bg-secondary py-1 px-2 my-1 mx-2">{{$skill_item->skill->name}}</div>
                         @endforeach
                     </div>
                     
