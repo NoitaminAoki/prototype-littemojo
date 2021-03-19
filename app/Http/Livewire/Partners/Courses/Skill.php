@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Partners\Courses;
 use Livewire\Component;
 use App\Models\{
     ObtainSkill as Skills,
+    CourseSkill,
 	Course,
 };
 
@@ -16,6 +17,7 @@ class Skill extends Component
 
     public $skills = [];
     public $skill;
+    public $courseSkill;
     public $course_id;
 
     public $notification = [
@@ -25,8 +27,9 @@ class Skill extends Component
 
     public function mount($course_id)
     {
-        $this->course_id = $course_id;
-        $this->skill = new Skills;
+        $this->course_id  = $course_id;
+        $this->skill      = new Skills;
+        $this->courseSkill = new CourseSkill;
     }
 
     public function render()
@@ -37,7 +40,7 @@ class Skill extends Component
         ->join('catalogs', 'catalogs.id', 'catalog_topics.catalog_id')
         ->findOrFail($this->course_id);
 
-        $this->skills = Skills::where('course_id', $this->course_id)->get();
+        $this->skills = CourseSkill::where('course_id', $this->course_id)->get();
         
         return view('partners.course.skill.live-index')
         ->with(['course' => $course, 'skills' => $this->skills])
@@ -50,8 +53,16 @@ class Skill extends Component
         $this->validate([
             'skill.name' => 'required|string',
         ]);
-        $this->skill->course_id = $this->course_id;
-        $this->skill->save();
+        $skill = Skills::where('name', 'like', '%'.$this->skill->name.'%')->first();
+        $cat = Course::findOrFail($this->course_id)->value('catalog_id');
+        if (is_null($skill)) {
+            $this->skill->catalog_id = $cat;
+            $this->skill->save();
+        }        
+
+        $this->courseSkill->course_id = $this->course_id;
+        $this->courseSkill->skill_id = (is_null($skill) ? $this->skill->id : $skill->id);
+        $this->courseSkill->save();
         $this->resetInput();
         $this->setNotif('Successfully adding data.');
     }
@@ -76,7 +87,7 @@ class Skill extends Component
 
     public function setSkill($id)
     {
-        $this->skill = Skills::find($id);
+        $this->skill = CourseSkill::where('skill_id', $id)->first();
     }
     
     public function resetInput()

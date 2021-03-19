@@ -113,11 +113,11 @@
                         @else
                         @foreach ($skills as $skill)
                         <tr>
-                            <td>{{$skill->name}}</td>
+                            <td>{{$skill->Skill->name}}</td>
                             <td class="text-right py-0 align-middle">
                                 <div class="btn-group btn-group-sm">
-                                    <button data-toggle="modal" wire:click="setSkill({{$skill->id}})" data-target="#modal-update" class="btn btn-warning"><i class="fas fa-edit"></i></button>
-                                    <button data-id="{{$skill->id}}" class="btn btn-danger btn-delete btn-process"><i class="fas fa-trash"></i></button>
+                                    <button data-toggle="modal" wire:click="setSkill({{$skill->skill_id}})" data-target="#modal-update" class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                                    <button data-id="{{$skill->skill_id}}" class="btn btn-danger btn-delete btn-process"><i class="fas fa-trash"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -172,7 +172,7 @@
                     <div class="modal-body">
                         <div class="w-100">
                             <label for="name">Name</label>
-                            <textarea id="edit_textarea_name" wire:model.defer="skill.name" name="name" class="form-control" style="min-height: 80px;" required>
+                            <textarea id="edit_textarea_name" wire:model.defer="skill.id" name="name" class="form-control" style="min-height: 80px;" required>
                             </textarea>
                         </div>
                         @error('skill.name')
