@@ -12,7 +12,7 @@ class VideoController extends Controller
     public function index($uuid)
     {
         $file = Video::where('uuid', $uuid)->firstOrFail();
-        $path = storage_path('app/videos/'.$file->lesson_id.'/'.$file->filename);
+        $path = storage_path("app/videos/{$file->lesson->course_id}/{$file->lesson_id}/{$file->filename}");
         
         if (file_exists($path)) {
             

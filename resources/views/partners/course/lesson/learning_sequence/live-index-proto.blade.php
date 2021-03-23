@@ -163,7 +163,7 @@
                                         <div class="w-100 card-title edit-title" style="display: none;">
                                             <input type="text" class="p-0 form-control form-control-border" wire:model.defer="title_sequences.{{$loop->index}}.title">
                                         </div>
-                                        <h4 class="card-title">{{$sequence->title}}</h4>
+                                        <h4 class="card-title">{{$sequence->title}} <small class="text-bold text-danger title-deleted" style="display: none;">[Deleted]</small></h4>
                                         <div class="card-tools">
                                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                                 <i class="fas fa-minus"></i>
@@ -174,12 +174,14 @@
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-right" role="menu" style="">
                                                     <button class="dropdown-item btn-tool__change-title">Change Title</button>
+                                                    <button class="dropdown-item btn-tool__delete text-danger">Delete</button>
+                                                    <button class="dropdown-item btn-tool__restore text-primary" style="display: none;">Restore</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <div data-id="{{$sequence->id}}" class="w-100 list_sequence connected_sequence_sortable connected_main_sortable">
+                                        <div data-id="{{$sequence->id}}" data-status="active" class="w-100 list_sequence connected_sequence_sortable connected_main_sortable">
                                             @foreach ($sequence->items() as $key => $item_list)
                                             <div class="px-1 py-2 border my-1 rounded list_sequence_child" data-list-id="{{$item_list->list_id}}" data-id="{{$item_list->id}}" data-type="{{$item_list->type}}">
                                                 <div class="ui-draggable tab-pane">
@@ -275,24 +277,46 @@
         showChanges();
         // console.info(title);
     });
+    $(document).on('click', '.btn-tool__delete', function() {
+        var parent = $(this).parents('.card');
+        var text_delete = parent.find('h4.card-title .title-deleted');
+        parent.find('.dropdown-menu button.dropdown-item').hide();
+        parent.find('.dropdown-menu button.btn-tool__restore').show();
+        var list_element = parent.find('div.card-body div.list_sequence');
+        list_element.attr('data-status', 'deleted');
+        text_delete.show();
+        showChanges();
+    });
+    $(document).on('click', '.btn-tool__restore', function() {
+        var parent = $(this).parents('.card');
+        var text_delete = parent.find('h4.card-title .title-deleted');
+        parent.find('.dropdown-menu button.dropdown-item').hide();
+        parent.find('.dropdown-menu button.btn-tool__delete').show();
+        var list_element = parent.find('div.card-body div.list_sequence');
+        text_delete.hide();
+    });
     document.addEventListener('livewire:load', function () {
         $("#btnSave").on('click', function() {
             $(this).attr('disabled', 'disabled');
             var data_list = [];
+            var data_trash = [];
             var parent_lists = $(".list_sequence");
             parent_lists.each(function(idx, parent) {
                 let child_lists = $(parent).find(".list_sequence_child");
-                data_list[idx] = [];
+                data_list[idx] = { id: $(parent).attr('data-id'), status: $(parent).attr('data-status'), items: [] };
                 child_lists.each(function(child_idx, child) {
-                    data_list[idx].push({list_id: $(child).attr('data-list-id'), parent_id: $(parent).attr('data-id'), id: $(child).attr('data-id'), type:$(child).attr('data-type')});
+                    data_list[idx].items.push({list_id: $(child).attr('data-list-id'), parent_id: $(parent).attr('data-id'), id: $(child).attr('data-id'), type:$(child).attr('data-type')});
                     // console.log(idx, child_idx);
                 })
             });
             var trash_lists = $("#sortable_trash").find(".list_sequence_child");
-            console.log(trash_lists);
-            
+            trash_lists.each(function(idx, child) {
+                data_trash[idx] = {list_id: $(child).attr('data-list-id')}
+            })
+
+            // console.log(data_trash);
             // console.log(data_list);
-            // @this.saveList(data_list);
+            @this.saveList({item: data_list, trash: data_trash});
         });
         $("#btnCancel").on('click', function() {
             @this.refreshData();

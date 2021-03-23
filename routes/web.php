@@ -29,6 +29,8 @@ use App\Http\Controllers\Partners\{
 };
 
 use App\Http\Livewire\Partners\{
+    LvCourseInsert as CourseInsertLive,
+
     Courses\Experience as PartnerExpLive,
     Courses\Skill as PartnerSkillLive,
     Courses\Lesson as PartnerLessonLive,
@@ -62,9 +64,7 @@ Route::middleware('auth:admin')->prefix('admin/management')->name('admin.')->gro
         Route::resource('verif_course', CourseController::class);
         Route::get('lessons/{lesson:id}', [CourseController::class, 'detailLesson'])->name('lessons.show');
         Route::get('lessons/{lesson:id}/quizzes', [CourseController::class, 'quiz'])->name('quiz.show');
-        Route::get('lessons/quiz/{quiz:id}/questions', [CourseController::class, 'detailQuiz'])->name(
-                    'quiz.detail'
-                );
+        Route::get('lessons/quiz/{quiz:id}/questions', [CourseController::class, 'detailQuiz'])->name('quiz.detail');
         Route::get('lessons/books/get/{uuid}/pdf', [
             CourseController::class, 'book'
         ])->name('lesson.books');
@@ -113,6 +113,8 @@ Route::group([
             });
         });
         Route::get('course/publish/{id}', [PartnerCourseController::class, 'publish'])->name('publish');
+        
+        Route::get('course/insert', CourseInsertLive::class);
         Route::resource('course', PartnerCourseController::class);
         Route::resource('corporation', PartnerCorporationController::class);
     });

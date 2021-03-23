@@ -1,5 +1,85 @@
 @extends('homepage.layouts.main')
 
+@section('top-css')
+@endsection
+@section('css')
+<style>
+    .single-popular-carusel .details h4:hover {
+        color: #ffffff !important;
+    }
+    .single-popular-carusel .meta {
+        padding: 0 !important;
+    }
+    .custom-div {
+        position: absolute;
+        background-image: linear-gradient(135deg, #1c96de, rgb(0 69 95));
+        transform: skewY(-10deg);
+        -webkit-transform: skewY(-10deg);
+        height: 100%;
+        width: 100%;
+        top: 190px;
+    }
+    .custom-div-2 {
+        position: absolute;
+        background-color: rgb(111 111 111);
+        transform: skewY(70deg);
+        -webkit-transform: skewY(70deg);
+        height: 100%;
+        width: 54%;
+        top: 190px;
+    }
+    .thumbnail-div {
+        position: absolute;
+        border: 1px solid rgb(225, 225, 225);
+        border-radius: 3px;
+        z-index: 1;
+        background-color: rgb(255, 255, 255);
+        width: 72px;
+        height: 72px;
+        padding: 8px;
+        /* top: 146px; */
+        top: 154px;
+        left: 17px;
+    }
+    .thumbnail-div-img {
+        width: 100%;
+        height: 100%;
+        background-size: contain;
+        background-position: center center;
+        background-repeat: no-repeat;
+    }
+    .sub-custom-div h4 {
+        font-size: 1.25rem;
+        line-height: 1.5rem;
+        font-weight: normal;
+        font-family: OpenSans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        margin-bottom: 15px !important;
+    }
+    .sub-custom-div h6 {
+        font-size: 0.875rem;
+        line-height: 1.5rem;
+        font-weight: normal;
+        font-family: OpenSans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    .sub-custom-div {
+        position: relative;
+        z-index: 1;
+        padding: 0.75rem 1.0rem;
+        background-color: transparent !important;
+        color: rgb(255, 255, 255);
+    }
+    .custom-bottom-div {
+        width: 100%;
+        position: absolute;
+        bottom: 4px;
+        padding: 0.75rem 1.0rem;
+        /* background-color: rgba(255, 255, 255, 0.493); */
+        border-color: rgb(189, 189, 189);
+        color: rgb(255, 255, 255);
+    }
+</style>
+@endsection
+
 @section('content')
 <!-- start banner Area -->
 <section class="banner-area relative" id="home">
@@ -85,26 +165,42 @@
             <div class="active-popular-carusel">
                 @foreach ($courses->popular_courses as $popular_course)
                 <div class="single-popular-carusel">
-                    <div class="thumb-wrap relative">
-                        <div class="thumb relative">
-                            <div class="overlay overlay-bg"></div>	
-                            <img class="img-fluid" src="{{ asset('page_dist/img/p'.rand(1, 4).'.jpg')}}" alt="">
+                    <a href="#">
+                        <div class="thumb-wrap relative">
+                            <div class="thumb relative">
+                                <div class="overlay overlay-bg"></div>	
+                                <img class="img-fluid" src="{{ asset('page_dist/img/p'.rand(1, 4).'.jpg')}}" alt="">
+                            </div>
+                            <div class="meta d-flex justify-content-between">
+                                <br>
+                                {{-- <p><span class="lnr lnr-users"></span> {{rand(100, 3000)}} <span class="lnr lnr-bubble"></span>{{rand(10, 250)}}</p> --}}
+                                {{-- <h4>{{$popular_course->price}}</h4> --}}
+                            </div>									
                         </div>
-                        <div class="meta d-flex justify-content-between">
-                            <p><span class="lnr lnr-users"></span> {{rand(100, 3000)}} <span class="lnr lnr-bubble"></span>{{rand(10, 250)}}</p>
-                            {{-- <h4>{{$popular_course->price}}</h4> --}}
-                        </div>									
-                    </div>
-                    <div class="details">
-                        <a href="#">
-                            <h4>
-                                {{$popular_course->title}}
-                            </h4>
-                        </a>
-                        <p>
-                            When television was young, there was a hugely popular show based on the still popular fictional characte										
-                        </p>
-                    </div>
+                        <div class="details" style="min-height: 230px">
+                            <div>
+                                <div class="custom-div-2">
+                                </div>
+                                <div class="custom-div">
+                                </div>
+                                <div class="thumbnail-div">
+                                    <div class="thumbnail-div-img" style="background-image: url({{ asset('uploaded_files/corporation/'.$popular_course->corporation->thumbnail) }})"></div>
+                                </div>
+                                <div class="sub-custom-div mt-1">
+                                    <h4 class="text-white">
+                                        {{$popular_course->title}}
+                                    </h4>
+                                    <h6 class="text-white">{{$popular_course->corporation->name}}</h6>
+                                </div>
+                                <div class="custom-bottom-div">
+                                    {{-- <div class="meta d-flex justify-content-between">
+                                    <p><span class="lnr lnr-users"></span> {{rand(100, 3000)}} <span class="lnr lnr-bubble"></span>{{rand(10, 250)}}</p>
+                                    </div> --}}
+                                    <small class="text-uppercase text-light">{{$popular_course->catalog->name}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
                 </div>
                 @endforeach						
             </div>

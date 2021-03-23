@@ -78,6 +78,7 @@ class CorporationController extends Controller
 
             $new['uuid']        = \Str::uuid();
             $new['name']        = $request['name'];
+            $new['partner_id']  = \Auth::user()->id;;
             $new['logo']        = $nama_logo;
             $new['image']       = $nama_image;
             $new['thumbnail']   = $nama_thumbnail;

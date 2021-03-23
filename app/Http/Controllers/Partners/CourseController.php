@@ -16,10 +16,10 @@ class CourseController extends Controller
     public function index()
     {
         $data['courses'] = Course::with('lessons')->select('courses.id', 'courses.is_published', 'courses.title', 'courses.description', 'price', 'duration', 'courses.is_verified', 'courses.date_verified', 'catalog_topics.name as nama_catalog_topic', 'catalogs.name as nama_catalog', 'levels.name as nama_level')
-    						 ->leftJoin('catalog_topics', 'catalog_topics.id', 'courses.id')
-    						 ->leftJoin('catalogs', 'catalogs.id', 'catalog_topics.catalog_id')
-                             ->leftJoin('levels', 'levels.id', 'courses.level_id')
-        					 ->orderBy('courses.id', 'DESC')->get();
+                            ->leftJoin('catalogs', 'catalogs.id', 'courses.catalog_id')
+    						->leftJoin('catalog_topics', 'catalog_topics.id', 'courses.catalog_topic_id')
+                            ->leftJoin('levels', 'levels.id', 'courses.level_id')
+        					->orderBy('courses.id', 'DESC')->get();
         return view('partners.course.index')->with($data);
     }
 
@@ -60,13 +60,18 @@ class CourseController extends Controller
         	$cat_topic['name'] 	 	 = $request['name'];
         	$cat_topic['catalog_id'] = $request['catalog_id'];
         	$cat_topic['created_by'] = \Auth::user()->id;
-        	$sv_catTopic 			 = CatalogTopic::create($cat_topic);
+            $query_search = CatalogTopic::where('catalog_id', $request['catalog_id'])->where('name', $request['name'])->first();
+            if($query_search) {
+                $request['catalog_topic_id'] 	= $query_search->id;
+            } else {
+                $sv_catTopic 			 = CatalogTopic::create($cat_topic);
+                $request['catalog_topic_id'] 	= $sv_catTopic->id;
+            }
 
             //ini buat course
             $file                           = $request->file('filename');
             $nama_file                      = Date('YmdHis').'_'.$request['title'].'_covers.'.$file->getClientOriginalExtension();
             $request['user_id'] 	  		= \Auth::user()->id;
-            $request['catalog_topic_id'] 	= $sv_catTopic->id;
             $request['cover']               = $nama_file;
             $request['uuid']                = \Str::uuid();
             $file->move('uploaded_files/courses/covers/'.$request['uuid'], $nama_file);
@@ -82,8 +87,8 @@ class CourseController extends Controller
                             'catalog_topics.name as nama_catalog_topic',
                             'catalogs.name as nama_catalog',
                             'levels.name as nama_level', 'levels.description as desc_level')
-    						->leftJoin('catalog_topics', 'catalog_topics.id', 'courses.id')
-    						->leftJoin('catalogs', 'catalogs.id', 'catalog_topics.catalog_id')
+    						->leftJoin('catalogs', 'catalogs.id', 'courses.catalog_id')
+    						->leftJoin('catalog_topics', 'catalog_topics.id', 'courses.catalog_topic_id')
                             ->leftJoin('levels', 'levels.id', 'courses.level_id')
         					->findOrFail($id);
         return view('partners.course.show', compact('catalogs', 'course'));

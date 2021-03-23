@@ -83,58 +83,70 @@ class LvLearningSequenceProto extends Component
     public function saveList($item)
     {
         $is_changed = false;
-        foreach ($item as $key => $parent) {
-            $sequence = $this->sequences[$key];
-            $changed_title = $this->title_sequences[$key]['title'];
-            if($sequence->id == $this->title_sequences[$key]['id'] && $sequence->title != $changed_title) {
-                $sequence->title = $changed_title;
-                $sequence->save();
+        foreach ($item['trash'] as $key => $trash_item) {
+            $list = ListSequence::find($trash_item['list_id']);
+            $list->delete();
+            $is_changed = true;
+        }
+        foreach ($item['item'] as $key => $parent) {
+            if ($parent['status'] == 'deleted') {
+                $sequence = Sequence::find($parent['id']);
+                $sequence->delete();
+                ListSequence::where('sequence_id', $parent['id'])->delete();
                 $is_changed = true;
-            }
-            foreach ($parent as $child_key => $child) {
-                if(isset($child['list_id'])) {
-
-                    $list = ListSequence::find($child['list_id']);
-                    if($list->sequence_id <> $child['parent_id']) {
-
-                        $list->sequence_id = $child['parent_id'];
-                        $list->order = ($child_key+1);
-                        $list->save();
-                        $is_changed = true;
-
-                    } else if($list->order <> ($child_key+1)) {
-                        $list->order = ($child_key+1);
-                        $list->save();
-                        $is_changed = true;
-                    }    
-                } else {
-                    $data_to_insert = [
-                        'sequence_id' => $child['parent_id'],
-                        'order' => ($child_key+1),
-                    ];
-                    $check_insert = null;
-                    if($child['type'] == 'book') {
-                        $data_to_insert['book_id'] = $child['id'];
-                        $data_to_insert['type'] = 'book';
-                        $check_insert = ListSequence::where('book_id', $child['id'])->first();
-                    }
-                    else if($child['type'] == 'video') {
-                        $data_to_insert['video_id'] = $child['id'];
-                        $data_to_insert['type'] = 'video';
-                        $check_insert = ListSequence::where('video_id', $child['id'])->first();
-                    }
-                    else if($child['type'] == 'quiz') {
-                        $data_to_insert['quiz_id'] = $child['id'];
-                        $data_to_insert['type'] = 'quiz';
-                        $check_insert = ListSequence::where('quiz_id', $child['id'])->first();
-                    }
-                    else {
-                        continue;
-                    }
-
-                    if(is_null($check_insert)) {
-                        ListSequence::create($data_to_insert);
-                        $is_changed = true;
+            } else {
+                $sequence = $this->sequences[$key];
+                $changed_title = $this->title_sequences[$key]['title'];
+                if($sequence->id == $this->title_sequences[$key]['id'] && $sequence->title != $changed_title) {
+                    $sequence->title = $changed_title;
+                    $sequence->save();
+                    $is_changed = true;
+                }
+                foreach ($parent['items'] as $child_key => $child) {
+                    if(isset($child['list_id'])) {
+                        
+                        $list = ListSequence::find($child['list_id']);
+                        if($list->sequence_id <> $child['parent_id']) {
+                            
+                            $list->sequence_id = $child['parent_id'];
+                            $list->order = ($child_key+1);
+                            $list->save();
+                            $is_changed = true;
+                            
+                        } else if($list->order <> ($child_key+1)) {
+                            $list->order = ($child_key+1);
+                            $list->save();
+                            $is_changed = true;
+                        }    
+                    } else {
+                        $data_to_insert = [
+                            'sequence_id' => $child['parent_id'],
+                            'order' => ($child_key+1),
+                        ];
+                        $check_insert = null;
+                        if($child['type'] == 'book') {
+                            $data_to_insert['book_id'] = $child['id'];
+                            $data_to_insert['type'] = 'book';
+                            $check_insert = ListSequence::where('book_id', $child['id'])->first();
+                        }
+                        else if($child['type'] == 'video') {
+                            $data_to_insert['video_id'] = $child['id'];
+                            $data_to_insert['type'] = 'video';
+                            $check_insert = ListSequence::where('video_id', $child['id'])->first();
+                        }
+                        else if($child['type'] == 'quiz') {
+                            $data_to_insert['quiz_id'] = $child['id'];
+                            $data_to_insert['type'] = 'quiz';
+                            $check_insert = ListSequence::where('quiz_id', $child['id'])->first();
+                        }
+                        else {
+                            continue;
+                        }
+                        
+                        if(is_null($check_insert)) {
+                            ListSequence::create($data_to_insert);
+                            $is_changed = true;
+                        }
                     }
                 }
             }
