@@ -19,6 +19,10 @@ class DatabaseSeeder extends Seeder
             CatalogSeeder::class,
             LevelSeeder::class,
             CourseSeeder::class,
+            CorporationSeeder::class,
+            CustomerTransactionSeeder::class,
+            PartnerFundTransactionSeeder::class,
+            PartnerWalletSeeder::class,
         ]);
         // \App\Models\User::factory(10)->create();
     }

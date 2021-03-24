@@ -55,33 +55,37 @@ class CorporationController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator->errors()->getMessages());
         }else{
+            $uuid_corporation = \Str::uuid();
             $nama_logo      = Date('YmdHis').'_logo.'.$request->file('logo')->getClientOriginalExtension();
             $nama_image     = Date('YmdHis').'_image.'.$request->file('image')->getClientOriginalExtension();
             $nama_thumbnail = Date('YmdHis').'_thumbnail.'.$request->file('image')->getClientOriginalExtension();
-            $request->file('logo')->move('uploaded_files/corporation/', $nama_logo);
-            $request->file('image')->move('uploaded_files/corporation/', $nama_image);
-            copy('uploaded_files/corporation/'.$nama_image, public_path('uploaded_files/corporation/'.$nama_thumbnail));
+            $request->file('logo')->move("uploaded_files/corporation/{$uuid_corporation}/", $nama_logo);
+            $request->file('image')->move("uploaded_files/corporation/{$uuid_corporation}/", $nama_image);
+            copy("uploaded_files/corporation/{$uuid_corporation}/".$nama_image, public_path("uploaded_files/corporation/{$uuid_corporation}/".$nama_thumbnail));
             
-            $logopath = public_path('uploaded_files/corporation/'.$nama_logo);
+            $logopath = public_path("uploaded_files/corporation/{$uuid_corporation}/{$nama_logo}");
             $img = Image::make($logopath);
             $img->resize(null, 70, function ($constraint) {
                 $constraint->aspectRatio();
             });
             $img->save($logopath);
 
-            $thumbnailpath = public_path('uploaded_files/corporation/'.$nama_thumbnail);
+            $thumbnailpath = public_path("uploaded_files/corporation/{$uuid_corporation}/{$nama_thumbnail}");
             $img = Image::make($thumbnailpath);
             $img->resize(120, 120, function ($constraint) {
                 $constraint->aspectRatio();
             });
             $img->save($thumbnailpath);
 
-            $new['uuid']        = \Str::uuid();
-            $new['name']        = $request['name'];
-            $new['partner_id']  = \Auth::user()->id;;
-            $new['logo']        = $nama_logo;
-            $new['image']       = $nama_image;
-            $new['thumbnail']   = $nama_thumbnail;
+            $new['uuid']            = $uuid_corporation;
+            $new['name']            = $request['name'];
+            $new['partner_id']      = \Auth::user()->id;;
+            $new['logo']            = $nama_logo;
+            $new['image']           = $nama_image;
+            $new['thumbnail']       = $nama_thumbnail;
+            $new['path']            = "uploaded_files/corporation/{$uuid_corporation}/{$nama_image}";
+            $new['path_logo']       = "uploaded_files/corporation/{$uuid_corporation}/{$nama_logo}";
+            $new['path_thumbnail']  = "uploaded_files/corporation/{$uuid_corporation}/{$nama_thumbnail}";
             Corporation::create($new);
 
             return redirect('partner/management/corporation/')->with('alert-message', 'Berhasil Menambah Data');
@@ -138,37 +142,44 @@ class CorporationController extends Controller
             $nama_image = ($request->file('image') ? Date('YmdHis').'_image.'.$request->file('image')->getClientOriginalExtension() : $upd->image);
             $nama_thumbnail = ($request->file('image') ? Date('YmdHis').'_thumbnail.'.$request->file('image')->getClientOriginalExtension() : $upd->thumbnail);
             if ($request->file('logo')) {
-                if (file_exists(public_path('uploaded_files/corporation/'.$upd->logo)))
-                    unlink(public_path('uploaded_files/corporation/'.$upd->logo));
+                $logo_path = public_path("uploaded_files/corporation/{$upd->uuid}/".$upd->logo);
+                if (file_exists($logo_path))
+                    unlink($logo_path);
 
-                $request->file('logo')->move('uploaded_files/corporation/', $nama_logo);
+                $request->file('logo')->move("uploaded_files/corporation/{$upd->uuid}/", $nama_logo);
+                $upd->path_logo = "uploaded_files/corporation/{$upd->uuid}/{$nama_logo}";
             }
             if ($request->file('image')) {
-                if (file_exists(public_path('uploaded_files/corporation/'.$upd->image)))
-                    unlink(public_path('uploaded_files/corporation/'.$upd->image));
+                if (file_exists(public_path("uploaded_files/corporation/{$upd->uuid}/".$upd->image)))
+                    unlink(public_path("uploaded_files/corporation/{$upd->uuid}/".$upd->image));
 
-                if (file_exists(public_path('uploaded_files/corporation/'.$upd->thumbnail)))
-                    unlink(public_path('uploaded_files/corporation/'.$upd->thumbnail));
+                if (file_exists(public_path("uploaded_files/corporation/{$upd->uuid}/".$upd->thumbnail)))
+                    unlink(public_path("uploaded_files/corporation/{$upd->uuid}/".$upd->thumbnail));
 
-                $request->file('image')->move('uploaded_files/corporation/', $nama_image);
-                copy('uploaded_files/corporation/'.$nama_image, public_path('uploaded_files/corporation/'.$nama_thumbnail));
+                $request->file('image')->move("uploaded_files/corporation/{$upd->uuid}/", $nama_image);
+                copy("uploaded_files/corporation/{$upd->uuid}/".$nama_image, public_path("uploaded_files/corporation/{$upd->uuid}/".$nama_thumbnail));
+                
+                $logopath = public_path("uploaded_files/corporation/{$upd->uuid}/".$nama_logo);
+                $img = Image::make($logopath);
+                $img->resize(null, 70, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                $img->save($logopath);
+                
+                $thumbnailpath = public_path("uploaded_files/corporation/{$upd->uuid}/".$nama_thumbnail);
+                $img = Image::make($thumbnailpath);
+                $img->resize(120, 120, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                $img->save($thumbnailpath);
+                
+                $upd->path = "uploaded_files/corporation/{$upd->uuid}/{$nama_image}";
+                $upd->path_thumbnail = "uploaded_files/corporation/{$upd->uuid}/{$nama_thumbnail}";
             }                                                        
             
-            $logopath = public_path('uploaded_files/corporation/'.$nama_logo);
-            $img = Image::make($logopath);
-            $img->resize(null, 70, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-            $img->save($logopath);
+            
 
-            $thumbnailpath = public_path('uploaded_files/corporation/'.$nama_thumbnail);
-            $img = Image::make($thumbnailpath);
-            $img->resize(120, 120, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-            $img->save($thumbnailpath);
-
-            $upd->uuid        = \Str::uuid();
+            // $upd->uuid        = \Str::uuid();
             $upd->name        = $request['name'];
             $upd->logo        = $nama_logo;
             $upd->image       = $nama_image;

@@ -19,5 +19,11 @@ class PartnerSeeder extends Seeder
             'email' => "partner1@mail.com",
             'password' => bcrypt('Password123')
         ]);
+        
+        DB::table('partners')->insert([
+            'name' => "Partner 2",
+            'email' => "partner2@mail.com",
+            'password' => bcrypt('Password123')
+        ]);
     }
 }

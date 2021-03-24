@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Partners;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\{
 	Course,
@@ -19,6 +20,7 @@ class CourseController extends Controller
                             ->leftJoin('catalogs', 'catalogs.id', 'courses.catalog_id')
     						->leftJoin('catalog_topics', 'catalog_topics.id', 'courses.catalog_topic_id')
                             ->leftJoin('levels', 'levels.id', 'courses.level_id')
+                            ->where('user_id', Auth('partner')->user()->id)
         					->orderBy('courses.id', 'DESC')->get();
         return view('partners.course.index')->with($data);
     }
@@ -90,6 +92,7 @@ class CourseController extends Controller
     						->leftJoin('catalogs', 'catalogs.id', 'courses.catalog_id')
     						->leftJoin('catalog_topics', 'catalog_topics.id', 'courses.catalog_topic_id')
                             ->leftJoin('levels', 'levels.id', 'courses.level_id')
+                            ->where('user_id', Auth('partner')->user()->id)
         					->findOrFail($id);
         return view('partners.course.show', compact('catalogs', 'course'));
     }

@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\PartnerWallet as Wallet;
 
 class Partner extends Authenticatable
 {
@@ -58,4 +59,9 @@ class Partner extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class, 'partner_id', 'id');
+    }
 }

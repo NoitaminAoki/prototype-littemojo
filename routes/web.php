@@ -47,6 +47,7 @@ use Illuminate\Support\Facades\Auth;
 // Route::view('/', 'homepage.pages.index');
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::get('/learn/{title}', [HomeController::class, 'detailCourse'])->name('home.detail.course');
 
 Route::view('dashboard', 'dashboard')->middleware(['auth:sanctum', 'verified'])->name('dashboard');
 

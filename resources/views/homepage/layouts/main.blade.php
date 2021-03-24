@@ -21,6 +21,7 @@
     @yield('top-css')
     @include('homepage.layouts.css')
     @yield('css')
+    @include('homepage.layouts.scripts')
 </head>
 <body>	
     @include('homepage.layouts.header')
@@ -30,7 +31,6 @@
     
     @include('homepage.layouts.footer')
     
-    @include('homepage.layouts.scripts')
     
 </body>
 </html>

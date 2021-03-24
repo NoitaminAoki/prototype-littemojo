@@ -25,6 +25,11 @@ class UserSeeder extends Seeder
                 'name' => 'Bariq Dharmawan',
                 'email' => 'sanchez77rodriguez@gmail.com',
                 'password' => Hash::make('gakadapassword')
+            ],
+            [
+                'name' => 'Bariq Rodriguez',
+                'email' => 'bariq_rodriguez@gmail.com',
+                'password' => Hash::make('gakadapassword')
             ]
         ]);
 
