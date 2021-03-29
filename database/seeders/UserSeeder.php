@@ -30,7 +30,17 @@ class UserSeeder extends Seeder
                 'name' => 'Bariq Rodriguez',
                 'email' => 'bariq_rodriguez@gmail.com',
                 'password' => Hash::make('gakadapassword')
-            ]
+            ],
+            [
+                'name' => 'Bariq Sanchez',
+                'email' => 'bariq_sanchez@gmail.com',
+                'password' => Hash::make('gakadapassword')
+            ],
+            [
+                'name' => 'Sanchez Rodriguez',
+                'email' => 'sanchez_rodriguez@gmail.com',
+                'password' => Hash::make('gakadapassword')
+            ],
         ]);
 
         DB::table('admins')->insert([

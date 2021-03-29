@@ -20,7 +20,18 @@ class HomeController extends Controller
 
     public function detailCourse($slug_course_name)
     {
-        // dd($slug_course_name);
-        return view('homepage.pages.courses.detail');
+        $normal_course_name = str_replace('-', ' ', $slug_course_name);
+        $course = Course::select('courses.*', 'catalog_topics.name as catalog_topic_title', 'catalogs.name as catalog_title', 'levels.name as level_name', 'levels.description as level_desc')
+        ->leftJoin('catalogs', 'catalogs.id', 'courses.catalog_id')
+        ->leftJoin('catalog_topics', 'catalog_topics.id', 'courses.catalog_topic_id')
+        ->leftJoin('levels', 'levels.id', 'courses.level_id')
+        ->where('title', $normal_course_name)->first();
+
+        if(is_null($course)) {
+            abort(404);
+        }
+        // dd($course);
+        $data['course'] = $course;
+        return view('homepage.pages.courses.detail')->with($data);
     }
 }

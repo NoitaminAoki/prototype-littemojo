@@ -16,7 +16,7 @@ class PartnerWalletSeeder extends Seeder
     {
         DB::table('partner_wallets')->insert([
             'partner_id' => 2,
-            'total_amount' => 884000,
+            'total_amount' => 6656000,
         ]);
     }
 }

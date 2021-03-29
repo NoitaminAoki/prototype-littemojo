@@ -55,6 +55,15 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-8">
+                        <p class="text-center">
+                            <strong>Sales Graph: {{ date('d F Y', strtotime($first_date)) }} - {{ date('d F Y', strtotime($last_date)) }}</strong>
+                        </p>
+                        
+                        <div class="chart">
+                            <!-- Sales Chart Canvas -->            
+                            <canvas id="visitors-chart" class="chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                        </div>
+                        <!-- /.chart-responsive -->
                     </div>
                     <!-- /.chart-responsive -->
                     <!-- /.col -->
@@ -82,7 +91,7 @@
                     <div class="col-sm-3 col-6">
                         <div class="description-block border-right">
                             <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 17%</span>
-                            <h5 class="description-header">$35,210.43</h5>
+                            <h5 class="description-header">IDR 0</h5>
                             <span class="description-text">TOTAL REVENUE <br><small>(ALL)</small></span>
                         </div>
                         <!-- /.description-block -->
@@ -100,7 +109,7 @@
                     <div class="col-sm-3 col-6">
                         <div class="description-block border-right">
                             <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 20%</span>
-                            <h5 class="description-header">$24,813.53</h5>
+                            <h5 class="description-header">IDR {{number_format($total_amount, 2, ',', '.')}}</h5>
                             <span class="description-text">INCOME <br><small>(THIS MONTH)</small></span>
                         </div>
                         <!-- /.description-block -->
@@ -125,5 +134,76 @@
 @endsection
 
 @section('script')
-{{-- kosong --}}
+<!-- ChartJS -->
+<script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
+<script>
+    $(document).ready(function() {
+        var ticksStyle = {
+            fontColor: '#495057',
+            fontStyle: 'bold'
+        }
+        
+        var mode      = 'index'
+        var intersect = true
+        
+        var s_visitorsChart = $('#visitors-chart');
+        var visitorsChart  = new Chart(s_visitorsChart, {
+            data   : {
+                labels  : {!! json_encode($list_date) !!},
+                datasets: [{
+                    type                : 'line',
+                    data                : {!! json_encode($list_amount) !!},
+                    backgroundColor     : 'transparent',
+                    borderColor         : '#4B94BF',
+                    pointBorderColor    : '#4B94BF',
+                    pointBackgroundColor: '#4B94BF',
+                    label               : 'Revenue',
+                    borderWidth         : 2,
+                    lineTension         : 0,
+                    fill                : false
+                    // pointHoverBackgroundColor: '#007bff',
+                    // pointHoverBorderColor    : '#007bff'
+                },
+                ]
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips           : {
+                    mode     : mode,
+                    intersect: intersect
+                },
+                hover              : {
+                    mode     : mode,
+                    intersect: intersect
+                },
+                legend             : {
+                    display: false
+                },
+                scales             : {
+                    yAxes: [{
+                        // display: false,
+                        gridLines : {
+                            display : true,
+                            color: '#898989',
+                            drawBorder: false,
+                        },
+                        ticks    : $.extend({
+                            beginAtZero : true,
+                            suggestedMax: 200
+                        }, ticksStyle)
+                    }],
+                    xAxes: [{
+                        display  : true,
+                        gridLines : {
+                            display : true,
+                            color: '#898989',
+                            drawBorder: false,
+                        },
+                        ticks    : ticksStyle
+                    }]
+                }
+            }
+        });
+    })
+</script>
 @endsection

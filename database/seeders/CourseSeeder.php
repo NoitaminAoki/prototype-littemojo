@@ -20,7 +20,7 @@ class CourseSeeder extends Seeder
 			'user_id' => 2,
 			'catalog_id' => 4,
 			'catalog_topic_id' => 11,
-			'level_id' => rand(1,3),
+			'level_id' => 2,
 			'title' => 'Big Data using Python',
 			'description' => '<h1>Deskripsi 1</h1><h2>Deskripsi 2</h2><h3>Deskripsi 3</h3><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam doloremque dignissimos accusamus nesciunt neque, adipisci, dolor vero assumenda quisquam laudantium libero ea, voluptas expedita ipsa veritatis, fuga nisi quia mollitia.<br></p>',
 			'price' => 589000,
@@ -35,8 +35,8 @@ class CourseSeeder extends Seeder
 			'user_id' => 2,
 			'catalog_id' => 4,
 			'catalog_topic_id' => 12,
-			'level_id' => rand(1,3),
-			'title' => 'Make Flappy Bird AI Machine Learning',
+			'level_id' => 1,
+			'title' => 'Flappy Bird AI Machine Learning with C#',
 			'description' => '<h1>Deskripsi 1</h1><h2>Deskripsi 2</h2><h3>Deskripsi 3</h3><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam doloremque dignissimos accusamus nesciunt neque, adipisci, dolor vero assumenda quisquam laudantium libero ea, voluptas expedita ipsa veritatis, fuga nisi quia mollitia.<br></p>',
 			'price' => 295000,
 			'duration' => 'week',
@@ -46,24 +46,54 @@ class CourseSeeder extends Seeder
 			'is_published' => 1,
 		]);
 
-		for ($i=0; $i < 10; ++$i) { 
-			$catalog_topics = Topic::where('catalog_id', $i)->orderBy('id', 'asc')->get();
-			foreach ($catalog_topics as $key => $topic) {
-				
-				\DB::table('courses')->insert([
-					'user_id' => 1,
-					'catalog_id' => $i,
-					'catalog_topic_id' => $topic->id,
-					'level_id' => rand(1,3),
-					'title' => $topic->name.' for '.$topic->catalog->name,
-					'description' => '<h1>Deskripsi 1</h1><h2>Deskripsi 2</h2><h3>Deskripsi 3</h3><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam doloremque dignissimos accusamus nesciunt neque, adipisci, dolor vero assumenda quisquam laudantium libero ea, voluptas expedita ipsa veritatis, fuga nisi quia mollitia.<br></p>',
-					'price' => $prices[rand(0, count($prices)-1)],
-					'duration' => 'month',
-					'cover' => Date('YmdHis').'_Ini_title_business_covers.jpg',
-					'uuid'  => \Str::uuid()
-				]);
+		\DB::table('courses')->insert([
+			'user_id' => 2,
+			'catalog_id' => 4,
+			'catalog_topic_id' => 12,
+			'level_id' => 1,
+			'title' => 'Flappy Bird AI Machine Learning with Python',
+			'description' => '<h1>Deskripsi 1</h1><h2>Deskripsi 2</h2><h3>Deskripsi 3</h3><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam doloremque dignissimos accusamus nesciunt neque, adipisci, dolor vero assumenda quisquam laudantium libero ea, voluptas expedita ipsa veritatis, fuga nisi quia mollitia.<br></p>',
+			'price' => 295000,
+			'duration' => 'week',
+			'cover' => 'cover_course.jpg',
+			'uuid'  => '12538236-08d3-5847-86b2-902d3348kkf9',
+			'is_verified' => 1,
+			'is_published' => 1,
+		]);
 
-			}
-		}
+		\DB::table('courses')->insert([
+			'user_id' => 2,
+			'catalog_id' => 5,
+			'catalog_topic_id' => 14,
+			'level_id' => 1,
+			'title' => 'Settings Server for Your Online Games',
+			'description' => '<h1>Deskripsi 1</h1><h2>Deskripsi 2</h2><h3>Deskripsi 3</h3><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam doloremque dignissimos accusamus nesciunt neque, adipisci, dolor vero assumenda quisquam laudantium libero ea, voluptas expedita ipsa veritatis, fuga nisi quia mollitia.<br></p>',
+			'price' => 485000,
+			'duration' => 'week',
+			'cover' => 'cover_course.jpg',
+			'uuid'  => '12538236-08d3-5847-86b2-902d3348kkf9',
+			'is_verified' => 1,
+			'is_published' => 1,
+		]);
+
+		// for ($i=0; $i < 10; ++$i) { 
+		// 	$catalog_topics = Topic::where('catalog_id', $i)->orderBy('id', 'asc')->get();
+		// 	foreach ($catalog_topics as $key => $topic) {
+				
+		// 		\DB::table('courses')->insert([
+		// 			'user_id' => 1,
+		// 			'catalog_id' => $i,
+		// 			'catalog_topic_id' => $topic->id,
+		// 			'level_id' => rand(1,3),
+		// 			'title' => $topic->name.' for '.$topic->catalog->name,
+		// 			'description' => '<h1>Deskripsi 1</h1><h2>Deskripsi 2</h2><h3>Deskripsi 3</h3><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam doloremque dignissimos accusamus nesciunt neque, adipisci, dolor vero assumenda quisquam laudantium libero ea, voluptas expedita ipsa veritatis, fuga nisi quia mollitia.<br></p>',
+		// 			'price' => $prices[rand(0, count($prices)-1)],
+		// 			'duration' => 'month',
+		// 			'cover' => Date('YmdHis').'_Ini_title_business_covers.jpg',
+		// 			'uuid'  => \Str::uuid()
+		// 		]);
+
+		// 	}
+		// }
     }
 }

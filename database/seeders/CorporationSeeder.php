@@ -17,7 +17,7 @@ class CorporationSeeder extends Seeder
         DB::table('corporations')->insert([
             'partner_id' => 2,
             'uuid' => "88224769-702a-309b-5682-4e61vf3095t4",
-            'name' => "Amazon",
+            'name' => "Google",
             'image' => "_image.png",
             'logo' => "_logo.png",
             'thumbnail' => "_thumbnail.png",
