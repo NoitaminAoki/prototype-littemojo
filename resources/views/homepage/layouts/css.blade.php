@@ -11,3 +11,8 @@
 <link rel="stylesheet" href="{{ asset('page_dist/css/owl.carousel.css') }}">
 <link rel="stylesheet" href="{{ asset('page_dist/css/jquery-ui.css') }}">
 <link rel="stylesheet" href="{{ asset('page_dist/css/main.css') }}">
+<style>
+    #mobile-nav-toggle {
+        top: 18px;
+    }
+</style>

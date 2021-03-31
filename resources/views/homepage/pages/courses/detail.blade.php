@@ -131,6 +131,13 @@
         padding: 0 10px;
     }
     
+    .info-box-text h5 {
+        font-size: 1.25rem;
+        line-height: 1.5rem;
+        font-weight: bold;
+        font-family: OpenSans-Bold, OpenSans, Arial, sans-serif;
+    }
+    
     /* End Imported Admin LTE CSS */
     
     .headline-4-text {
@@ -159,6 +166,26 @@
         font-size: 0.875rem;
         background-color: #EBECED;
         color: #000000;
+        min-width: 60px;
+    }
+    
+    .content-offer-by {
+        font-size: 14px;
+        line-height: 21px;
+        font-family: OpenSans,Arial,sans-serif;
+        color: #373a3c;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .text-enroll {
+        font-size: 1rem;
+        line-height: 1rem;
+        font-family: OpenSans,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+    }
+
+    .btn-enroll-course {
+        min-height: 71px;
     }
     
     @media (min-width: 608px){
@@ -194,7 +221,7 @@
 </section>
 <!-- start banner Area -->
 <section class="banner-area banner-gradient-color relative about-banner" id="home">	
-    <div class="px-5 pt-4">				
+    <div class="px-5 py-4">				
         <div class="row">
             <div class="col-md-6">
                 <ol class="breadcrumb pl-0" style="background-color: transparent">
@@ -217,6 +244,9 @@
                 <br>
                 <br>
                 <br>
+                <button class="btn btn-warning btn-lg btn-enroll-course px-4">
+                    <span class="text-enroll font-weight-bold text-light">Enroll This Course <br> Starts {{Date('M d')}}</span>
+                </button>
                 <br>
                 <br>
                 <br>
@@ -234,9 +264,9 @@
     <div class="col-lg-12 border-top pt-3">
         <div class="cust-container">
             <div class="row">
-                <div class="col-lg-8">
+                <div class="col-md-8">
                     <h4 class="headline-4-text font-weight-bold">About this Course</h4>
-                    <div class="pr-1 my-4">
+                    <div class="pr-1 my-4 text-black">
                         {!! $course->description !!}
                     </div>
                     
@@ -251,7 +281,7 @@
                                     
                                     
                                     <div class="info-box-content custom-content-top pl-0">
-                                        <span class="custom-info-box-text">{{$exp_item->name}}</span>
+                                        <span class="custom-info-box-text text-black">{{$exp_item->name}}</span>
                                     </div>
                                     <!-- /.info-box-content -->
                                 </div>
@@ -261,16 +291,15 @@
                     </div>
                     <div class="w-100 px-3 pt-3 border mt-3">
                         <h3 class="headline-desc-course text-secondary">SKILLS YOU WILL GAIN</h3>
-                        <br>
-                        <div class="d-flex flex-wrap mt-3">
+                        <div class="d-flex flex-wrap my-4">
                             @foreach ($course->skills as $skill_item)
-                            <div class="skill-content py-1 px-3 my-1 mx-2">{{$skill_item->skill->name}}</div>
+                            <div class="skill-content text-center py-1 px-3 mb-2 mr-2">{{$skill_item->skill->name}}</div>
                             @endforeach
                         </div>
                     </div>
                     
                 </div>
-                <div class="col-lg-4 pl-4">
+                <div class="col-md-4 pl-4">
                     <div class="info-box custom-info-box shadow-none p-0">
                         <div class="custom-info-box-content">
                             <span class="custom-info-box-icon rounded-circle text-primary"><i class="far fa-clock"></i></span>
@@ -317,9 +346,22 @@
                         
                         <div class="info-box-content">
                             <span class="info-box-text"><h5 class="mb-0">Price</h5></span>
-                            <span class="info-box-text">IDR {{number_format($course->price, 0)}} </span>
+                            <span class="info-box-text">Rp {{number_format($course->price, 0, ',', '.')}} IDR</span>
                         </div>
                         <!-- /.info-box-content -->
+                    </div>
+                </div>
+                <div class="col-lg-12 my-5"></div>
+                <div class="col-lg-12">
+                    <h4 class="headline-4-text font-weight-bold pl-3">Offered By</h4>
+                    <div class="col-md-6 py-3 d-flex">
+                        <div class="mr-4">
+                            <img src="{{asset($course->corporation->path_thumbnail)}}" alt="{{$course->corporation->name}}" title="{{$course->corporation->name}}">
+                        </div>
+                        <div>
+                            <h4 class="headline-4-text font-weight-bold">{{$course->corporation->name}}</h4>
+                            <p class="content-offer-by  mt-2">{{$course->corporation->description}}</p>
+                        </div>
                     </div>
                 </div>
             </div> 

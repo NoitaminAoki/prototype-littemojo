@@ -91,7 +91,7 @@
                     <div class="col-sm-3 col-6">
                         <div class="description-block border-right">
                             <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 17%</span>
-                            <h5 class="description-header">IDR 0</h5>
+                            <h5 class="description-header">IDR {{number_format($total_sales_amount, 0, ',', '.')}}</h5>
                             <span class="description-text">TOTAL REVENUE <br><small>(ALL)</small></span>
                         </div>
                         <!-- /.description-block -->
@@ -109,7 +109,7 @@
                     <div class="col-sm-3 col-6">
                         <div class="description-block border-right">
                             <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 20%</span>
-                            <h5 class="description-header">IDR {{number_format($total_amount, 2, ',', '.')}}</h5>
+                            <h5 class="description-header">IDR {{number_format($total_amount, 0, ',', '.')}}</h5>
                             <span class="description-text">INCOME <br><small>(THIS MONTH)</small></span>
                         </div>
                         <!-- /.description-block -->
