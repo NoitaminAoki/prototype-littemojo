@@ -153,6 +153,14 @@
         font-family: OpenSans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
     
+    .skill-content {
+        border-radius: 1.875rem;
+        line-height: 1.5rem;
+        font-size: 0.875rem;
+        background-color: #EBECED;
+        color: #000000;
+    }
+    
     @media (min-width: 608px){
         .cust-container {
             width: 576px;
@@ -223,7 +231,7 @@
 <!-- End banner Area -->	
 <!-- Start events-list Area -->
 <section class="events-list-area mt-5 event-page-lists">
-    <div class="col-lg-12">
+    <div class="col-lg-12 border-top pt-3">
         <div class="cust-container">
             <div class="row">
                 <div class="col-lg-8">
@@ -256,7 +264,7 @@
                         <br>
                         <div class="d-flex flex-wrap mt-3">
                             @foreach ($course->skills as $skill_item)
-                            <div class="rounded bg-secondary py-1 px-2 my-1 mx-2">{{$skill_item->skill->name}}</div>
+                            <div class="skill-content py-1 px-3 my-1 mx-2">{{$skill_item->skill->name}}</div>
                             @endforeach
                         </div>
                     </div>

@@ -36,8 +36,8 @@ class Skill extends Component
     {
         $course = Course::select('courses.id', 'courses.catalog_id', 'courses.catalog_topic_id', 'title', 'description', 'price', 'catalog_topics.name as nama_catalog_topic',
         'catalogs.name as nama_catalog')
-        ->join('catalog_topics', 'catalog_topics.id', 'courses.id')
-        ->join('catalogs', 'catalogs.id', 'catalog_topics.catalog_id')
+        ->join('catalog_topics', 'catalog_topics.id', 'courses.catalog_topic_id')
+        ->join('catalogs', 'catalogs.id', 'courses.catalog_id')
         ->findOrFail($this->course_id);
 
         $this->skills = CourseSkill::where('course_id', $this->course_id)->get();
@@ -53,11 +53,17 @@ class Skill extends Component
         $this->validate([
             'skill.name' => 'required|string',
         ]);
-        $skill = Skills::where('name', 'like', '%'.$this->skill->name.'%')->first();
+        $skill = Skills::where('name', 'like', $this->skill->name)->first();
         $cat = Course::findOrFail($this->course_id)->value('catalog_id');
         if (is_null($skill)) {
             $this->skill->catalog_id = $cat;
             $this->skill->save();
+        } else {
+            $this->courseSkill = CourseSkill::where([['course_id', '=', $this->course_id], ['skill_id', '=', $skill->id]])->first();
+            
+            if(is_null($this->courseSkill)) {
+                $this->courseSkill = new CourseSkill;
+            }
         }        
 
         $this->courseSkill->course_id = $this->course_id;
@@ -83,18 +89,23 @@ class Skill extends Component
     {
         $this->setSkill($id);
         $this->skill->delete();
+        $course_skill = CourseSkill::where('skill_id', $this->skill->skill_id)->first();
+        if(is_null($course_skill)) {
+            Skills::where('id', $this->skill->skill_id)->delete();
+        }
         $this->resetInput();
         $this->setNotif('Successfully deleting data.');
     }
 
     public function setSkill($id)
     {
-        $this->skill = CourseSkill::where('skill_id', $id)->first();
+        $this->skill = CourseSkill::where([['course_id', '=', $this->course_id], ['skill_id', '=', $id]])->first();
     }
     
     public function resetInput()
     {
         $this->skill = new Skills;
+        $this->courseSkill = new CourseSkill;
     }
 
     public function setNotif($message)
