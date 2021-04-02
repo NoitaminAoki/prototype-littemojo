@@ -297,9 +297,16 @@
                 <br>
                 <br>
                 <br>
+                @auth('web')
+                <a href="{{ route('home.course.enroll', ['title' => Str::slug($course->title)]) }}" class="btn btn-warning btn-lg btn-enroll-course px-4">
+                    <span class="text-enroll font-weight-bold text-light">Enroll This Course <br> Starts {{Date('M d')}}</span>
+                </a>
+                @endauth
+                @guest
                 <button class="btn btn-warning btn-lg btn-enroll-course px-4">
                     <span class="text-enroll font-weight-bold text-light">Enroll This Course <br> Starts {{Date('M d')}}</span>
                 </button>
+                @endguest
                 <div class="mt-3 text-enrolled">
                     <span><strong class="font-weight-bold">500,231</strong> Already enrolled</span>
                 </div>

@@ -11,13 +11,21 @@
                     <li><a href="courses.html">Courses</a></li>
                     <li><a href="events.html">Events</a></li>
                     <li><a href="gallery.html">Gallery</a></li>
-                    <li class="menu-has-children"><a href="">Blog <i class="fas fa-angle-down" style="padding-left: 3px;"></i></a>
+                    <li class="menu-has-children"><a href="">Blog 
+                        @hasSection ('font-awesome')
+                        <i class="fas fa-angle-down" style="padding-left: 3px;"></i>
+                        @endif
+                    </a>
                         <ul>
                             <li><a href="blog-home.html">Blog Home</a></li>
                             <li><a href="blog-single.html">Blog Single</a></li>
                         </ul>
                     </li>	
-                    <li class="menu-has-children"><a href="">Pages <i class="fas fa-angle-down" style="padding-left: 3px;"></i></a>
+                    <li class="menu-has-children"><a href="">Pages 
+                        @hasSection ('font-awesome')
+                        <i class="fas fa-angle-down" style="padding-left: 3px;"></i>
+                        @endif
+                    </a>
                         <ul>
                             <li><a href="course-details.html">Course Details</a></li>		
                             <li><a href="event-details.html">Event Details</a></li>		

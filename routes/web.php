@@ -1,7 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Home\HomeController;
+use App\Http\Controllers\Home\{
+    HomeController,
+    PaymentController
+};
 
 use App\Http\Controllers\Admins\DashboardController as AdminDashboard;
 use App\Http\Controllers\Admins\AuthController as AdminAuthController;
@@ -47,7 +50,13 @@ use Illuminate\Support\Facades\Auth;
 // Route::view('/', 'homepage.pages.index');
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
+
 Route::get('/learn/{title}', [HomeController::class, 'detailCourse'])->name('home.detail.course');
+
+Route::middleware(['auth:web'])->group(function () {
+    Route::get('learn/{title}/enroll', [PaymentController::class, 'index'])->name('home.course.enroll');
+});
+
 
 Route::view('dashboard', 'dashboard')->middleware(['auth:sanctum', 'verified'])->name('dashboard');
 
