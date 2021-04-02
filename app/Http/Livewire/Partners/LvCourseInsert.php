@@ -24,7 +24,7 @@ class LvCourseInsert extends Component
 
     public function updatingTopicName($value)
     {
-        $this->searchTopic(null, $value);
+        $this->searchTopic($this->selected_catalog, $value);
     }
     
     public function render()

@@ -2,6 +2,12 @@
 @section('font-awesome', 'new')
 @section('css')
 <style>
+    .sf-arrows .sf-with-ul:after {
+        content: none;
+    }
+    .sf-arrows .sf-with-ul {
+        padding-right: 8px;
+    }
     .banner-title {
         font-family: OpenSansBoldOptional,Arial,sans-serif;
         font-size: 34px;
@@ -140,6 +146,16 @@
     
     /* End Imported Admin LTE CSS */
     
+    
+    /* Imported Custom Admin LTE CSS */
+    
+    .custom-bg-gradient-green {
+        color: white;
+        background-image: linear-gradient(to right, rgb(9, 227, 56, 1), rgba(9, 209, 227,1));
+    }
+    
+    /* End Imported Custom Admin LTE CSS */
+    
     .headline-4-text {
         font-size: 24px;
         line-height: 30px;
@@ -177,15 +193,43 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
-
+    
     .text-enroll {
         font-size: 1rem;
         line-height: 1rem;
-        font-family: OpenSans,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+        font-family: 'Open Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     }
-
+    
+    .text-rating {
+        font-size: 14px;
+        line-height: 19px;
+        font-weight: 700;
+        font-family: 'Open Sans';
+    }
+    
+    .text-enrolled {
+        font-size: 16px;
+        font-weight: 400;
+        font-family: 'Open Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    
     .btn-enroll-course {
         min-height: 71px;
+    }
+    
+    .pt-4rem {
+        padding-top: 4rem !important;
+    }
+    
+    .text-font-family {
+        font-family: 'Open Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    
+    .paragraph-text {
+        font-size: 14px;
+        line-height: 21px;
+        font-weight: 400;
+        font-family: 'Open Sans', Arial, sans-serif;
     }
     
     @media (min-width: 608px){
@@ -240,6 +284,15 @@
                     <li class=""><a href="#" class="text-white custom-text-white text-decoration-none font-weight-bold">{{$course->catalog_topic_title}}</a></li>
                 </ol>
                 <h2 class="font-weight-bold text-light banner-title"> {{$course->title}} </h2>
+                <div class="text-warning mt-2">
+                    <span class="fas fa-star checked"></span>
+                    <span class="fas fa-star checked"></span>
+                    <span class="fas fa-star checked"></span>
+                    <span class="fas fa-star-half-alt checked"></span>
+                    <span class="far fa-star"></span>
+                    <span class="ml-1 text-rating">4.6</span>
+                    <span class="ml-1 text-white text-rating">86,528 ratings</span>
+                </div>
                 <br>
                 <br>
                 <br>
@@ -247,8 +300,10 @@
                 <button class="btn btn-warning btn-lg btn-enroll-course px-4">
                     <span class="text-enroll font-weight-bold text-light">Enroll This Course <br> Starts {{Date('M d')}}</span>
                 </button>
-                <br>
-                <br>
+                <div class="mt-3 text-enrolled">
+                    <span><strong class="font-weight-bold">500,231</strong> Already enrolled</span>
+                </div>
+                
                 <br>
             </div>
             <div class="col-md-6 offer-area">
@@ -502,6 +557,50 @@
     </div>	
 </section>
 <!-- End review Area -->	
+
+<section class="events-list-area mt-5 event-page-lists">
+    <div class="col-lg-12 border-top">
+        <div class="cust-container">
+            <h4 class="text-center headline-4-text font-weight-bold pt-4rem">Syllabus - What you will learn from this course</h4>
+            <div class="text-center text-font-family text-black font-weight-bold">
+                <span>Content Rating</span>
+                <span class="mx-1 fas fa-thumbs-up text-warning"></span>
+                <span class="text-secondary">97%</span>
+                <span>(521,705 ratings)</span>
+            </div>
+            <div class="row my-4">
+                @foreach($course->lessons as $key => $lesson)
+                <div class="col-12 mt-3 row">
+                    <div class="col-lg-2">
+                        <div class="text-center" style="display: inline-block">
+                            <span>LESSON</span>
+                            <br>
+                            <span class="custom-header-text-lesson">{{$key+1}}</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-10 border-bottom">
+                        <h2 class="font-weight-bold custom-headline-text-lesson mb-3">{{$lesson->title}}</h2>
+                        
+                        <p class="text-black paragraph-text">{{$lesson->description}}</p>
+                        
+                        <div class="info-box custom-info-box shadow-none p-0 mb-5">
+                            <div class="custom-info-box-content pr-1">
+                                <span class="custom-info-box-icon border-0 custom-icon-sm custom-bg-gradient-green rounded-circle text-white"><i class="fas fa-book"></i></span>
+                            </div>
+                            
+                            <div class="info-box-content text-font-family font-weight-normal">
+                                <span class="info-box-text text-secondary">23 videos (Total 74 min), 6 readings, 10 quizzes</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            <div class="pt-4rem"></div>
+        </div>
+    </div>
+</section>
 
 <!-- Start cta-one Area -->
 <section class="cta-one-area relative section-gap">
