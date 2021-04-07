@@ -165,7 +165,7 @@
             <div class="active-popular-carusel">
                 @foreach ($courses->popular_courses as $popular_course)
                 <div class="single-popular-carusel">
-                    <a href="{{ route('home.detail.course', ['title'=>Str::slug($popular_course->title)]) }}">
+                    <a href="{{ route('home.detail.course', ['title'=>$popular_course->slug_title]) }}">
                         <div class="thumb-wrap relative">
                             <div class="thumb relative">
                                 <div class="overlay overlay-bg"></div>	

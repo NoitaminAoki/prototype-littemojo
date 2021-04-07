@@ -25,17 +25,21 @@
         }
     </style>
     @yield('top-css')
-    @include('homepage.layouts.css')
+    @include('homepage.lv-layouts.lv-css')
     @yield('css')
+    
+    <script src="{{ mix('js/app.js') }}" defer></script>
 </head>
 <body>	
-    @include('homepage.layouts.header')
+    @include('homepage.lv-layouts.lv-header')
     <!-- #header -->
     
-    @yield('content')
+    {{ $slot }}
     
+    @stack('script-top')
     @include('homepage.layouts.footer')
     @include('homepage.layouts.scripts')
-    @yield('script')
+    @livewireScripts
+    @stack('script')
 </body>
 </html>

@@ -11,6 +11,7 @@ use App\Models\{
 	CatalogTopic,
     Level
 };
+use Illuminate\Support\Str;
 
 class CourseController extends Controller
 {
@@ -75,7 +76,8 @@ class CourseController extends Controller
             $nama_file                      = Date('YmdHis').'_'.$request['title'].'_covers.'.$file->getClientOriginalExtension();
             $request['user_id'] 	  		= \Auth::user()->id;
             $request['cover']               = $nama_file;
-            $request['uuid']                = \Str::uuid();
+            $request['uuid']                = Str::uuid();
+            $request['slug_title']          = Str::slug($request['title']);
             $file->move('uploaded_files/courses/covers/'.$request['uuid'], $nama_file);
             // \Storage::putFileAs('covers/'.\Auth::user()->id, $file , $nama_file);
             Course::create($request->except('_token', 'name', 'files', 'filename'));

@@ -45,6 +45,10 @@ use App\Http\Livewire\Partners\{
     Courses\Lessons\Quizzes\LvQuestion as QuestionLive,
 };
 
+use App\Http\Livewire\Homepages\{
+    Payments\LvPayCourse
+};
+
 use Illuminate\Support\Facades\Auth;
 
 // Route::view('/', 'homepage.pages.index');
@@ -55,6 +59,7 @@ Route::get('/learn/{title}', [HomeController::class, 'detailCourse'])->name('hom
 
 Route::middleware(['auth:web'])->group(function () {
     Route::get('learn/{title}/enroll', [PaymentController::class, 'index'])->name('home.course.enroll');
+    Route::get('learn/{title}/lv_enroll', LvPayCourse::class)->name('home.course.lv_enroll');
 });
 
 

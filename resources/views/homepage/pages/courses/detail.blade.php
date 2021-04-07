@@ -383,8 +383,8 @@
                         </div>
                         
                         <div class="info-box-content">
-                            <span class="info-box-text"><h5 class="mb-0">flexible schedules</h5></span>
-                            <span class="info-box-text"> free to choose a start date </span>
+                            <span class="info-box-text"><h5 class="mb-0">flexible schedule</h5></span>
+                            <span class="info-box-text"> Set and maintain flexible deadlines. </span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -575,7 +575,7 @@
                 <span class="text-secondary">97%</span>
                 <span>(521,705 ratings)</span>
             </div>
-            <div class="row my-4">
+            <div class="row my-4 text-black">
                 @foreach($course->lessons as $key => $lesson)
                 <div class="col-12 mt-3 row">
                     <div class="col-lg-2">
