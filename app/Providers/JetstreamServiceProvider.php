@@ -29,6 +29,10 @@ class JetstreamServiceProvider extends ServiceProvider
         Fortify::loginView(function () {
             return view('auth.custom-login');
         });
+        
+        Fortify::registerView(function () {
+            return view('auth.custom-register');
+        });
 
         $this->configurePermissions();
 

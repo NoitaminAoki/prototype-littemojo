@@ -366,8 +366,23 @@
     <!-- Start course-details Area -->
     <section class="course-details-area pt-80 pb-120" id="course_outline">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-8 left-contents border-top pt-4">
+            <div class="row border-top">
+                <div class="col-12 pt-4">
+                    <div class="col-12 pr-0">
+                        @if(Session::has('success'))
+                        <div class="alert alert-success">
+                            <h5 class="headline-4-text font-weight-normal"><i class="icon fas fa-check"></i> Success</h5>
+                            {{ Session::get('success') }}
+                        </div>
+                        @elseif(Session::has('error'))
+                        <div class="alert alert-danger">
+                            <h5 class="headline-4-text font-weight-normal"><i class="icon fas fa-ban"></i> Error</h5>
+                            {{ Session::get('error') }}
+                        </div>
+                        @endif
+                    </div>
+                </div>
+                <div class="col-lg-8 left-contents pt-4">
                     @if ($result_snap['is_open'])
                     <div class="event-details-area">
                         <div class="col-lg-12 event-details-right">
@@ -438,7 +453,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 border-top pt-4">
+                <div class="col-lg-4 pt-4">
                     <div class="event-details-area">
                         <div class="event-details-right">
                             @if ($result_snap['is_open'])
@@ -521,6 +536,55 @@
                             </div>	
                         </div>													
                     </div>
+                    @if ($transaction)
+                    @if ($transaction->status_payment == 'settlement')
+                    <div class="right-contents">
+                        <ul>
+                            <li>
+                                <a class="justify-content-between d-flex" style="cursor: default;" href="javascript:void(0);">
+                                    <p>Course Price </p>
+                                    <span>{{number_format($course->price, 0, ',', '.')}} IDR</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="justify-content-between d-flex" style="cursor: default;" href="javascript:void(0);">
+                                    <p>Start Date </p>
+                                    <span>{{date('d M Y H:i', strtotime($transaction->start_date))}}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="justify-content-between d-flex" style="cursor: default;" href="javascript:void(0);">
+                                    <p>Status </p>
+                                    <span class="text-success"><small>Course already Purchased</small></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <a href="#" class="primary-btn text-uppercase">Open the course</a>
+                    </div>
+                    @elseif($transaction->status_payment == 'pending')
+                    <div class="right-contents">
+                        <ul>
+                            <li>
+                                <a class="justify-content-between d-flex" style="cursor: default;" href="javascript:void(0);">
+                                    <p>Course Price </p>
+                                    <span>{{number_format($course->price, 0, ',', '.')}} IDR</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="justify-content-between d-flex" style="cursor: default;" href="javascript:void(0);">
+                                    <p>Start Date </p>
+                                    <span>{{date('d M Y H:i', strtotime($transaction->start_date))}}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="justify-content-between d-flex" style="cursor: default;" href="javascript:void(0);">
+                                    <p>Status </p>
+                                    <span class="text-warning"><small>Waiting for payment</small></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    @elseif(in_array($transaction->status_payment, ['deny', 'cancel', 'expire']))
                     <div class="right-contents">
                         @if (!$result_snap['is_open'])
                         <ul>
@@ -549,6 +613,37 @@
                         </ul>
                         @endif
                     </div>
+                    @endif
+                    @else
+                    <div class="right-contents">
+                        @if (!$result_snap['is_open'])
+                        <ul>
+                            <li>
+                                <a class="justify-content-between d-flex" style="cursor: default;" href="javascript:void(0);">
+                                    <p>Course Price </p>
+                                    <span>{{number_format($course->price, 0, ',', '.')}} IDR</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="justify-content-between d-flex mb-2" style="cursor: default;" href="javascript:void(0);">
+                                    <p>Start Date</p>
+                                </a>
+                                <input type="text" name="" id="input_datepicker" class="form-control datetimepicker">
+                            </li>
+                        </ul>
+                        <button wire:click="pay" wire:loading.attr="disabled" class="primary-btn text-uppercase">Enroll the course</button>
+                        @else
+                        <ul>
+                            <li>
+                                <a class="justify-content-between d-flex" style="cursor: default;" href="javascript:void(0);">
+                                    <p>Course Price </p>
+                                    <span>{{number_format($course->price, 0, ',', '.')}} IDR</span>
+                                </a>
+                            </li>
+                        </ul>
+                        @endif
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>	
@@ -556,7 +651,7 @@
     <!-- End course-details Area -->
     
     <!-- Start popular-course Area -->
-    <section class="popular-course-area section-gap custom-bg-gray">
+    <section wire:ignore class="popular-course-area section-gap custom-bg-gray">
         <div class="container">
             <div class="row d-flex justify-content-center">
                 <div class="menu-content pb-70 col-lg-8">

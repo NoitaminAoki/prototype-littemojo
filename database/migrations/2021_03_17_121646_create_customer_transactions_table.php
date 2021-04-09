@@ -23,7 +23,7 @@ class CreateCustomerTransactionsTable extends Migration
             $table->integer('total_price');
             $table->bigInteger('promo_id')->unsigned()->nullable();
             $table->string('snap_token')->nullable();
-            $table->enum('status_payment', ['waiting', 'pending', 'success', 'failed', 'expired']);
+            $table->enum('status_payment', ['waiting', 'pending', 'settlement', 'deny', 'expire', 'cancel']);
             $table->dateTime('start_date')->nullable();
             $table->timestamps();
         });

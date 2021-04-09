@@ -50,16 +50,33 @@ use App\Http\Livewire\Homepages\{
 };
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+
+    return redirect('/');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
 
 // Route::view('/', 'homepage.pages.index');
+
+// Midtrans Notification Handler
+Route::post('payments/notification/handler', [PaymentController::class, 'notification']);
+Route::get('payments/completed', [PaymentController::class, 'completed']);
+Route::get('payments/failed', [PaymentController::class, 'failed']);
+Route::get('payments/unfinish', [PaymentController::class, 'unfinish']);
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
 Route::get('/learn/{title}', [HomeController::class, 'detailCourse'])->name('home.detail.course');
 
 Route::middleware(['auth:web'])->group(function () {
-    Route::get('learn/{title}/enroll', [PaymentController::class, 'index'])->name('home.course.enroll');
-    Route::get('learn/{title}/lv_enroll', LvPayCourse::class)->name('home.course.lv_enroll');
+    // Route::get('learn/{title}/enroll', [PaymentController::class, 'index'])->name('home.course.enroll');
+    Route::get('learn/{title}/enroll', LvPayCourse::class)->name('home.course.enroll');
 });
 
 

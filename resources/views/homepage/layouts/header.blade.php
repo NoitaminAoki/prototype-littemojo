@@ -39,11 +39,27 @@
                         </ul>
                     </li>			
                     @auth('web')
+                    <li class="menu-has-children">
+                        <a href="">
+                            Account 
+                        </a>
+                        <ul>
+                            <li><a href="course-details.html">Profile</a></li>		
+                            <li>
+                                <form action="{{ route('logout') }}" method="post">
+                                    @csrf
+                                    
+                                        <i><button type="submit" class="btn btn-link btn-block text-left btn-nav-link">Logout</button></i>
+                                    
+                                </form>
+                            </li>  		
+                        </ul>
+                    </li>
                     <li><a class="genric-btn primary small border-0 text-capitalize" href="contact.html">My Dashboard</a></li>
                     @endauth		          					          		          
                     @guest
                     <li><a href="{{ route('login') }}">Sign In</a></li>
-                    <li><a class="genric-btn primary small border-0 text-capitalize" href="contact.html">Join for Free</a></li>
+                    <li><a class="genric-btn primary small border-0 text-capitalize" href="{{ route('register') }}">Join for Free</a></li>
                     @endguest
                 </ul>
             </nav><!-- #nav-menu-container -->		    		

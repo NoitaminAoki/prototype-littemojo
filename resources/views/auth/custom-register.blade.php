@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>LitteMojo | Log in (Customer)</title>
+    <title>LitteMojo | Sign Up (Customer)</title>
     
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -38,7 +38,7 @@
             <span class="info-box-icon custom-info-box-icon"><small><i class="fas fa-exclamation-circle"></i></small></span>
             
             <div class="info-box-content w-100">
-                <p class="info-box-text custom-info-box-text text-sm mb-0">We don't recognize that username or password. You can try again or Sign Up</p>
+                <p class="info-box-text custom-info-box-text text-sm mb-0">{{$message}}</p>
                 
             </div>
             <!-- /.info-box-content -->
@@ -52,33 +52,46 @@
                 <a href="{{ route('home.index') }}" class="h1"><b>Little</b>Mojo</a>
             </div>
             <div class="card-body">
-                <p class="login-box-msg">Sign in to start your session</p>
-                
-                <form method="POST" action="{{ route('login') }}">
+                <p class="login-box-msg">Learn on your own time from top universities and businesses.</p>
+                <form method="POST" action="{{ route('register') }}">
                     @csrf
-                    <div class="input-group mb-3">
-                        @if (env('APP_ENV') === 'local')
-                        <input type="email" name="email" class="form-control" value="sanchez77rodriguez@gmail.com" placeholder="Email">
-                        @else
-                        <input type="email" name="email" class="form-control" value="{{old('email')}}" placeholder="Email">
-                        @endif
+                    <div>
+                        <x-jet-label for="name" value="{{ __('Name') }}" />
+                        <x-jet-input id="name" class="form-control" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
                     </div>
-                    <div class="input-group mb-3">
-                        @if (env('APP_ENV') === 'local')
-                        <input type="password" name="password" value="gakadapassword" class="form-control border-right-0 pr-0" placeholder="Password">
-                        @else
-                        <input type="password" name="password" class="form-control border-right-0 pr-0" placeholder="Password">
-                        @endif
-                        <div class="input-group-append">
-                            <div class="input-group-text input-group-transparent bg-transparent">
-                                <span class="fas fa-eye icon-eye" style="cursor: pointer"></span>
+                    
+                    <div class="mt-2">
+                        <x-jet-label for="email" value="{{ __('Email') }}" />
+                        <x-jet-input id="email" class="form-control" type="email" name="email" :value="old('email')" required autocomplete="off" />
+                    </div>
+                    
+                    <div class="mt-2">
+                        <x-jet-label for="password" value="{{ __('Password') }}" />
+                        <div class="input-group">
+                            <input type="password" id="password" name="password" class="form-control border-right-0 pr-0" placeholder="Password">
+                            <div class="input-group-append">
+                                <div class="input-group-text input-group-transparent bg-transparent">
+                                    <span class="fas fa-eye icon-eye" style="cursor: pointer"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="mt-2">
+                        <x-jet-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
+                        <div class="input-group">
+                            <input type="password" id="password_confirmation" name="password_confirmation" class="form-control border-right-0 pr-0" placeholder="Confirm Password">
+                            <div class="input-group-append">
+                                <div class="input-group-text input-group-transparent bg-transparent">
+                                    <span class="fas fa-eye icon-eye" style="cursor: pointer"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <x-jet-validation-errors class="mb-4" />
+                    <div class="row mt-4">
                         <!-- /.col -->
                         <div class="col-12">
-                            <button type="submit" class="btn btn-warning btn-block">Sign In</button>
+                            <button type="submit" class="btn btn-warning btn-block">Sign Up</button>
                         </div>
                         <!-- /.col -->
                     </div>
@@ -90,10 +103,7 @@
                 <!-- /.social-auth-links -->
                 
                 <p class="mb-1">
-                    <a href="forgot-password.html" class="text-sm">Forgot password?</a>
-                </p>
-                <p class="mb-0">
-                    <a href="{{ route('register') }}" class="text-center text-sm">Register for free</a>
+                    Already Registered? <a href="{{ route('login') }}" class="text-sm">Sign In</a>
                 </p>
             </div>
             <!-- /.card-body -->
@@ -111,11 +121,11 @@
     
     <script>
         $('.icon-eye').on('mousedown', function() {
-            let input = $(this).parents('.input-group').find('input[name="password"]');
+            let input = $(this).parents('.input-group').find('input');
             input.attr('type', 'text');
             $(this).removeClass('fa-eye').addClass('fa-eye-slash');
         }).on('mouseup', function() {
-            let input = $(this).parents('.input-group').find('input[name="password"]');
+            let input = $(this).parents('.input-group').find('input');
             input.attr('type', 'password');
             $(this).removeClass('fa-eye-slash').addClass('fa-eye');
         });

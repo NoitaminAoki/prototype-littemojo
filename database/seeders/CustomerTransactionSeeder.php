@@ -23,7 +23,7 @@ class CustomerTransactionSeeder extends Seeder
             'total_price' => 589000,
             'promo_id' => null,
             'snap_token' => null,
-            'status_payment' => "success",
+            'status_payment' => "settlement",
 			'created_at' => "2021-03-01 12:00:00",
         ]);
         DB::table('customer_transactions')->insert([
@@ -35,7 +35,7 @@ class CustomerTransactionSeeder extends Seeder
             'total_price' => 295000,
             'promo_id' => null,
             'snap_token' => null,
-            'status_payment' => "success",
+            'status_payment' => "settlement",
 			'created_at' => "2021-03-05 12:00:00",
         ]);
         DB::table('customer_transactions')->insert([
@@ -47,7 +47,7 @@ class CustomerTransactionSeeder extends Seeder
             'total_price' => 295000,
             'promo_id' => null,
             'snap_token' => null,
-            'status_payment' => "success",
+            'status_payment' => "settlement",
 			'created_at' => "2021-03-13 12:00:00",
         ]);
         DB::table('customer_transactions')->insert([
@@ -59,7 +59,7 @@ class CustomerTransactionSeeder extends Seeder
             'total_price' => 485000,
             'promo_id' => null,
             'snap_token' => null,
-            'status_payment' => "success",
+            'status_payment' => "settlement",
 			'created_at' => "2021-03-20 12:00:00",
         ]);
 
@@ -73,7 +73,7 @@ class CustomerTransactionSeeder extends Seeder
             'total_price' => 589000,
             'promo_id' => null,
             'snap_token' => null,
-            'status_payment' => "success",
+            'status_payment' => "settlement",
 			'created_at' => "2021-03-01 12:00:00",
         ]);
         DB::table('customer_transactions')->insert([
@@ -85,7 +85,7 @@ class CustomerTransactionSeeder extends Seeder
             'total_price' => 295000,
             'promo_id' => null,
             'snap_token' => null,
-            'status_payment' => "success",
+            'status_payment' => "settlement",
 			'created_at' => "2021-03-07 12:00:00",
         ]);
         DB::table('customer_transactions')->insert([
@@ -97,7 +97,7 @@ class CustomerTransactionSeeder extends Seeder
             'total_price' => 295000,
             'promo_id' => null,
             'snap_token' => null,
-            'status_payment' => "success",
+            'status_payment' => "settlement",
 			'created_at' => "2021-03-15 12:00:00",
         ]);
         DB::table('customer_transactions')->insert([
@@ -109,7 +109,7 @@ class CustomerTransactionSeeder extends Seeder
             'total_price' => 485000,
             'promo_id' => null,
             'snap_token' => null,
-            'status_payment' => "success",
+            'status_payment' => "settlement",
 			'created_at' => "2021-03-25 12:00:00",
         ]);
 
@@ -123,7 +123,7 @@ class CustomerTransactionSeeder extends Seeder
             'total_price' => 589000,
             'promo_id' => null,
             'snap_token' => null,
-            'status_payment' => "success",
+            'status_payment' => "settlement",
 			'created_at' => "2021-03-04 12:00:00",
         ]);
         DB::table('customer_transactions')->insert([
@@ -135,7 +135,7 @@ class CustomerTransactionSeeder extends Seeder
             'total_price' => 295000,
             'promo_id' => null,
             'snap_token' => null,
-            'status_payment' => "success",
+            'status_payment' => "settlement",
 			'created_at' => "2021-03-11 12:00:00",
         ]);
         DB::table('customer_transactions')->insert([
@@ -147,7 +147,7 @@ class CustomerTransactionSeeder extends Seeder
             'total_price' => 295000,
             'promo_id' => null,
             'snap_token' => null,
-            'status_payment' => "success",
+            'status_payment' => "settlement",
 			'created_at' => "2021-03-15 12:00:00",
         ]);
         DB::table('customer_transactions')->insert([
@@ -159,7 +159,7 @@ class CustomerTransactionSeeder extends Seeder
             'total_price' => 485000,
             'promo_id' => null,
             'snap_token' => null,
-            'status_payment' => "success",
+            'status_payment' => "settlement",
 			'created_at' => "2021-03-20 12:00:00",
         ]);
     }

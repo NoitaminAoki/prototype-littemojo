@@ -11,4 +11,17 @@
     #mobile-nav-toggle {
         top: 18px;
     }
+    .btn-nav-link {
+        padding: 5px 9px;
+        color: #333;
+        transition: 0.3s;
+        display: block;
+        font-size: 12px;
+        text-transform: none;
+        font-weight: 500;
+    }
+    .btn-nav-link:hover {
+        color: #f7631b;
+        text-decoration: none;
+    }
 </style>
