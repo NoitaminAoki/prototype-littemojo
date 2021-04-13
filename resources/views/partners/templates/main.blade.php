@@ -55,7 +55,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       Prototype Design
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2020-{{Date('Y')}} <a href="https://adminlte.io">LittleMojo</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2020-{{Date('Y')}} <a href="{{url('/')}}">LittleMojo</a>.</strong> All rights reserved.
   </footer>
 </div>
 <!-- ./wrapper -->

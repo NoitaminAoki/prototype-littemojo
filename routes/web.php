@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Home\{
     HomeController,
-    PaymentController
+    PaymentController,
+    Dashboard\CourseController as DashCouseController,
 };
 
 use App\Http\Controllers\Admins\DashboardController as AdminDashboard;
@@ -46,7 +47,8 @@ use App\Http\Livewire\Partners\{
 };
 
 use App\Http\Livewire\Homepages\{
-    Payments\LvPayCourse
+    Payments\LvPayCourse,
+    Dashboard\LvCourse as DashboardCourseLive,
 };
 
 use Illuminate\Support\Facades\Auth;
@@ -63,6 +65,12 @@ Route::get('/email/verify', function () {
 })->middleware('auth')->name('verification.notice');
 
 // Route::view('/', 'homepage.pages.index');
+
+Route::middleware(['auth:web', 'verified'])->group(function () {
+    Route::prefix('dashboard')->name('home.dashboard.')->group(function () {
+        Route::get('course/{title}', DashboardCourseLive::class)->name('course');
+    });
+});
 
 // Midtrans Notification Handler
 Route::post('payments/notification/handler', [PaymentController::class, 'notification']);

@@ -20,7 +20,7 @@ class PartnerFundTransactionSeeder extends Seeder
             'type_transaction' => "income",
             'amount' => 589000,
             'final_amount' => 589000,
-			'created_at' => "2021-03-01 12:00:00",
+			'created_at' => date('Y-m-01 H:i:s'),
         ]);
         DB::table('partner_fund_transactions')->insert([
             'partner_id' => 2,
@@ -28,7 +28,7 @@ class PartnerFundTransactionSeeder extends Seeder
             'type_transaction' => "income",
             'amount' => 295000,
             'final_amount' => 295000,
-			'created_at' => "2021-03-05 12:00:00",
+			'created_at' => date('Y-m-05 H:i:s'),
         ]);
         DB::table('partner_fund_transactions')->insert([
             'partner_id' => 2,
@@ -36,7 +36,7 @@ class PartnerFundTransactionSeeder extends Seeder
             'type_transaction' => "income",
             'amount' => 295000,
             'final_amount' => 295000,
-			'created_at' => "2021-03-13 12:00:00",
+			'created_at' => date('Y-m-13 H:i:s'),
         ]);
         DB::table('partner_fund_transactions')->insert([
             'partner_id' => 2,
@@ -44,7 +44,7 @@ class PartnerFundTransactionSeeder extends Seeder
             'type_transaction' => "income",
             'amount' => 485000,
             'final_amount' => 485000,
-			'created_at' => "2021-03-20 12:00:00",
+			'created_at' => date('Y-m-20 H:i:s'),
         ]);
         
 
@@ -54,7 +54,7 @@ class PartnerFundTransactionSeeder extends Seeder
             'type_transaction' => "income",
             'amount' => 589000,
             'final_amount' => 589000,
-			'created_at' => "2021-03-01 12:00:00",
+			'created_at' => date('Y-m-01 H:i:s'),
         ]);
         DB::table('partner_fund_transactions')->insert([
             'partner_id' => 2,
@@ -62,7 +62,7 @@ class PartnerFundTransactionSeeder extends Seeder
             'type_transaction' => "income",
             'amount' => 295000,
             'final_amount' => 295000,
-			'created_at' => "2021-03-07 12:00:00",
+			'created_at' => date('Y-m-07 H:i:s'),
         ]);
         DB::table('partner_fund_transactions')->insert([
             'partner_id' => 2,
@@ -70,7 +70,7 @@ class PartnerFundTransactionSeeder extends Seeder
             'type_transaction' => "income",
             'amount' => 295000,
             'final_amount' => 295000,
-			'created_at' => "2021-03-15 12:00:00",
+			'created_at' => date('Y-m-15 H:i:s'),
         ]);
         DB::table('partner_fund_transactions')->insert([
             'partner_id' => 2,
@@ -78,7 +78,7 @@ class PartnerFundTransactionSeeder extends Seeder
             'type_transaction' => "income",
             'amount' => 485000,
             'final_amount' => 485000,
-			'created_at' => "2021-03-25 12:00:00",
+			'created_at' => date('Y-m-25 H:i:s'),
         ]);
         
 
@@ -88,7 +88,7 @@ class PartnerFundTransactionSeeder extends Seeder
             'type_transaction' => "income",
             'amount' => 589000,
             'final_amount' => 589000,
-			'created_at' => "2021-03-04 12:00:00",
+			'created_at' => date('Y-m-04 H:i:s'),
         ]);
         DB::table('partner_fund_transactions')->insert([
             'partner_id' => 2,
@@ -96,7 +96,7 @@ class PartnerFundTransactionSeeder extends Seeder
             'type_transaction' => "income",
             'amount' => 295000,
             'final_amount' => 295000,
-			'created_at' => "2021-03-11 12:00:00",
+			'created_at' => date('Y-m-11 H:i:s'),
         ]);
         DB::table('partner_fund_transactions')->insert([
             'partner_id' => 2,
@@ -104,7 +104,7 @@ class PartnerFundTransactionSeeder extends Seeder
             'type_transaction' => "income",
             'amount' => 295000,
             'final_amount' => 295000,
-			'created_at' => "2021-03-15 12:00:00",
+			'created_at' => date('Y-m-15 H:i:s'),
         ]);
         DB::table('partner_fund_transactions')->insert([
             'partner_id' => 2,
@@ -112,7 +112,7 @@ class PartnerFundTransactionSeeder extends Seeder
             'type_transaction' => "income",
             'amount' => 485000,
             'final_amount' => 485000,
-			'created_at' => "2021-03-20 12:00:00",
+			'created_at' => date('Y-m-20 H:i:s'),
         ]);
         
     }

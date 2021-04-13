@@ -24,7 +24,7 @@ class CustomerTransactionSeeder extends Seeder
             'promo_id' => null,
             'snap_token' => null,
             'status_payment' => "settlement",
-			'created_at' => "2021-03-01 12:00:00",
+			'created_at' => date('Y-m-01 H:i:s'),
         ]);
         DB::table('customer_transactions')->insert([
             'customer_id' => 3,
@@ -36,7 +36,7 @@ class CustomerTransactionSeeder extends Seeder
             'promo_id' => null,
             'snap_token' => null,
             'status_payment' => "settlement",
-			'created_at' => "2021-03-05 12:00:00",
+			'created_at' => date('Y-m-05 H:i:s'),
         ]);
         DB::table('customer_transactions')->insert([
             'customer_id' => 3,
@@ -48,7 +48,7 @@ class CustomerTransactionSeeder extends Seeder
             'promo_id' => null,
             'snap_token' => null,
             'status_payment' => "settlement",
-			'created_at' => "2021-03-13 12:00:00",
+			'created_at' => date('Y-m-13 H:i:s'),
         ]);
         DB::table('customer_transactions')->insert([
             'customer_id' => 3,
@@ -60,7 +60,7 @@ class CustomerTransactionSeeder extends Seeder
             'promo_id' => null,
             'snap_token' => null,
             'status_payment' => "settlement",
-			'created_at' => "2021-03-20 12:00:00",
+			'created_at' => date('Y-m-20 H:i:s'),
         ]);
 
 
@@ -74,7 +74,7 @@ class CustomerTransactionSeeder extends Seeder
             'promo_id' => null,
             'snap_token' => null,
             'status_payment' => "settlement",
-			'created_at' => "2021-03-01 12:00:00",
+			'created_at' => date('Y-m-01 H:i:s'),
         ]);
         DB::table('customer_transactions')->insert([
             'customer_id' => 4,
@@ -86,7 +86,7 @@ class CustomerTransactionSeeder extends Seeder
             'promo_id' => null,
             'snap_token' => null,
             'status_payment' => "settlement",
-			'created_at' => "2021-03-07 12:00:00",
+			'created_at' => date('Y-m-07 H:i:s'),
         ]);
         DB::table('customer_transactions')->insert([
             'customer_id' => 4,
@@ -98,7 +98,7 @@ class CustomerTransactionSeeder extends Seeder
             'promo_id' => null,
             'snap_token' => null,
             'status_payment' => "settlement",
-			'created_at' => "2021-03-15 12:00:00",
+			'created_at' => date('Y-m-15 H:i:s'),
         ]);
         DB::table('customer_transactions')->insert([
             'customer_id' => 4,
@@ -110,7 +110,7 @@ class CustomerTransactionSeeder extends Seeder
             'promo_id' => null,
             'snap_token' => null,
             'status_payment' => "settlement",
-			'created_at' => "2021-03-25 12:00:00",
+			'created_at' => date('Y-m-25 H:i:s'),
         ]);
 
 
@@ -124,7 +124,7 @@ class CustomerTransactionSeeder extends Seeder
             'promo_id' => null,
             'snap_token' => null,
             'status_payment' => "settlement",
-			'created_at' => "2021-03-04 12:00:00",
+			'created_at' => date('Y-m-04 H:i:s'),
         ]);
         DB::table('customer_transactions')->insert([
             'customer_id' => 5,
@@ -136,7 +136,7 @@ class CustomerTransactionSeeder extends Seeder
             'promo_id' => null,
             'snap_token' => null,
             'status_payment' => "settlement",
-			'created_at' => "2021-03-11 12:00:00",
+			'created_at' => date('Y-m-11 H:i:s'),
         ]);
         DB::table('customer_transactions')->insert([
             'customer_id' => 5,
@@ -148,7 +148,7 @@ class CustomerTransactionSeeder extends Seeder
             'promo_id' => null,
             'snap_token' => null,
             'status_payment' => "settlement",
-			'created_at' => "2021-03-15 12:00:00",
+			'created_at' => date('Y-m-15 H:i:s'),
         ]);
         DB::table('customer_transactions')->insert([
             'customer_id' => 5,
@@ -160,7 +160,7 @@ class CustomerTransactionSeeder extends Seeder
             'promo_id' => null,
             'snap_token' => null,
             'status_payment' => "settlement",
-			'created_at' => "2021-03-20 12:00:00",
+			'created_at' => date('Y-m-13 H:i:s'),
         ]);
     }
 }
