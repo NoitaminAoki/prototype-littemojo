@@ -17,10 +17,16 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');;
 
-        if (Auth::guard('partner')->attempt($credentials)) {
-            return redirect()->route('partner.dashboard');
+        $user = \DB::table('partners')->where('email', $request->email)->value('is_verified_by_admin');
+        if ($user > 0) {
+            if (Auth::guard('partner')->attempt($credentials)) {
+                return redirect()->route('partner.dashboard');
+            }else{
+                return redirect()->route('partner.login')->with(['error' => 'Email or password not valid!']);
+            }
+        }else{
+            return redirect()->route('partner.login')->with(['error' => 'Account partner is not verified by admin.']);
         }
-        return redirect()->route('partner.login')->withError(['error' => 'Email or password not valid!']);
     }
 
     public function loginForm()

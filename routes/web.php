@@ -15,7 +15,7 @@ use App\Http\Controllers\Admins\Master\{
     LevelController
 };
 use App\Http\Controllers\Admins\Manage\UserController;
-use App\Http\Controllers\Admins\Manage\Partner\CourseController;
+use App\Http\Controllers\Admins\Manage\Partner\{CourseController, UserController as PartnerController};
 use App\Http\Controllers\Partners\{
     DashboardController as PartnerDashboard,
     AuthController as PartnerAuthController,
@@ -102,6 +102,7 @@ Route::middleware('auth:admin')->prefix('admin/management')->name('admin.')->gro
     Route::prefix('partner')->group(function(){
         Route::get('verif_course/{course_id}/lessons', [CourseController::class, 'lesson'])->name('verif_course.lesson.index');
         Route::resource('verif_course', CourseController::class);
+        Route::resource('verif_partner', PartnerController::class);
         Route::get('lessons/{lesson:id}', [CourseController::class, 'detailLesson'])->name('lessons.show');
         Route::get('lessons/{lesson:id}/quizzes', [CourseController::class, 'quiz'])->name('quiz.show');
         Route::get('lessons/quiz/{quiz:id}/questions', [CourseController::class, 'detailQuiz'])->name('quiz.detail');
