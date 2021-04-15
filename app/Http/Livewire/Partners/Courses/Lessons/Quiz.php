@@ -31,6 +31,9 @@ class Quiz extends Component
     public $quiz;
     public $quizzes;
 
+    public $user_id;
+    public $course_user_id;
+
     public $title;
     public $total_question;
     public $iteration;
@@ -38,7 +41,9 @@ class Quiz extends Component
 
     public function Mount(Lesson $lesson)
     {
+        $this->user_id = \Auth::user()->id;
         $this->lesson = $lesson;
+        $this->course_user_id = $this->lesson->course->user_id;
     }
 
     public function render()
@@ -51,26 +56,31 @@ class Quiz extends Component
 
     public function store()
     {
-        $this->validate([
-            'title' => 'required|string',
-            'total_question' => 'required|string',
-        ]);
-        $last_quiz = MsQuiz::where('lesson_id', $this->lesson->id)->orderBy('orders', 'desc')->first();
+        if ($this->course_user_id == $this->user_id) {
+            $this->validate([
+                'title' => 'required|string',
+                'total_question' => 'required|string',
+            ]);
+            $last_quiz = MsQuiz::where('lesson_id', $this->lesson->id)->orderBy('orders', 'desc')->first();
 
-        $order = 1;
+            $order = 1;
 
-        if($last_quiz) {
-            $order += $last_quiz->orders;
+            if($last_quiz) {
+                $order += $last_quiz->orders;
+            }
+            MsQuiz::create([
+                'lesson_id' => $this->lesson->id,
+                'user_id' => $this->user_id,
+                'title' => $this->title,
+                'orders' => $order,
+                'total_question' => $this->total_question
+            ]);
+
+            $this->resetInput();
+            $this->setNotif('Successfully adding data.');
+        }else{
+            abort(404);
         }
-        MsQuiz::create([
-            'lesson_id' => $this->lesson->id,
-            'title' => $this->title,
-            'orders' => $order,
-            'total_question' => $this->total_question
-        ]);
-
-        $this->resetInput();
-        $this->setNotif('Successfully adding data.');
     }
 
     public function update()

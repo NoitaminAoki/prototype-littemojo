@@ -17,6 +17,8 @@ class CreateCourseSkillsTable extends Migration
             $table->id();
             $table->bigInteger('course_id')->unsigned()->nullable();
             $table->bigInteger('skill_id')->unsigned()->nullable();
+
+            $table->bigInteger('user_id')->unsigned()->nullable();
             $table->timestamps();
         });
     }
