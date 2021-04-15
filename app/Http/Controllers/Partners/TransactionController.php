@@ -19,7 +19,7 @@ class TransactionController extends Controller
         $transactions = CustomerTransaction::leftJoin('courses', 'courses.id', 'customer_transactions.course_id')
                                                 ->leftJoin('users', 'users.id', 'customer_transactions.customer_id')
         ->select('customer_transactions.id', 'customer_transactions.customer_id', 'customer_transactions.course_id', 'customer_transactions.price', 'customer_transactions.status_payment', 'customer_transactions.start_date', 'courses.title as title_course', 'users.name as name_customer')
-        ->orderBy('id', 'DESC')
+        ->orderBy('customer_transactions.created_at', 'DESC')
         ->get();
         return view('partners.transaction.index', compact('transactions'));
     }
