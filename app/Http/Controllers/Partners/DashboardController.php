@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\{
     PartnerFundTransaction as FundTransaction,
     PartnerWithDrawal,
+    CustomerTransaction
 };
 use DB;
 
@@ -38,14 +39,7 @@ class DashboardController extends Controller
             $list_amount = [0, 0];
             $list_date = [Date('d F'), Date('t F')];
         }
-        // dump(date('Y-m-d'));
-        // dump($first_date);
-        // dump($last_date);
-        // dump($total_amount);
-        // dump($list_amount);
-        // dump($list_date);
-        // dump($total_sales_amount);
-        // dd($sales_graph->toArray());
-        return view('partners.index', compact('first_date', 'last_date', 'total_sales_amount', 'total_amount', 'list_amount', 'list_date'));
+        $sales = CustomerTransaction::where('status_payment', 'settlement')->count();
+        return view('partners.index', compact('first_date', 'sales', 'last_date', 'total_sales_amount', 'total_amount', 'list_amount', 'list_date'));
     }
 }

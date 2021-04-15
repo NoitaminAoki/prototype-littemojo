@@ -21,6 +21,7 @@ use App\Http\Controllers\Partners\{
     AuthController as PartnerAuthController,
     CourseController as PartnerCourseController,
     CorporationController as PartnerCorporationController,
+    TransactionController as PartnerTransactionController,
 
     Courses\ExperienceController as PartnerExpController,
     Courses\LessonController as PartnerLessonController,
@@ -158,6 +159,7 @@ Route::group([
         Route::get('course/insert', CourseInsertLive::class);
         Route::resource('course', PartnerCourseController::class);
         Route::resource('corporation', PartnerCorporationController::class);
+        Route::resource('transaction', PartnerTransactionController::class);
     });
 });
 
