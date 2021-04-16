@@ -16,6 +16,7 @@
     <div class="col-lg">
         <div class="card">
             <div class="card-body">
+                <a href="{{\Request::url().'/export_pdf'}}" class="btn btn-primary btn-sm my-2">Export to PDF</a>
                 <table id="example1" class="table table-bordered table-striped table-hover">
                     <thead>
                         <tr role="row">
