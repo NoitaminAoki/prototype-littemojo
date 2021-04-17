@@ -17,6 +17,14 @@
         .container {
             max-width: 100%;
         }
+        .custom-margin-bottom {
+            margin-bottom: 3rem;
+        }
+        @media (max-width: 452px) {
+            .custom-margin-bottom {
+                margin-bottom: 5rem;
+            }
+        }
     </style>
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
@@ -34,22 +42,27 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
-            <div class="content-header">
-                {{-- <div class="container">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0 text-dark"> Top Navigation <small>Example 3.0</small></h1>
-                        </div><!-- /.col -->
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item"><a href="#">Layout</a></li>
-                                <li class="breadcrumb-item active">Top Navigation</li>
-                            </ol>
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
-                </div><!-- /.container-fluid --> --}}
+            @hasSection ('breadcrumb-navbar')
+            <div class="content-header custom-margin-bottom">
             </div>
+            @else
+            <div class="content-header">
+            </div>
+            @endif
+            {{-- <div class="container">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark"> Top Navigation <small>Example 3.0</small></h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item"><a href="#">Layout</a></li>
+                            <li class="breadcrumb-item active">Top Navigation</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid --> --}}
             <!-- /.content-header -->
             
             <!-- Main content -->

@@ -49,6 +49,8 @@ use App\Http\Livewire\Partners\{
 use App\Http\Livewire\Homepages\{
     Payments\LvPayCourse,
     Dashboard\LvCourse as DashboardCourseLive,
+    Dashboard\LvLesson as DashboardLessonLive,
+    Dashboard\LvQuiz as DashboardQuizLive,
 };
 
 use Illuminate\Support\Facades\Auth;
@@ -68,7 +70,9 @@ Route::get('/email/verify', function () {
 
 Route::middleware(['auth:web', 'verified'])->group(function () {
     Route::prefix('dashboard')->name('home.dashboard.')->group(function () {
-        Route::get('course/{title}', DashboardCourseLive::class)->name('course');
+        Route::get('course/{title}', DashboardCourseLive::class)->name('course.lesson');
+        Route::get('course/{title}/lesson/{lesson_id}', DashboardLessonLive::class)->name('course.lesson.index');
+        Route::get('course/{title}/lesson/{lesson_id}/quiz/{quiz_id}', DashboardQuizLive::class)->name('course.lesson.quiz');
     });
 });
 
@@ -173,6 +177,21 @@ Route::prefix('partner')->name('partner.')->group(function () {
 
 Route::middleware(['auth:partner'])->group(function (){
     Route::get('lessons/books/get/{uuid}/pdf', [
+        BookController::class, 'index'
+    ])->name('lesson.books');
+    Route::get('lessons/videos/get/{uuid}/video', [
+        VideoController::class, 'index'
+    ])->name('lesson.videos');
+    Route::get('quizzes/questions/get/{uuid}/image', [
+        QuestionController::class, 'index'
+    ])->name('question.images');
+    Route::get('quizzes/questions/options/get/{uuid}/image', [
+        QuestionController::class, 'optionIndex'
+    ])->name('question.option.images');
+});
+
+Route::middleware(['auth:web', 'verified'])->prefix('assets/')->name('home.asset.')->group(function (){
+    Route::get('lessons/books/get/{uuid}/pdf/{filename}', [
         BookController::class, 'index'
     ])->name('lesson.books');
     Route::get('lessons/videos/get/{uuid}/video', [

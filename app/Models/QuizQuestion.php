@@ -42,4 +42,14 @@ class QuizQuestion extends Model
         return $this->belongsTo(AnswerKey::class, 'id', 'question_id');
     }
 
+    public function lastOrder()
+    {
+        $last_question = $this->orderBy('orders', 'DESC')->first();
+
+        if($last_question) {
+            return $last_question->orders;
+        }
+        return 1;
+    }
+
 }

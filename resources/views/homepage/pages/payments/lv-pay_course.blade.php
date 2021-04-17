@@ -559,7 +559,7 @@
                                 </a>
                             </li>
                         </ul>
-                        <a href="#" class="primary-btn text-uppercase">Open the course</a>
+                        <a href="{{ route('home.dashboard.course.lesson', ['title'=>$course->slug_title]) }}" class="primary-btn text-uppercase">Open the course</a>
                     </div>
                     @elseif($transaction->status_payment == 'pending')
                     <div class="right-contents">

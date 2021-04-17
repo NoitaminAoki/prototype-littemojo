@@ -11,6 +11,8 @@
     }
     .content-single {
         padding-left: 20px;
+        border-bottom: 1px solid #fff;
+        border-top: 1px solid #fff;
     }
     .content-active {
         background-color: #dcdcdc;
@@ -47,7 +49,7 @@
     
     .content-hover:hover {
         cursor: pointer;
-        background-color: #000;
+        background-color: #dcdcdc;
     }
     .text-font-family {
         font-family: 'Open Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -62,14 +64,14 @@
     .custom-info-box-icon-circle-single {
         -webkit-box-align: center;
         -webkit-box-pack: center;
-        width: 24px !important;
-        height: 24px !important;
+        width: 22px !important;
+        height: 22px !important;
         border: 2.2px solid rgb(225, 225, 225);
         display: flex;
         justify-content: center;
         align-items: center;
         flex-shrink: 0;
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
     
     .custom-text-light-green {
@@ -94,7 +96,7 @@
                     <h5 class="">Lesson</h5>
                     <div class="row content-lesson">
                         @foreach ($course->lessons as $lesson)
-                        <div class="col-12 content-single {{($lesson->id == $selected_lesson->id)? 'content-active' : ''}}">
+                        <div class="col-12 content-single content-hover {{($lesson->id == $selected_lesson->id)? 'content-active' : ''}}">
                             <div class="info-box part-content-action custom-info-box my-2 pl-0 shadow-none mb-0" data-id="{{$lesson->id}}">
                                 <span class="info-box-icon custom-info-box-icon"><i class="far">{{$loop->iteration}}</i></span>
                                 
@@ -129,7 +131,7 @@
                     <h5>{{$selected_lesson->title}}</h5>
                     <p class="mb-4">{{$selected_lesson->description}}</p>
                     
-                    <div class="w-100 text-right"><a href="#" class="custom-btn-capsule btn btn-primary"><i class="fas fa-arrow-right"></i></a></div>
+                    <div class="w-100 text-right"><a href="{{ route('home.dashboard.course.lesson.index', ['title'=>$slug_course_name, 'lesson_id' => $selected_lesson->id]) }}" class="custom-btn-capsule btn btn-primary"><i class="fas fa-arrow-right"></i></a></div>
                     <hr>
                     
                     <div class="info-box custom-info-box pl-0 shadow-none mb-0">
@@ -149,10 +151,10 @@
                     <hr>
                     
                     <div class="info-box custom-info-box pl-0 shadow-none mb-0">
-                        <span class="custom-info-box-icon-circle-single custom-border-light-green custom-icon-sm rounded-circle custom-text-light-green"><i class="fas fa-book-open"></i></span>
+                        <span class="custom-info-box-icon-circle-single custom-border-light-green rounded-circle custom-text-light-green"><i class="fas fa-book-open"></i></span>
                         
                         <div class="info-box-content">
-                            <span class="info-box-text custom-info-box-text-single font-weight-bold text-font-family"> {{$selected_lesson->totalBooks()}} books</span>
+                            <span class="info-box-text custom-info-box-text-single font-weight-bold text-font-family"> {{$selected_lesson->totalBooks()}} readings</span>
                         </div>
                         <!-- /.info-box-content custom-info-box-content -->
                     </div>

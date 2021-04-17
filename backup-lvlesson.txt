@@ -13,6 +13,14 @@ use App\Models\{
 
 class LvLesson extends Component
 {
+    public $type = '';
+    public $order = 1;
+
+    protected $queryString = [
+        'type' => ['except' => ''],
+        'order' => ['except' => 1],
+    ];
+
     public $slug_course_name;
     
     public $lesson;
@@ -36,20 +44,20 @@ class LvLesson extends Component
         ->where('slug_title', $this->slug_course_name)->firstOrFail();
         $this->lesson = CourseLesson::where([['course_id', $course->id], ['id', $lesson_id]])->first();
         
-        // $video = LessonVideo::where('lesson_id', $lesson_id)->first();
-        // if($video) {
-        //     $this->selected_item['type'] = 'video';
-        //     $this->selected_item['video'] = $video;
-        //     $this->item_id = $video->id;
-        //     return;
-        // }
-        // $book = LessonBook::where('lesson_id', $lesson_id)->first();
-        // if($book) {
-        //     $this->selected_item['type'] = 'book';
-        //     $this->selected_item['book'] = $book;
-        //     $this->item_id = $book->id;
-        //     return;
-        // }
+        $video = LessonVideo::where('lesson_id', $lesson_id)->first();
+        if($video) {
+            $this->selected_item['type'] = 'video';
+            $this->selected_item['video'] = $video;
+            $this->item_id = $video->id;
+            return;
+        }
+        $book = LessonBook::where('lesson_id', $lesson_id)->first();
+        if($book) {
+            $this->selected_item['type'] = 'book';
+            $this->selected_item['book'] = $book;
+            $this->item_id = $book->id;
+            return;
+        }
         $quiz = LessonQuiz::where('lesson_id', $lesson_id)->first();
         if($quiz) {
             $this->selected_item['type'] = 'quiz';
@@ -90,6 +98,7 @@ class LvLesson extends Component
     public function setItem($item)
     {
         $item = (object) $item;
+        $this->type = $item->type;
         $this->item_id = $item->id;
         if($item->type == 'video') {
             $video = LessonVideo::where([['lesson_id', $this->lesson->id], ['id', $item->id]])->first();
@@ -116,5 +125,4 @@ class LvLesson extends Component
             $this->dispatchBrowserEvent('breadcrumb_title:load', ['title' => $quiz->title]);
         }
     }
-
 }

@@ -24,15 +24,57 @@
         .custom-info-box-icon {
             width: 35px !important;
         }
+        .register-page {
+            height: auto;
+        }
     </style>
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition register-page pt-4">
     @if (session('status'))
     <div class="mb-4 font-medium text-sm text-green-600">
         {{ session('status') }}
     </div>
     @endif
+    @error('name')
+    <div class="login-box">
+        <div class="info-box mb-3 bg-pink">
+            <span class="info-box-icon custom-info-box-icon"><small><i class="fas fa-exclamation-circle"></i></small></span>
+            
+            <div class="info-box-content w-100">
+                <p class="info-box-text custom-info-box-text text-sm mb-0">{{$message}}</p>
+                
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+    </div>
+    @enderror
     @error('email')
+    <div class="login-box">
+        <div class="info-box mb-3 bg-pink">
+            <span class="info-box-icon custom-info-box-icon"><small><i class="fas fa-exclamation-circle"></i></small></span>
+            
+            <div class="info-box-content w-100">
+                <p class="info-box-text custom-info-box-text text-sm mb-0">{{$message}}</p>
+                
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+    </div>
+    @enderror
+    @error('password')
+    <div class="login-box">
+        <div class="info-box mb-3 bg-pink">
+            <span class="info-box-icon custom-info-box-icon"><small><i class="fas fa-exclamation-circle"></i></small></span>
+            
+            <div class="info-box-content w-100">
+                <p class="info-box-text custom-info-box-text text-sm mb-0">{{$message}}</p>
+                
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+    </div>
+    @enderror
+    @error('password_confirmation')
     <div class="login-box">
         <div class="info-box mb-3 bg-pink">
             <span class="info-box-icon custom-info-box-icon"><small><i class="fas fa-exclamation-circle"></i></small></span>
@@ -87,7 +129,6 @@
                             </div>
                         </div>
                     </div>
-                    <x-jet-validation-errors class="mb-4" />
                     <div class="row mt-4">
                         <!-- /.col -->
                         <div class="col-12">
