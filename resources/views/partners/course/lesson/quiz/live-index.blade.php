@@ -39,7 +39,7 @@
                         @foreach ($quizzes as $quiz)
                         <tr>
                             <td>{{$quiz->title}}</td>
-                            <td>{{$quiz->total_question}}</td>
+                            <td>{{$quiz->minimum_score}}</td>
                             <td class="text-right py-0 align-middle">
                                 <div class="btn-group btn-group-sm">
                                     <a href="{{ route('partner.manage.course.lesson.quiz.question.index', ['quiz'=> $quiz->id]) }}" class="btn btn-primary"><i class="fas fa-search"></i></a>
@@ -83,10 +83,10 @@
                         <span class="text-danger">{{$message}}</span>
                         @enderror
                         <div class="w-100">
-                            <label for="">Total Question</label>
-                            <input type="text" wire:model.defer="total_question" class="form-control" required>
+                            <label for="">Minimum Score</label>
+                            <input type="text" wire:model.defer="minimum_score" class="form-control" required>
                         </div>
-                        @error('total_question')
+                        @error('minimum_score')
                         <span class="text-danger">{{$message}}</span>
                         @enderror
                     </div>
@@ -121,10 +121,10 @@
                         <span class="text-danger">{{$message}}</span>
                         @enderror
                         <div class="w-100">
-                            <label for="">Total Question</label>
-                            <input type="text" wire:model.defer="quiz.total_question" class="form-control" required>
+                            <label for="">Minimum Score</label>
+                            <input type="text" wire:model.defer="quiz.minimum_score" class="form-control" required>
                         </div>
-                        @error('quiz.total_question')
+                        @error('quiz.minimum_score')
                         <span class="text-danger">{{$message}}</span>
                         @enderror
                     </div>

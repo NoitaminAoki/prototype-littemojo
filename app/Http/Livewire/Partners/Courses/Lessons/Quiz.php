@@ -15,7 +15,7 @@ class Quiz extends Component
     protected $rules = [
         'title' => 'required|string',
         'quiz.title' => 'required|string',
-        'quiz.total_question' => 'required|integer',
+        'quiz.minimum_score' => 'required|max:100',
     ];
     
     public $orders_id;
@@ -35,7 +35,7 @@ class Quiz extends Component
     public $course_user_id;
 
     public $title;
-    public $total_question;
+    public $minimum_score;
     public $iteration;
 
 
@@ -59,7 +59,7 @@ class Quiz extends Component
         if ($this->course_user_id == $this->user_id) {
             $this->validate([
                 'title' => 'required|string',
-                'total_question' => 'required|string',
+                'minimum_score' => 'required|max:100',
             ]);
             $last_quiz = MsQuiz::where('lesson_id', $this->lesson->id)->orderBy('orders', 'desc')->first();
 
@@ -73,7 +73,7 @@ class Quiz extends Component
                 'user_id' => $this->user_id,
                 'title' => $this->title,
                 'orders' => $order,
-                'total_question' => $this->total_question
+                'minimum_score' => $this->minimum_score
             ]);
 
             $this->resetInput();
@@ -87,7 +87,7 @@ class Quiz extends Component
     {
         $this->validate([
             'quiz.title' => 'required|string',
-            'quiz.total_question' => 'required|integer',
+            'quiz.minimum_score' => 'required|max:100',
         ]);
 
         $this->quiz->save();
@@ -112,7 +112,7 @@ class Quiz extends Component
 
     public function resetInput()
     {
-        $this->reset(['title', 'total_question']);
+        $this->reset(['title', 'minimum_score']);
         $this->iteration++;
     }
 

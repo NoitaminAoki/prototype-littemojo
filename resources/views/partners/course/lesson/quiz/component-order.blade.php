@@ -13,7 +13,7 @@
             <span class="text">{{$quiz->title}}</span>
             
             <!-- Emphasis label -->
-            <small class="badge badge-secondary">{{$quiz->total_question}}</small>
+            <small class="badge badge-secondary">{{$quiz->minimum_score}}</small>
             <!-- General tools such as edit or delete-->
             <div class="float-right">
                 <div class="rounded px-2 bg-info">

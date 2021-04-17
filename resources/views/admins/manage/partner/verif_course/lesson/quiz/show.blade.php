@@ -27,7 +27,7 @@
                         @foreach ($quizzes as $quiz)
                         <tr>
                             <td>{{$quiz->title}}</td>
-                            <td>{{$quiz->total_question}}</td>
+                            <td>{{$quiz->minimum_score}}</td>
                             <td class="text-right py-0 align-middle">
                                 <div class="btn-group btn-group-sm">
                                     <a href="{{ route('admin.quiz.detail', ['quiz'=> $quiz->id]) }}" class="btn btn-primary"><i class="fas fa-search"></i></a>

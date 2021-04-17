@@ -168,7 +168,7 @@
                             <tr>
                                 <td>
                                     <div>
-                                        <a target="_blank" href="#" class="btn-link text-secondary"><i class="far fa-fw fa-question-circle"></i> {{$quiz->title}}<span class="float-right">{{$quiz->total_question}}</span> </a>
+                                        <a target="_blank" href="#" class="btn-link text-secondary"><i class="far fa-fw fa-question-circle"></i> {{$quiz->title}}<span class="float-right">{{$quiz->minimum_score}}</span> </a>
                                     </div> 
                                 </td>
                             </tr>

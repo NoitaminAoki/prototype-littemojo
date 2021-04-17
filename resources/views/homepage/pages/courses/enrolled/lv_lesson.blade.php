@@ -300,7 +300,7 @@
                                     <div class="col-12">
                                         <div class="info-box bg-light">
                                             <div class="info-box-content">
-                                                <span class="info-box-text text-center text-muted">Total Question</span>
+                                                <span class="info-box-text text-center text-muted">Minimum Score</span>
                                                 <span class="info-box-number text-center text-muted mb-0">{{$selected_item['quiz']->totalQuestion()}} <span>
                                                 </span></span>
                                             </div>

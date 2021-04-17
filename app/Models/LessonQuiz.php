@@ -20,7 +20,7 @@ class LessonQuiz extends Model
         'user_id',
         'title',
         'orders',
-        'total_question',
+        'minimum_score',
     ];
     
     public function lesson()
@@ -35,12 +35,12 @@ class LessonQuiz extends Model
 
     public function progressWork($user_id)
     {
-        $total_question = Question::where('quiz_id', $this->id)->count();
+        $minimum_score = Question::where('quiz_id', $this->id)->count();
         $user_total_answer = UserAnswer::where([['quiz_id', $this->id], ['customer_id', $user_id]])->count();
 
         $percent_progress = 0;
-        if($total_question > 0) {
-            $percent_progress = number_format(($user_total_answer/$total_question) * 100, 2);
+        if($minimum_score > 0) {
+            $percent_progress = number_format(($user_total_answer/$minimum_score) * 100, 2);
         }
 
         return (float) $percent_progress;

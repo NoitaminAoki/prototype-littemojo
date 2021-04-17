@@ -18,7 +18,7 @@ class CreateLessonQuizzesTable extends Migration
             $table->bigInteger('lesson_id')->unsigned()->nullable();
             $table->integer('orders');
             $table->string('title');
-            $table->integer('total_question');
+            $table->integer('minimum_score');
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->timestamps();
 
