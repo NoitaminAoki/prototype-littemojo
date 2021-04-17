@@ -163,7 +163,8 @@ Route::group([
         Route::get('course/insert', CourseInsertLive::class);
         Route::resource('course', PartnerCourseController::class);
         Route::resource('corporation', PartnerCorporationController::class);
-        Route::get('transaction/export_pdf', [PartnerTransactionController::class, 'exportPdf']);
+        Route::get('transaction/export_pdf/{status}', [PartnerTransactionController::class, 'exportPdf']);
+        Route::get('transaction/export_excel/{status}', [PartnerTransactionController::class, 'exportExcel']);
         Route::resource('transaction', PartnerTransactionController::class);
     });
 });

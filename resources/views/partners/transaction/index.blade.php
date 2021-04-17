@@ -16,7 +16,20 @@
     <div class="col-lg">
         <div class="card">
             <div class="card-body">
-                <a href="{{\Request::url().'/export_pdf'}}" class="btn btn-primary btn-sm my-2">Export to PDF</a>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <select name="status" class="form-control">
+                                <option value="All">All</option>
+                                <option value="Paid">Paid</option>
+                            </select>
+                        </div>
+                        <div class="col-sm">
+                            <a id="btn-exportPdf" href="#" class="btn btn-primary btn-sm my-2">Export to PDF</a>
+                            <a id="btn-exportExcel" href="#" class="btn btn-primary btn-sm my-2 ml-2">Export to Excel</a>
+                        </div>
+                    </div>
+                </div>
                 <table id="example1" class="table table-bordered table-striped table-hover">
                     <thead>
                         <tr role="row">
@@ -54,6 +67,15 @@
         $("#example1").DataTable({
             "autoWidth": false,
         });
+        $('#btn-exportPdf').click(function(){
+            let status = $('[name="status"] option:selected').val()
+            $(this).attr('href', 'transaction/export_pdf/'+status)
+        })
+
+        $('#btn-exportExcel').click(function(){
+            let status = $('[name="status"] option:selected').val()
+            $(this).attr('href', 'transaction/export_excel/'+status)
+        })
     })
 </script>
 @endsection
