@@ -18,6 +18,7 @@ class CreateCourseLessonsTable extends Migration
             $table->bigInteger('course_id')->unsigned()->nullable();
             $table->string('title', 100);
             $table->text('description');
+            $table->bigInteger('user_id')->unsigned()->nullable();
             $table->timestamps();
 
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');

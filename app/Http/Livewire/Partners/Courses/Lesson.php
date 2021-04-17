@@ -18,6 +18,8 @@ class Lesson extends Component
 	public $lessons = [];
 	public $lesson;
 	public $course_id;
+	public $user_id;
+	public $course_user_id;
 
 	public $notification = [
 		'isOpen' => false, 
@@ -26,17 +28,19 @@ class Lesson extends Component
 
 	public function mount($course_id)
 	{
+		$this->user_id = \Auth::user()->id;
 		$this->course_id = $course_id;
 		$this->lesson = new CourseLesson;
 	}
 
 	public function render()
 	{
-		$course = Course::select('courses.id', 'courses.catalog_id', 'courses.catalog_topic_id', 'title', 'description', 'price', 'catalog_topics.name as nama_catalog_topic',
+		$course = Course::select('courses.id','courses.user_id', 'courses.catalog_id', 'courses.catalog_topic_id', 'title', 'description', 'price', 'catalog_topics.name as nama_catalog_topic',
 			'catalogs.name as nama_catalog')
 		->join('catalog_topics', 'catalog_topics.id', 'courses.id')
 		->join('catalogs', 'catalogs.id', 'catalog_topics.catalog_id')
 		->findOrFail($this->course_id);
+		$this->course_user_id = $course->user_id;
 
 		$this->lessons = CourseLesson::where('course_id', $this->course_id)->get();
 
@@ -48,14 +52,19 @@ class Lesson extends Component
 
 	public function insert()
 	{
-		$this->validate([
-			'lesson.title' 		 => 'required|string',
-			'lesson.description' => 'required|string',
-		]);
-		$this->lesson->course_id = $this->course_id;
-		$this->lesson->save();
-		$this->resetInput();
-		$this->setNotif('Successfully adding data.');
+		if ($this->course_user_id == $this->user_id) {
+			$this->validate([
+				'lesson.title' 		 => 'required|string',
+				'lesson.description' => 'required|string',
+			]);
+			$this->lesson->course_id = $this->course_id;
+			$this->lesson->user_id   = $this->user_id;
+			$this->lesson->save();
+			$this->resetInput();
+			$this->setNotif('Successfully adding data.');
+		}else{
+			abort(404);
+		}
 	}
 
 	public function setLesson($id)

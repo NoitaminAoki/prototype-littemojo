@@ -17,6 +17,7 @@ class LessonQuiz extends Model
 
     protected $fillable = [
         'lesson_id',
+        'user_id',
         'title',
         'orders',
         'total_question',

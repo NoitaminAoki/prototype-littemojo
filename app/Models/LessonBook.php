@@ -18,6 +18,7 @@ class LessonBook extends Model
      */
     protected $fillable = [
         'lesson_id',
+        'user_id',
         'uuid',
         'title',
         'orders',

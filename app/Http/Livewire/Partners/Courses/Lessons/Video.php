@@ -36,6 +36,9 @@ class Video extends Component
     public $video;
     public $videos;
 
+    public $user_id;
+    public $course_user_id;
+
     public $title;
     public $file;
     public $update_file;
@@ -43,7 +46,9 @@ class Video extends Component
 
     public function Mount(Lesson $lesson)
     {
+        $this->user_id = \Auth::user()->id;
         $this->lesson = $lesson;
+        $this->course_user_id = $this->lesson->course->user_id;
     }
 
     public function render()
@@ -56,38 +61,43 @@ class Video extends Component
 
     public function upload()
     {
-        $this->validate([
-            'title' => 'required|string',
-            'file' => 'required|mimes:mp4,mkv|max:102400'
-        ]);
+        if ($this->course_user_id == $this->user_id) {
+            $this->validate([
+                'title' => 'required|string',
+                'file' => 'required|mimes:mp4,mkv|max:102400'
+            ]);
 
-        $name = Date('YmdHis').'_videos.'.$this->file->extension();
-        $course_id = Lesson::where('id', $this->lesson->id)->value('course_id');
+            $name = Date('YmdHis').'_videos.'.$this->file->extension();
+            $course_id = Lesson::where('id', $this->lesson->id)->value('course_id');
 
-        $path = Storage::putFileAs('videos/'.$course_id.'/'.$this->lesson->id, $this->file, $name);
+            $path = Storage::putFileAs('videos/'.$course_id.'/'.$this->lesson->id, $this->file, $name);
 
-        $last_video = MsVideo::where('lesson_id', $this->lesson->id)->orderBy('orders', 'desc')->first();
+            $last_video = MsVideo::where('lesson_id', $this->lesson->id)->orderBy('orders', 'desc')->first();
 
-        $order = 1;
+            $order = 1;
 
-        if($last_video) {
-            $order += $last_video->orders;
-        }
-        $getid3 = new \getID3;
-        $video = $getid3->analyze(storage_path('app/videos/'.$course_id.'/'.$this->lesson->id.'/'.$name));
-        
-        MsVideo::create([
-            'lesson_id' => $this->lesson->id,
-            'uuid' => Str::uuid(),
-            'title' => $this->title,
-            'orders' => $order,
-            'filename' => $name,
-            'duration' => round($video['playtime_seconds']),
-            'size' => Converter::formatBytes($this->file->getSize())
-        ]);
+            if($last_video) {
+                $order += $last_video->orders;
+            }
+            $getid3 = new \getID3;
+            $video = $getid3->analyze(storage_path('app/videos/'.$course_id.'/'.$this->lesson->id.'/'.$name));
+            
+            MsVideo::create([
+                'lesson_id' => $this->lesson->id,
+                'user_id' => $this->user_id,
+                'uuid' => Str::uuid(),
+                'title' => $this->title,
+                'orders' => $order,
+                'filename' => $name,
+                'duration' => round($video['playtime_seconds']),
+                'size' => Converter::formatBytes($this->file->getSize())
+            ]);
 
-        $this->resetInput();
-        $this->setNotif('Successfully adding data.');
+            $this->resetInput();
+            $this->setNotif('Successfully adding data.');
+        }else{
+            abort(404);
+        }        
     }
 
     public function update()
