@@ -1,5 +1,6 @@
 @section('title', "{$course->title} - {$lesson->title}")
 @section('css')
+<link rel="stylesheet" href="{{ asset('plugins/sweetalert2/sweetalert2.min.css') }}">
 <link href="https://vjs.zencdn.net/7.11.4/video-js.css" rel="stylesheet" />
 <!-- Theme Forest -->
 <link href="https://unpkg.com/@videojs/themes@1/dist/forest/index.css" rel="stylesheet"/>
@@ -29,6 +30,7 @@
         background: inherit;
         cursor: pointer;
         min-height: auto;
+        height: 100%;
     }
     .info-box .custom-info-box-icon {
         width: auto;
@@ -151,9 +153,9 @@
         <div class="card rounded-0">
             <div id="selected_item" data-id="{{$selected_item[$selected_item['type']]->id}}" data-type="{{$selected_item['type']}}" class="card-body">
                 <div class="overlay-wrapper">
-                    <div wire:loading.flex wire:target="setItem" class="overlay modal-overlay" style="display: none;"><i class="fas fa-3x fa-sync-alt fa-spin"></i></div>
+                    <div wire:loading.flex wire:target="setItem, resetQuiz" class="overlay modal-overlay" style="display: none;"><i class="fas fa-3x fa-sync-alt fa-spin"></i></div>
                     @if ($selected_item['type'] == 'video')
-                    <video id="video_{{$selected_item['video']->id}}" class="video-js vjs-theme-forest" controls preload="auto" data-setup='{"fluid": true}'>
+                    <video id="video_{{$selected_item['video']->id}}" class="video-js vjs-theme-forest" controls preload="meta-data" data-setup='{"fluid": true}'>
                         <source src="{{ route('home.asset.lesson.videos', ['uuid'=>$selected_item['video']->uuid]) }}" type="video/mp4" />
                             <p class="vjs-no-js">
                             To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
@@ -165,8 +167,8 @@
                                 <h5 class="mt-0 mb-0 text-font-family">{{$selected_item['video']->title}}</h5>
                             </div>
                             <div>
-                                <button class="btn"><i class="custom-icon-size far fa-thumbs-up"></i></button>
-                                <button class="btn"><i class="custom-icon-size far fa-thumbs-down"></i></button>
+                                <button id="btn_like" data-id="{{$selected_item['video']->id}}" data-type="video" class="btn {{ ($selected_item['video']->isLiked(Auth::guard('web')->user()->id))? 'text-primary' : '' }}"><i class="custom-icon-size far fa-thumbs-up"></i></button>
+                                <button id="btn_dislike" data-id="{{$selected_item['video']->id}}" data-type="video" class="btn {{ ($selected_item['video']->isDisliked(Auth::guard('web')->user()->id))? 'text-primary' : '' }}"><i class="custom-icon-size far fa-thumbs-down"></i></button>
                             </div>
                         </div>
                         <hr class="mt-0">
@@ -186,8 +188,8 @@
                                 <h5 class="mt-0 mb-0 text-font-family">{{$selected_item['book']->title}}</h5>
                             </div>
                             <div>
-                                <button class="btn"><i class="custom-icon-size far fa-thumbs-up"></i></button>
-                                <button class="btn"><i class="custom-icon-size far fa-thumbs-down"></i></button>
+                                <button id="btn_like" data-id="{{$selected_item['book']->id}}" data-type="book" class="btn {{ ($selected_item['book']->isLiked(Auth::guard('web')->user()->id))? 'text-primary' : '' }}"><i class="custom-icon-size far fa-thumbs-up"></i></button>
+                                <button id="btn_dislike" data-id="{{$selected_item['book']->id}}" data-type="book" class="btn {{ ($selected_item['book']->isDisliked(Auth::guard('web')->user()->id))? 'text-primary' : '' }}"><i class="custom-icon-size far fa-thumbs-down"></i></button>
                             </div>
                         </div>
                         <hr class="mt-0">
@@ -202,8 +204,8 @@
                                 <h5 class="mt-0 mb-0 text-font-family">{{$selected_item['quiz']->title}}</h5>
                             </div>
                             <div>
-                                <button class="btn"><i class="custom-icon-size far fa-thumbs-up"></i></button>
-                                <button class="btn"><i class="custom-icon-size far fa-thumbs-down"></i></button>
+                                <button id="btn_like" data-id="{{$selected_item['quiz']->id}}" data-type="quiz" class="btn {{ ($selected_item['quiz']->isLiked(Auth::guard('web')->user()->id))? 'text-primary' : '' }}"><i class="custom-icon-size far fa-thumbs-up"></i></button>
+                                <button id="btn_dislike" data-id="{{$selected_item['quiz']->id}}" data-type="quiz" class="btn {{ ($selected_item['quiz']->isDisliked(Auth::guard('web')->user()->id))? 'text-primary' : '' }}"><i class="custom-icon-size far fa-thumbs-down"></i></button>
                             </div>
                         </div>
                         <hr class="mt-0">
@@ -221,13 +223,17 @@
                                     <hr>
                                     <div class="d-flex justify-content-between">
                                         <div>
+                                            @if ($user_score->is_pass)
                                             <h6 class="text-font-family mb-0">Congratulation! You passed!</h6>
-                                            <small class="text-secondary">TO PASS 80% or higher</small>
+                                            @else
+                                            <h6 class="text-font-family mb-0">Sorry, you failed!</h6>
+                                            @endif
+                                            <small class="text-secondary"><b>TO PASS</b> {{$selected_item['quiz']->minimum_score}}% or higher</small>
                                         </div>
-                                        <h4 class="text-font-family text-xl text-secondary">{{$user_score->score}}%</h4>
+                                        <h4 class="text-font-family text-xl {{($user_score->is_pass)? 'text-success' : 'text-danger'}}">{{$user_score->score}}%</h4>
                                     </div>
                                     <div class="progress">
-                                        <div class="progress-bar bg-lime" role="progressbar" aria-valuenow="{{$user_score->score}}" aria-valuemin="0" aria-valuemax="100" style="width: {{$user_score->score}}%">
+                                        <div class="progress-bar {{($user_score->is_pass)? 'bg-teal' : 'bg-red'}}" role="progressbar" aria-valuenow="{{$user_score->score}}" aria-valuemin="0" aria-valuemax="100" style="width: {{$user_score->score}}%">
                                             <span class="sr-only">{{$user_score->score}}% Complete</span>
                                         </div>
                                     </div>
@@ -247,7 +253,11 @@
                                                 <div class="text-muted">
                                                     <p class="text-sm">Status
                                                     </p>
+                                                    @if ($user_score->is_pass)
                                                     <h4 class="text-success">PASS</h4>
+                                                    @else
+                                                    <h4 class="text-danger">FAIL</h4>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -297,13 +307,18 @@
                             @endif
                             <div class="col-md-4">
                                 <div class="row">
-                                    <div class="col-12">
-                                        <div class="info-box bg-light">
-                                            <div class="info-box-content">
-                                                <span class="info-box-text text-center text-muted">Minimum Score</span>
-                                                <span class="info-box-number text-center text-muted mb-0">{{$selected_item['quiz']->totalQuestion()}} <span>
-                                                </span></span>
-                                            </div>
+                                    <div class="col-md-6">
+                                        <div class="text-muted">
+                                            <p class="text-sm">Total Question
+                                                <b class="d-block">{{$selected_item['quiz']->totalQuestion()}}</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="text-muted">
+                                            <p class="text-sm">Correct Answer <small>(Minimum)</small>
+                                                <b class="d-block">{{ceil($selected_item['quiz']->totalQuestion()/100 * $selected_item['quiz']->minimum_score)}}</b>
+                                            </p>
                                         </div>
                                     </div>
                                     <div class="col-12">
@@ -325,11 +340,8 @@
                                                 @elseif($progress_works <= 60)
                                                 <div class="progress-bar bg-green" role="progressbar" aria-volumenow="{{$progress_works}}" aria-volumemin="0" aria-volumemax="100" style="width: {{$progress_works}}%">
                                                 </div>
-                                                @elseif($progress_works <= 80)
-                                                <div class="progress-bar bg-teal" role="progressbar" aria-volumenow="{{$progress_works}}" aria-volumemin="0" aria-volumemax="100" style="width: {{$progress_works}}%">
-                                                </div>
                                                 @elseif($progress_works <= 100)
-                                                <div class="progress-bar bg-lime" role="progressbar" aria-volumenow="{{$progress_works}}" aria-volumemin="0" aria-volumemax="100" style="width: {{$progress_works}}%">
+                                                <div class="progress-bar bg-teal" role="progressbar" aria-volumenow="{{$progress_works}}" aria-volumemin="0" aria-volumemax="100" style="width: {{$progress_works}}%">
                                                 </div>
                                                 @endif
                                             </div>
@@ -339,6 +351,14 @@
                                           </div>
                                           <div class="post">
                                             @if ($user_score)
+                                            <a href="{{ route('home.dashboard.course.lesson.quiz', ['title'=>$course->slug_title, 'lesson_id' => $lesson->id, 'quiz_id' => $selected_item['quiz']->id]) }}" target="_blank" class="btn btn-success btn-block">
+                                                See Result
+                                            </a>
+                                            @if (!$user_score->is_pass)
+                                            <button id="btn_requiz" data-id="{{$user_score->id}}" target="_blank" class="btn btn-link btn-block mt-2">
+                                                Re-quiz
+                                            </button>
+                                            @endif
                                             @else
                                             @if ($progress_works > 0)
                                             <a href="{{ route('home.dashboard.course.lesson.quiz', ['title'=>$course->slug_title, 'lesson_id' => $lesson->id, 'quiz_id' => $selected_item['quiz']->id]) }}" target="_blank" class="btn btn-warning btn-block">
@@ -356,68 +376,6 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="w-100" style="display: none">
-                        <div class="row">
-                            <div class="col-12">
-                                <span>{{$selected_item['quiz']->progressWork(Auth::guard('web')->user()->id)}}</span>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="progress progress-sm">
-                                    <div class="progress-bar bg-red" role="progressbar" aria-volumenow="{{number_format(3/3 * 100, 2)}}" aria-volumemin="0" aria-volumemax="100" style="width: {{number_format(3/3 * 100, 2)}}%">
-                                    </div>
-                                </div>
-                                <small>
-                                    {{number_format(3/3 * 100, 0)}}% Complete
-                                </small>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="progress progress-sm">
-                                    <div class="progress-bar bg-red" role="progressbar" aria-volumenow="20" aria-volumemin="0" aria-volumemax="100" style="width: 20%">
-                                    </div>
-                                </div>
-                                <small>
-                                    20% Complete
-                                </small>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="progress progress-sm">
-                                    <div class="progress-bar bg-orange" role="progressbar" aria-volumenow="40" aria-volumemin="0" aria-volumemax="100" style="width: 40%">
-                                    </div>
-                                </div>
-                                <small>
-                                    40% Complete
-                                </small>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="progress progress-sm">
-                                    <div class="progress-bar bg-green" role="progressbar" aria-volumenow="60" aria-volumemin="0" aria-volumemax="100" style="width: 60%">
-                                    </div>
-                                </div>
-                                <small>
-                                    60% Complete
-                                </small>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="progress progress-sm">
-                                    <div class="progress-bar bg-teal" role="progressbar" aria-volumenow="80" aria-volumemin="0" aria-volumemax="100" style="width: 80%">
-                                    </div>
-                                </div>
-                                <small>
-                                    80% Complete
-                                </small>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="progress progress-sm">
-                                    <div class="progress-bar bg-lime" role="progressbar" aria-volumenow="100" aria-volumemin="0" aria-volumemax="100" style="width: 100%">
-                                    </div>
-                                </div>
-                                <small>
-                                    100% Complete
-                                </small>
-                            </div>
-                        </div>
-                    </div>
                     @endif
                 </div>
             </div>
@@ -426,8 +384,44 @@
 </div>
 
 @push('script')
+<script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js')}} "></script>
 <script src="https://vjs.zencdn.net/7.11.4/video.min.js"></script>
 <script>
+    $(document).on('click', '#btn_requiz', function() {
+        var score_id = $(this).attr('data-id');
+        Swal.fire({
+            title: "Are you sure want to re-quiz?",
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.value) {
+                @this.resetQuiz(score_id);
+            }
+        });
+    })
+
+    $(document).on('click', '#btn_like', function() {
+        var data_id = $(this).attr('data-id');
+        var data_type = $(this).attr('data-type');
+        $(this).addClass('text-primary');
+        $('#btn_dislike').removeClass('text-primary');
+        @this.likeItem(data_id, data_type);
+    })
+
+    $(document).on('click', '#btn_dislike', function() {
+        var data_id = $(this).attr('data-id');
+        var data_type = $(this).attr('data-type');
+        $(this).addClass('text-primary');
+        $('#btn_like').removeClass('text-primary');
+        @this.dislikeItem(data_id, data_type);
+    })
+
     $('#btn_prev_item').on('click', function() {
         var selected_item = $('#selected_item');
         var item_id = selected_item.attr('data-id');
@@ -504,7 +498,9 @@
         $("#breadcrumb_title_item").text(event.detail.title);
     })
     document.addEventListener('videojs:load', function (event) {
-        $("#breadcrumb_title_item").text(event.detail.title);
+        if(event.detail.title) {
+            $("#breadcrumb_title_item").text(event.detail.title);
+        }
         videojs(document.getElementById(event.detail.id), {}, function(){
             // Player (this) is initialized and ready.
         });

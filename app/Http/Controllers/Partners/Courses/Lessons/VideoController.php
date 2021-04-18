@@ -17,7 +17,7 @@ class VideoController extends Controller
         if (file_exists($path)) {
             
             return response()
-            ->file($path, array('Cache-Control' => 'no-cache, no-store, must-revalidate', 'Pragma' => 'no-cache', 'Expires' => '0', 'Content-Type' =>'video/mp4'));
+            ->file($path, array('Content-Type' =>'video/mp4'));
         }
         
         abort(404);

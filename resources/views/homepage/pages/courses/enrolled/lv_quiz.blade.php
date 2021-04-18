@@ -92,10 +92,129 @@
     .box-action {
         cursor: pointer;
     }
+    .original-alert-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+    }
+    
+    .original-alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+    }
+    
+    .custom-border-left {
+        border-left: 1px solid #b1b1b1;
+    }
+    
+    .text-icon {
+        padding: 0.3rem 1rem 0 0;
+        font-size: 1.6rem;
+    }
+    .text-icon-small {
+        padding: 0.1rem .5rem 0 0;
+        font-size: 1rem;
+    }
+    .mb-3rem {
+        margin-bottom: 3rem;
+    }
+    .mb-4rem {
+        margin-bottom: 4rem;
+    }
 </style>
 @endsection
 
-<div class="row">
+<div class="row bg-white">
+    @if ($is_quiz_completed)
+    <div class="w-100 alert {{($user_score->score >= $quiz->minimum_score)? 'original-alert-success' : 'original-alert-danger'}} rounded-0 px-0">
+        <div class="col-md-8 col-sm-12 mx-auto">
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="d-flex">
+                        <span class="d-flex align-items-start text-icon">
+                            @if ($user_score->score >= $quiz->minimum_score)
+                            <i class="text-success fas fa-check"></i>
+                            @else
+                            <i class="text-danger fas fa-times"></i>
+                            @endif
+                        </span>
+                        <div>
+                            @if ($user_score->score >= $quiz->minimum_score)
+                            <h4 class="text-font-family font-weight-bold">Congratulation! You passed!</h4>
+                            @else
+                            <h4 class="text-font-family font-weight-bold">Sorry, you failed!</h4>
+                            @endif
+                            <small class=""><b>TO PASS</b> {{$quiz->minimum_score}}% or higher</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2 custom-border-left">
+                    <small class="text-font-family font-weight-bold">TOTAL SCORE</small>
+                    <h4 class="text-font-family text-xl {{($user_score->score >= $quiz->minimum_score)? 'text-success' : 'text-danger'}}">{{$user_score->score}}%</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 mt-4 mx-auto">
+        <div class="row">
+            <div class="col-12 mb-3rem">
+                <h4 class="text-font-family font-weight-bold text-xl">{{$quiz->title}} - Quiz</h4>
+            </div>
+            @foreach ($question_answers as $question)
+            <div class="col-md-10">
+                <table class="w-100 mb-4rem">
+                    <tbody>
+                        <tr>
+                            <td class="align-top" style="width: 25px;"><span class="text-font-family font-weight-bold">{{$question->orders}}.</span></td>
+                            <td>
+                                <div class="w-100">
+                                    <span class="text-font-family font-weight-bold">{{$question->title}}</span>
+                                </div>
+                                <div class="w-100 mt-3">
+                                    <ul class="list-unstyled">
+                                        @foreach ($question->options as $option)
+                                        <li>
+                                            <div class="d-flex my-3">
+                                                <span class="mr-2">
+                                                    @if ($question->user_option_id == $option->id)
+                                                    <i class="far fa-dot-circle text-primary"></i>
+                                                    @else
+                                                    <i class="far fa-circle"></i>
+                                                    @endif
+                                                </span>
+                                                <p class="text-font-family mb-0">{{$option->title}}</p>
+                                            </div> 
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                @if ($question->is_correct)
+                                <div class="alert original-alert-success rounded-0 mt-4">
+                                    <div class="d-flex">
+                                        <span class="d-flex align-items-start text-icon-small text-success">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        <h6 class="text-font-family mb-0">Correct</h6>
+                                    </div>
+                                </div>
+                                @else
+                                <div class="alert original-alert-danger rounded-0 mt-4">
+                                    <div class="d-flex">
+                                        <span class="d-flex align-items-start text-icon-small text-danger">
+                                            <i class="fas fa-times"></i>
+                                        </span>
+                                        <h6 class="text-font-family mb-0">Incorrect</h6>
+                                    </div>
+                                </div>
+                                @endif
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @else
     <div class="col-lg-9 col-md-8 order-md-1 order-2">
         <div class="card rounded-0">
             <div class="card-body">
@@ -114,13 +233,12 @@
                                             @foreach ($selected_question->options as $option)
                                             <li class="form-group">
                                                 <div class="custom-control custom-radio">
-                                                    <input wire:model="selected_option_value" class="custom-control-input input-cursor" type="radio" value="{{$option->id}}" id="option_radio_{{$option->id}}" name="customRadio">
+                                                    <input wire:model.defer="selected_option_value" class="custom-control-input input-cursor" type="radio" value="{{$option->id}}" id="option_radio_{{$option->id}}" name="customRadio">
                                                     <label for="option_radio_{{$option->id}}" class="input-cursor custom-control-label font-weight-normal text-font-family">{{$option->title}}</label>
                                                 </div>
                                             </li>
                                             @endforeach
                                         </ul>
-                                        {{-- <p class="text-font-family my-3">{{$option->title}}</p> --}}
                                     </div>
                                 </td>
                             </tr>
@@ -162,6 +280,7 @@
             </div>
         </div>
     </div>
+    @endif
 </div>
 
 @push('script')

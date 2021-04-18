@@ -9,6 +9,7 @@ use App\Models\{
     QuizQuestion as Question,
     CustomerAnswerKey as UserAnswer,
     CustomerQuizScore as UserScore,
+    CustomerQuizRating as UserQuizRating,
 };
 
 class LessonQuiz extends Model
@@ -37,7 +38,7 @@ class LessonQuiz extends Model
     {
         $minimum_score = Question::where('quiz_id', $this->id)->count();
         $user_total_answer = UserAnswer::where([['quiz_id', $this->id], ['customer_id', $user_id]])->count();
-
+        
         $percent_progress = 0;
         if($minimum_score > 0) {
             $percent_progress = number_format(($user_total_answer/$minimum_score) * 100, 2);
@@ -49,6 +50,26 @@ class LessonQuiz extends Model
 
     public function userScore($user_id)
     {
-        return UserScore::where([['quiz_id', $this->id], ['customer_id', $user_id]])->first();
+        return UserScore::select('customer_quiz_scores.*', \DB::raw('IF(customer_quiz_scores.score >= quiz.minimum_score, true, false) as is_pass'))
+        ->leftJoin('lesson_quizzes as quiz', 'quiz.id', 'customer_quiz_scores.quiz_id')
+        ->where([['customer_quiz_scores.quiz_id', $this->id], ['customer_quiz_scores.customer_id', $user_id]])
+        ->first();
+    }
+
+    public function isLiked($user_id)
+    {
+        $rate = UserQuizRating::where([['customer_id', $user_id], ['lesson_id', $this->lesson_id], ['quiz_id', $this->id]])->first();
+        if ($rate && $rate->like == 1) {
+            return true;
+        }
+        return false;
+    }
+    public function isDisliked($user_id)
+    {
+        $rate = UserQuizRating::where([['customer_id', $user_id], ['lesson_id', $this->lesson_id], ['quiz_id', $this->id]])->first();
+        if ($rate && $rate->dislike == 1) {
+            return true;
+        }
+        return false;
     }
 }
