@@ -55,7 +55,7 @@
                             </li>  		
                         </ul>
                     </li>
-                    <li><a class="genric-btn primary small border-0 text-capitalize" href="contact.html">My Dashboard</a></li>
+                    <li><a class="genric-btn primary small border-0 text-capitalize" href="{{ route('home.dashboard.index') }}">My Dashboard</a></li>
                     @endauth		          					          		          
                     @guest
                     <li><a href="{{ route('login') }}">Sign In</a></li>

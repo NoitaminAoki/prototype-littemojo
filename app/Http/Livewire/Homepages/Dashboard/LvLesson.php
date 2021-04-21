@@ -130,14 +130,16 @@ class LvLesson extends Component
     {
         $item = [ 'id' => $id, 'type' => $type, 'like' => true ];
         $this->rateItem($item);
+        $this->test = 'rendered';
     }
 
     public function dislikeItem($id, $type)
     {
         $item = [ 'id' => $id, 'type' => $type, 'like' => false ];
         $this->rateItem($item);
+        $this->test = 'rendered';
     }
-
+    
     public function rateItem($item)
     {
         $user_auth = Auth::guard('web')->user();
@@ -155,7 +157,7 @@ class LvLesson extends Component
                 ['customer_id' => $user_auth->id, 'course_id' => $this->course_id, 'lesson_id' => $this->lesson->id, 'video_id' => $item->id],
                 $array_rating,
             );
-            $this->dispatchBrowserEvent('videojs:load', ['id' => "video_{$item->id}", 'title' => $video->title]);
+            // $this->dispatchBrowserEvent('videojs:load', ['id' => "video_{$item->id}", 'title' => $video->title]);
         }
         else if($item->type == 'book') {
             $book = UserBookRating::updateOrCreate(

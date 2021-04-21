@@ -85,6 +85,46 @@
         border-radius: 500px !important;
         text-align: end;
     }
+    
+    /* Star Rating */
+    .rating-fieldset, .rating-label { margin: 0; padding: 0; }
+    
+    /****** Style Star Rating Widget *****/
+    
+    .rating-label {
+        cursor: pointer;
+    }
+    
+    .rating { 
+        border: none;
+        float: left;
+    }
+    
+    .rating > input { display: none; } 
+    .rating > .rating-label:before { 
+        margin: 5px;
+        font-size: 1.25em;
+        font-family: "Font Awesome 5 Free";
+        display: inline-block;
+        content: "\f005";
+    }
+    
+    .rating > .rating-label { 
+        color: #ddd; 
+        float: right; 
+    }
+    
+    /***** CSS Magic to Highlight Stars on Hover *****/
+    
+    .rating > input:checked ~ .rating-label, /* show gold star when clicked */
+    .rating:not(:checked) > .rating-label:hover, /* hover current star */
+    .rating:not(:checked) > .rating-label:hover ~ .rating-label { color: #FFD700;  } /* hover previous stars in list */
+    
+    .rating > input:checked + .rating-label:hover, /* hover current star when changing rating */
+    .rating > input:checked ~ .rating-label:hover,
+    .rating > .rating-label:hover ~ input:checked ~ .rating-label, /* lighten current selection */
+    .rating > input:checked ~ .rating-label:hover ~ .rating-label { color: #FFED85;  }
+    /* End Star Rating */
 </style>
 @endsection
 
@@ -131,7 +171,11 @@
                     <h5>{{$selected_lesson->title}}</h5>
                     <p class="mb-4">{{$selected_lesson->description}}</p>
                     
-                    <div class="w-100 text-right"><a href="{{ route('home.dashboard.course.lesson.index', ['title'=>$slug_course_name, 'lesson_id' => $selected_lesson->id]) }}" class="custom-btn-capsule btn btn-primary"><i class="fas fa-arrow-right"></i></a></div>
+                    <div class="w-100">
+                        <div class="d-flex justify-content-end">
+                            <a href="{{ route('home.dashboard.course.lesson.index', ['title'=>$slug_course_name, 'lesson_id' => $selected_lesson->id]) }}" class="custom-btn-capsule btn btn-primary"><i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
                     <hr>
                     
                     <div class="info-box custom-info-box pl-0 shadow-none mb-0">
@@ -182,6 +226,17 @@
                 </div>
             </div>
         </div>
+        {{-- <div class="card">
+            <div class="card-body">
+                <fieldset class="rating-fieldset rating">
+                    <input type="radio" id="star5" name="rating" value="5" /><label class="rating-label full" for="star5" title="Awesome - 5 stars"></label>
+                    <input type="radio" id="star4" name="rating" value="4" /><label class="rating-label full" for="star4" title="Pretty good - 4 stars"></label>
+                    <input type="radio" id="star3" name="rating" value="3" /><label class="rating-label full" for="star3" title="Good - 3 stars"></label>
+                    <input type="radio" id="star2" name="rating" value="2" /><label class="rating-label full" for="star2" title="Kinda bad - 2 stars"></label>
+                    <input type="radio" id="star1" name="rating" value="1" /><label class="rating-label full" for="star1" title="Bad - 1 star"></label>
+                </fieldset>
+            </div>
+        </div> --}}
     </div>
 </div>
 

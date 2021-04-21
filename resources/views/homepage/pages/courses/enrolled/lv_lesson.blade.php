@@ -155,20 +155,22 @@
                 <div class="overlay-wrapper">
                     <div wire:loading.flex wire:target="setItem, resetQuiz" class="overlay modal-overlay" style="display: none;"><i class="fas fa-3x fa-sync-alt fa-spin"></i></div>
                     @if ($selected_item['type'] == 'video')
-                    <video id="video_{{$selected_item['video']->id}}" class="video-js vjs-theme-forest" controls preload="meta-data" data-setup='{"fluid": true}'>
-                        <source src="{{ route('home.asset.lesson.videos', ['uuid'=>$selected_item['video']->uuid]) }}" type="video/mp4" />
-                            <p class="vjs-no-js">
-                            To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                        </p>
-                    </video>
+                    <div id="test_div" class="w-100">
+                        <video id="video_{{$selected_item['video']->id}}" class="video-js vjs-theme-forest" controls preload="meta-data" data-setup='{"fluid": true}'>
+                            <source src="{{ route('home.asset.lesson.videos', ['uuid'=>$selected_item['video']->uuid]) }}" type="video/mp4" />
+                                <p class="vjs-no-js">
+                                To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                            </p>
+                        </video>
+                    </div>
                     <div class="w-100 mt-2">
                         <div class="d-flex justify-content-between">
                             <div class="d-flex align-items-center">
                                 <h5 class="mt-0 mb-0 text-font-family">{{$selected_item['video']->title}}</h5>
                             </div>
                             <div>
-                                <button id="btn_like" data-id="{{$selected_item['video']->id}}" data-type="video" class="btn {{ ($selected_item['video']->isLiked(Auth::guard('web')->user()->id))? 'text-primary' : '' }}"><i class="custom-icon-size far fa-thumbs-up"></i></button>
-                                <button id="btn_dislike" data-id="{{$selected_item['video']->id}}" data-type="video" class="btn {{ ($selected_item['video']->isDisliked(Auth::guard('web')->user()->id))? 'text-primary' : '' }}"><i class="custom-icon-size far fa-thumbs-down"></i></button>
+                                <button id="btn_like" data-parent-id="{{$course->id}}" data-sub-parent-id="{{$lesson->id}}" data-id="{{$selected_item['video']->id}}" data-type="video" class="btn {{ ($selected_item['video']->isLiked(Auth::guard('web')->user()->id))? 'text-primary' : '' }}"><i class="custom-icon-size far fa-thumbs-up"></i></button>
+                                <button id="btn_dislike" data-parent-id="{{$course->id}}" data-sub-parent-id="{{$lesson->id}}" data-id="{{$selected_item['video']->id}}" data-type="video" class="btn {{ ($selected_item['video']->isDisliked(Auth::guard('web')->user()->id))? 'text-primary' : '' }}"><i class="custom-icon-size far fa-thumbs-down"></i></button>
                             </div>
                         </div>
                         <hr class="mt-0">
@@ -188,8 +190,8 @@
                                 <h5 class="mt-0 mb-0 text-font-family">{{$selected_item['book']->title}}</h5>
                             </div>
                             <div>
-                                <button id="btn_like" data-id="{{$selected_item['book']->id}}" data-type="book" class="btn {{ ($selected_item['book']->isLiked(Auth::guard('web')->user()->id))? 'text-primary' : '' }}"><i class="custom-icon-size far fa-thumbs-up"></i></button>
-                                <button id="btn_dislike" data-id="{{$selected_item['book']->id}}" data-type="book" class="btn {{ ($selected_item['book']->isDisliked(Auth::guard('web')->user()->id))? 'text-primary' : '' }}"><i class="custom-icon-size far fa-thumbs-down"></i></button>
+                                <button id="btn_like" data-parent-id="{{$course->id}}" data-sub-parent-id="{{$lesson->id}}" data-id="{{$selected_item['book']->id}}" data-type="book" class="btn {{ ($selected_item['book']->isLiked(Auth::guard('web')->user()->id))? 'text-primary' : '' }}"><i class="custom-icon-size far fa-thumbs-up"></i></button>
+                                <button id="btn_dislike" data-parent-id="{{$course->id}}" data-sub-parent-id="{{$lesson->id}}" data-id="{{$selected_item['book']->id}}" data-type="book" class="btn {{ ($selected_item['book']->isDisliked(Auth::guard('web')->user()->id))? 'text-primary' : '' }}"><i class="custom-icon-size far fa-thumbs-down"></i></button>
                             </div>
                         </div>
                         <hr class="mt-0">
@@ -204,8 +206,8 @@
                                 <h5 class="mt-0 mb-0 text-font-family">{{$selected_item['quiz']->title}}</h5>
                             </div>
                             <div>
-                                <button id="btn_like" data-id="{{$selected_item['quiz']->id}}" data-type="quiz" class="btn {{ ($selected_item['quiz']->isLiked(Auth::guard('web')->user()->id))? 'text-primary' : '' }}"><i class="custom-icon-size far fa-thumbs-up"></i></button>
-                                <button id="btn_dislike" data-id="{{$selected_item['quiz']->id}}" data-type="quiz" class="btn {{ ($selected_item['quiz']->isDisliked(Auth::guard('web')->user()->id))? 'text-primary' : '' }}"><i class="custom-icon-size far fa-thumbs-down"></i></button>
+                                <button id="btn_like" data-parent-id="{{$course->id}}" data-sub-parent-id="{{$lesson->id}}" data-id="{{$selected_item['quiz']->id}}" data-type="quiz" class="btn {{ ($selected_item['quiz']->isLiked(Auth::guard('web')->user()->id))? 'text-primary' : '' }}"><i class="custom-icon-size far fa-thumbs-up"></i></button>
+                                <button id="btn_dislike" data-parent-id="{{$course->id}}" data-sub-parent-id="{{$lesson->id}}" data-id="{{$selected_item['quiz']->id}}" data-type="quiz" class="btn {{ ($selected_item['quiz']->isDisliked(Auth::guard('web')->user()->id))? 'text-primary' : '' }}"><i class="custom-icon-size far fa-thumbs-down"></i></button>
                             </div>
                         </div>
                         <hr class="mt-0">
@@ -407,26 +409,77 @@
     })
 
     $(document).on('click', '#btn_like', function() {
+        // $('#test_div').attr('wire:ignore', '');
+        var data_course_id = $(this).attr('data-parent-id');
+        var data_lesson_id = $(this).attr('data-sub-parent-id');
         var data_id = $(this).attr('data-id');
         var data_type = $(this).attr('data-type');
         $(this).addClass('text-primary');
         $('#btn_dislike').removeClass('text-primary');
-        @this.likeItem(data_id, data_type);
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        var data = {
+            _token: CSRF_TOKEN, 
+            course_id: data_course_id, 
+            lesson_id:data_lesson_id,
+            id: data_id,
+            type: data_type,
+            like: true, 
+            message:`Data ID: ${data_id}, Data Type: ${data_type}`
+        };
+        $.ajax({
+            url: '{{route("ajax.request.lesson.rating")}}',
+            type: 'POST',
+            data: data,
+            dataType: 'JSON',
+            success: function (data) { 
+                console.info(data); 
+            }
+        }); 
     })
 
     $(document).on('click', '#btn_dislike', function() {
+        var data_course_id = $(this).attr('data-parent-id');
+        var data_lesson_id = $(this).attr('data-sub-parent-id');
         var data_id = $(this).attr('data-id');
         var data_type = $(this).attr('data-type');
         $(this).addClass('text-primary');
         $('#btn_like').removeClass('text-primary');
-        @this.dislikeItem(data_id, data_type);
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        var data = {
+            _token: CSRF_TOKEN, 
+            course_id: data_course_id, 
+            lesson_id:data_lesson_id,
+            id: data_id,
+            type: data_type,
+            like: false, 
+            message:`Data ID: ${data_id}, Data Type: ${data_type}`
+        };
+        $.ajax({
+            url: '{{route("ajax.request.lesson.rating")}}',
+            type: 'POST',
+            data: data,
+            dataType: 'JSON',
+            success: function (data) { 
+                console.info(data); 
+            }
+        }); 
     })
+
+    function stopMediaPlayer(element_id) {
+        var video = document.getElementById(element_id);
+        if(video) {
+            videojs(video).pause();
+        }
+    }
 
     $('#btn_prev_item').on('click', function() {
         var selected_item = $('#selected_item');
         var item_id = selected_item.attr('data-id');
         var item_type = selected_item.attr('data-type');
         var prev_item_id = (parseInt(item_id)-1);
+        if(item_type == "video") {
+            stopMediaPlayer(`video_${item_id}`);
+        }
         function checkItem(id, type) {
             let item = $(`#content_lesson #items_${type}_${id}`);
             if(item.length > 0) {
@@ -461,6 +514,9 @@
         var item_id = selected_item.attr('data-id');
         var item_type = selected_item.attr('data-type');
         var next_item_id = (parseInt(item_id)+1);
+        if(item_type == "video") {
+            stopMediaPlayer(`video_${item_id}`);
+        }
         function checkItem(id, type) {
             let item = $(`#content_lesson #items_${type}_${id}`);
             if(item.length > 0) {
@@ -492,6 +548,9 @@
         $(this).parents('div.col-12').addClass('content-active');
         var item_id = $(this).attr('data-id');
         var item_type = $(this).attr('data-type');
+        if(item_type == "video") {
+            stopMediaPlayer(`video_${item_id}`);
+        }
         @this.setItem({id: item_id, type: item_type});
     });
     document.addEventListener('breadcrumb_title:load', function (event) {

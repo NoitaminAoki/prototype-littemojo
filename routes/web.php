@@ -49,6 +49,8 @@ use App\Http\Livewire\Partners\{
 
 use App\Http\Livewire\Homepages\{
     Payments\LvPayCourse,
+
+    Dashboard\LvDashboard as DashboardLive,
     Dashboard\LvCourse as DashboardCourseLive,
     Dashboard\LvLesson as DashboardLessonLive,
     Dashboard\LvQuiz as DashboardQuizLive,
@@ -71,10 +73,16 @@ Route::get('/email/verify', function () {
 
 Route::middleware(['auth:web', 'verified'])->group(function () {
     Route::prefix('dashboard')->name('home.dashboard.')->group(function () {
+        Route::get('/home', DashboardLive::class)->name('index');
+
         Route::get('course/{title}', DashboardCourseLive::class)->name('course.lesson');
         Route::get('course/{title}/lesson/{lesson_id}', DashboardLessonLive::class)->name('course.lesson.index');
         Route::get('course/{title}/lesson/{lesson_id}/quiz/{quiz_id}', DashboardQuizLive::class)->name('course.lesson.quiz');
     });
+});
+
+Route::middleware(['auth:web', 'verified'])->prefix('ajax/request/')->name('ajax.request.')->group(function () {
+    Route::post('lesson/rating', [DashCouseController::class, 'lessonRateItem'])->name('lesson.rating');
 });
 
 // Midtrans Notification Handler

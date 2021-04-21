@@ -23,6 +23,9 @@
         .single-popular-carusel {
             display: none;
         }
+        .owl-item > .single-popular-carusel {
+            display: block;
+        }
     </style>
     @yield('top-css')
     @include('homepage.lv-layouts.lv-css')

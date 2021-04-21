@@ -155,7 +155,7 @@ $(document).ready(function() {
         }
     });
 
-    $('.single-popular-carusel').show();
+    // $('.single-popular-carusel').show();
 
     //------- Mobile Nav  js --------//  
 
