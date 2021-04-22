@@ -39,7 +39,8 @@
                         @foreach ($quizzes as $quiz)
                         <tr>
                             <td>{{$quiz->title}}</td>
-                            <td>{{$quiz->minimum_score}}</td>
+                            <td>{{$quiz->minimum_score}} Minimum score</td>
+                            <td>Total <b><i>{{$quiz->totalQuestion()}}</i></b> Question</td>
                             <td class="text-right py-0 align-middle">
                                 <div class="btn-group btn-group-sm">
                                     <a href="{{ route('partner.manage.course.lesson.quiz.question.index', ['quiz'=> $quiz->id]) }}" class="btn btn-primary"><i class="fas fa-search"></i></a>

@@ -164,13 +164,13 @@
                     @else
                     <table class="table">
                         <tbody>
+                            @php $i=1; @endphp
                             @foreach ($lesson->quizzes as $quiz)
                             <tr>
-                                <td>
-                                    <div>
-                                        <a target="_blank" href="#" class="btn-link text-secondary"><i class="far fa-fw fa-question-circle"></i> {{$quiz->title}}<span class="float-right">{{$quiz->minimum_score}}</span> </a>
-                                    </div> 
-                                </td>
+                                <td style="width: 20px;">{{$i++}}</a></td>
+                                <td>{{$quiz->title}}</td>
+                                <td>{{$quiz->minimum_score}} Minimum score</td>
+                                <td><b><i>{{$quiz->totalQuestion()}}</i></b> Question</td>
                             </tr>
                             @endforeach
                         </tbody>
