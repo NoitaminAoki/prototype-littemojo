@@ -1,11 +1,14 @@
-<header id="header" id="home">
+<header id="header" id="home" style="background-color: rgba(4,9,30,0.9);">
     <div class="container main-menu">
         <div class="row align-items-center justify-content-between d-flex">
             <div id="logo">
                 <a href="{{ route('home.index') }}"><img src="{{ asset('page_dist/img/logo.png') }}" alt="" title="" /></a>
-            </div>
+            </div>            
             <nav id="nav-menu-container">
                 <ul class="nav-menu">
+                    <!-- <li>
+                        <input type="text" class="form-control"  wire:model="searchCourse" placeholder="What do you want to learn ? " style="margin-right: 40px;padding: 5px;">
+                    </li> -->
                     <li><a href="{{ route('home.index') }}">Home</a></li>
                     <li><a href="about.html">About</a></li>
                     <li><a href="courses.html">Courses</a></li>

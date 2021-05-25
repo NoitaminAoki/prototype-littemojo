@@ -49,7 +49,7 @@ use App\Http\Livewire\Partners\{
 
 use App\Http\Livewire\Homepages\{
     Payments\LvPayCourse,
-
+    Course as CoursesLive,
     Dashboard\LvDashboard as DashboardLive,
     Dashboard\LvCourse as DashboardCourseLive,
     Dashboard\LvLesson as DashboardLessonLive,
@@ -73,8 +73,7 @@ Route::get('/email/verify', function () {
 
 Route::middleware(['auth:web', 'verified'])->group(function () {
     Route::prefix('dashboard')->name('home.dashboard.')->group(function () {
-        Route::get('/home', DashboardLive::class)->name('index');
-
+        Route::get('/home', DashboardLive::class)->name('index');        
         Route::get('course/{title}', DashboardCourseLive::class)->name('course.lesson');
         Route::get('course/{title}/lesson/{lesson_id}', DashboardLessonLive::class)->name('course.lesson.index');
         Route::get('course/{title}/lesson/{lesson_id}/quiz/{quiz_id}', DashboardQuizLive::class)->name('course.lesson.quiz');
@@ -92,6 +91,7 @@ Route::get('payments/failed', [PaymentController::class, 'failed']);
 Route::get('payments/unfinish', [PaymentController::class, 'unfinish']);
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::get('courses', CoursesLive::class)->name('course_home.index');
 
 Route::get('/learn/{title}', [HomeController::class, 'detailCourse'])->name('home.detail.course');
 

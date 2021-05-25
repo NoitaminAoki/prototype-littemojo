@@ -10,7 +10,9 @@ use App\Models\{
     CourseLesson as Lesson,
     Catalog,
     Partner,
-    Corporation
+    Corporation,
+    CatalogTopic,
+    Level
 };
 
 class Course extends Model
@@ -48,5 +50,15 @@ class Course extends Model
     public function catalog(Type $var = null)
     {
         return $this->belongsTo(Catalog::class, 'catalog_id');
+    }
+
+    public function catalogTopic()
+    {
+        return $this->belongsTo(CatalogTopic::class, 'catalog_topic_id')->select('id', 'name');
+    }
+
+    public function level()
+    {
+        return $this->belongsTo(Level::class, 'level_id')->select('id', 'name');
     }
 }
