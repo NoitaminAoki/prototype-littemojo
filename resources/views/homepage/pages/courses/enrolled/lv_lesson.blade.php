@@ -77,6 +77,10 @@
         width: 100%;
         min-height: 80vh;
     }
+
+    .not-allowed {
+        cursor: not-allowed;
+    }
 </style>
 @endsection
 
@@ -89,11 +93,19 @@
     </ol>
     <div class="d-flex align-items-center">
         <button id="btn_prev_item" class="btn">Prev</button>
+        @if ($selected_item['type'] == $last_item['type'] && $selected_item[$selected_item['type']]->id == $last_item['id'])
+        <button id="btn_next_item" class="btn" style="display: none;">Next</button>
+        <button id="btn_finish_lesson" class="btn">Finish</button>
+        @else
         <button id="btn_next_item" class="btn">Next</button>
+        <button id="btn_finish_lesson" class="btn" style="display: none;">Finish</button>
+        @endif
     </div>
 </div>
 @endsection
-
+@php
+    $next_item_allowed = true;
+@endphp
 <div class="row">
     <div class="col-md-3">
         <div class="card rounded-0">
@@ -101,9 +113,21 @@
                 <h5 class="">{{$lesson->title}}</h5>
                 <div id="content_lesson" class="row content-lesson">
                     @foreach ($lesson->videos as $video)
+
+                    @php
+                        $is_finished = $video->isFinished(Auth::guard('web')->user()->id);
+                    @endphp
+
                     <div id="items_video_{{$video->id}}" data-status="{{($loop->iteration == 1)? 'video_first' : (($loop->last)? 'video_last' : '') }}" class="col-12 content-single content-hover {{($video->id == $selected_item['video']['id'])? 'content-active' : ''}}">
-                        <div class="info-box part-content-action custom-info-box pl-0 shadow-none mb-0" data-id="{{$video->id}}" data-type="video">
+                        <div class="info-box custom-info-box pl-0 shadow-none mb-0 {{($is_finished)? 'part-content-action' : ($next_item_allowed)? 'part-content-action' : 'not-allowed'}}" data-id="{{$video->id}}" data-type="video">
+                            @if ($is_finished)
+                            <span class="info-box-icon custom-info-box-icon text-success"><i class="fas fa-check-circle"></i></span>
+                            @else
+                            @php
+                                $next_item_allowed = false;
+                            @endphp
                             <span class="info-box-icon custom-info-box-icon"><i class="far fa-play-circle"></i></span>
+                            @endif
                             
                             <div class="info-box-content custom-info-box-content">
                                 <span class="info-box-text custom-info-box-text pb-1"><strong>Video: </strong> {{$video->title}}</span>
@@ -119,10 +143,19 @@
                         <hr>
                     </div>
                     @foreach ($lesson->books as $book)
+                    @php
+                        $is_finished = $book->isFinished(Auth::guard('web')->user()->id);
+                    @endphp
                     <div id="items_book_{{$book->id}}" data-status="{{($loop->iteration == 1)? 'book_first' : (($loop->last)? 'book_last' : '') }}" class="col-12 content-single content-hover {{($book->id == $selected_item['book']['id'])? 'content-active' : ''}}">
-                        <div class="info-box part-content-action custom-info-box pl-0 shadow-none mb-0" data-id="{{$book->id}}" data-type="book">
+                        <div class="info-box custom-info-box pl-0 shadow-none mb-0 {{($is_finished)? 'part-content-action' : ($next_item_allowed)? 'part-content-action' : 'not-allowed'}}" data-id="{{$book->id}}" data-type="book">
+                            @if ($is_finished)
+                            <span class="info-box-icon custom-info-box-icon text-success"><i class="fas fa-check-circle"></i></span>
+                            @else
+                            @php
+                                $next_item_allowed = false;
+                            @endphp
                             <span class="custom-info-box-icon-circle-single rounded-circle"><i class="fas fa-book-open"></i></span>
-                            
+                            @endif
                             <div class="info-box-content custom-info-box-content">
                                 <span class="info-box-text custom-info-box-text pb-1"><strong>Reading: </strong> {{$book->title}}</span>
                             </div>
@@ -134,10 +167,20 @@
                         <hr>
                     </div>
                     @foreach ($lesson->quizzes as $quiz)
+                    @php
+                        $is_finished = $quiz->isFinished(Auth::guard('web')->user()->id);
+                    @endphp
                     <div id="items_quiz_{{$quiz->id}}" data-status="{{($loop->iteration == 1)? 'quiz_first' : (($loop->last)? 'quiz_last' : '') }}" class="col-12 content-single content-hover {{($quiz->id == $selected_item['quiz']['id'])? 'content-active' : ''}}">
-                        <div class="info-box part-content-action custom-info-box pl-0 shadow-none mb-0" data-id="{{$quiz->id}}" data-type="quiz">
-                            <span class="info-box-icon custom-info-box-icon"><i class="far fa-question-circle"></i></span>
+                        <div class="info-box custom-info-box pl-0 shadow-none mb-0 {{($is_finished)? 'part-content-action' : ($next_item_allowed)? 'part-content-action' : 'not-allowed'}}" data-id="{{$quiz->id}}" data-type="quiz">
                             
+                            @if ($is_finished)
+                            <span class="info-box-icon custom-info-box-icon text-success"><i class="fas fa-check-circle"></i></span>
+                            @else
+                            @php
+                                $next_item_allowed = false;
+                            @endphp
+                            <span class="info-box-icon custom-info-box-icon"><i class="far fa-question-circle"></i></span>
+                            @endif
                             <div class="info-box-content custom-info-box-content">
                                 <span class="info-box-text custom-info-box-text pb-1"><strong>Quiz: </strong> {{$quiz->title}}</span>
                             </div>
@@ -153,7 +196,7 @@
         <div class="card rounded-0">
             <div id="selected_item" data-id="{{$selected_item[$selected_item['type']]->id}}" data-type="{{$selected_item['type']}}" class="card-body">
                 <div class="overlay-wrapper">
-                    <div wire:loading.flex wire:target="setItem, resetQuiz" class="overlay modal-overlay" style="display: none;"><i class="fas fa-3x fa-sync-alt fa-spin"></i></div>
+                    <div wire:loading.flex wire:target="setItem, finishLesson, nextItem, resetQuiz" class="overlay modal-overlay" style="display: none;"><i class="fas fa-3x fa-sync-alt fa-spin"></i></div>
                     @if ($selected_item['type'] == 'video')
                     <div id="test_div" class="w-100">
                         <video id="video_{{$selected_item['video']->id}}" class="video-js vjs-theme-forest" controls preload="meta-data" data-setup='{"fluid": true}'>
@@ -527,7 +570,8 @@
         }
         var get_item = checkItem(next_item_id, item_type);
         if(get_item) {
-            @this.setItem({id: next_item_id, type: item_type});
+            // @this.setItem({id: next_item_id, type: item_type});
+            @this.nextItem({id: item_id, type: item_type}, {id: next_item_id, type: item_type});
         } else {
             let next_item_type = "";
             if(item_type == "video") {
@@ -539,10 +583,22 @@
             }
             get_item = checkItem(1, next_item_type);
             if(get_item) {
-                @this.setItem({id: 1, type: next_item_type});
+                // @this.setItem({id: 1, type: next_item_type});
+                @this.nextItem({id: item_id, type: item_type}, {id: 1, type: next_item_type});
             }
         }
     })
+
+    $('#btn_finish_lesson').on('click', function() {
+        var selected_item = $('#selected_item');
+        var item_id = selected_item.attr('data-id');
+        var item_type = selected_item.attr('data-type');
+        if(item_type == "video") {
+            stopMediaPlayer(`video_${item_id}`);
+        }
+        @this.finishLesson({id: item_id, type: item_type});
+    })
+
     $(document).on('click', '.part-content-action', function() {
         $('.content-lesson div.content-active').removeClass('content-active');
         $(this).parents('div.col-12').addClass('content-active');
@@ -553,15 +609,37 @@
         }
         @this.setItem({id: item_id, type: item_type});
     });
+
     document.addEventListener('breadcrumb_title:load', function (event) {
+        buttonBreadcrumb(event.detail.is_last_item);
         $("#breadcrumb_title_item").text(event.detail.title);
     })
+    
     document.addEventListener('videojs:load', function (event) {
         if(event.detail.title) {
             $("#breadcrumb_title_item").text(event.detail.title);
+            buttonBreadcrumb(event.detail.is_last_item);
         }
         videojs(document.getElementById(event.detail.id), {}, function(){
             // Player (this) is initialized and ready.
+        });
+    })
+
+    function buttonBreadcrumb(is_last) {
+        if(is_last) {
+            $('#btn_finish_lesson').show();
+            $('#btn_next_item').hide();
+        } else {
+            $('#btn_finish_lesson').hide();
+            $('#btn_next_item').show();
+        }
+    }
+
+    document.addEventListener('notification:alert', function (event) {
+        Swal.fire( {
+            icon: 'warning',
+            title: 'Oops...',
+            text: event.detail.message,
         });
     })
 </script>

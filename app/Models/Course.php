@@ -11,6 +11,7 @@ use App\Models\{
     Catalog,
     Partner,
     Corporation,
+    CustomerCourseProgress as UserCourseProgress,
     CatalogTopic,
     Level
 };
@@ -50,6 +51,25 @@ class Course extends Model
     public function catalog(Type $var = null)
     {
         return $this->belongsTo(Catalog::class, 'catalog_id');
+    }
+
+    public function isFinished($user_id)
+    {
+        $lesson = Lesson::selectRaw('COUNT(course_lessons.id) as total_lesson, COUNT(ccp.id) as completed_lesson')
+        ->leftJoin('customer_course_progress as ccp', function($join) use($user_id) {
+            $join->on('ccp.course_id', '=', 'course_lessons.course_id')
+            ->on('ccp.lesson_id', '=', 'course_lessons.id')
+            ->where('ccp.customer_id', '=', $user_id);
+        })
+        ->where('course_lessons.course_id', $this->id)
+        ->first();
+        
+        if($lesson) {
+            if($lesson->total_lesson == $lesson->completed_lesson) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function catalogTopic()

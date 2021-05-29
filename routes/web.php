@@ -54,7 +54,9 @@ use App\Http\Livewire\Homepages\{
     Course as CoursesLive,
     Dashboard\LvDashboard as DashboardLive,
     Dashboard\LvCourse as DashboardCourseLive,
+    Dashboard\LvCourseFinish as DashboardCourseFinishLive,
     Dashboard\LvLesson as DashboardLessonLive,
+    Dashboard\LvLessonRating as DashboardLessonRatingLive,
     Dashboard\LvQuiz as DashboardQuizLive,
 };
 
@@ -75,10 +77,17 @@ Route::get('/email/verify', function () {
 
 Route::middleware(['auth:web', 'verified'])->group(function () {
     Route::prefix('dashboard')->name('home.dashboard.')->group(function () {
-        Route::get('/home', DashboardLive::class)->name('index');        
-        Route::get('course/{title}', DashboardCourseLive::class)->name('course.lesson');
+        Route::get('/home', DashboardLive::class)->name('index');
+
+        Route::get('course/{title}', DashboardCourseFinishLive::class)->name('course');
+
+        Route::get('course/{title}/lesson', DashboardCourseLive::class)->name('course.lesson');
+
         Route::get('course/{title}/lesson/{lesson_id}', DashboardLessonLive::class)->name('course.lesson.index');
+
         Route::get('course/{title}/lesson/{lesson_id}/quiz/{quiz_id}', DashboardQuizLive::class)->name('course.lesson.quiz');
+
+        Route::get('course/{title}/lesson/{lesson_id}/rate', DashboardLessonRatingLive::class)->name('course.lesson.rating');
     });
 });
 
@@ -173,8 +182,8 @@ Route::group([
         });
         Route::get('course/publish/{id}', [PartnerCourseController::class, 'publish'])->name('publish');
         
-        Route::get('course/insert', CourseInsertLive::class);
         Route::resource('course', PartnerCourseController::class);
+        Route::get('course/create', CourseInsertLive::class)->name('course.create');
         Route::resource('corporation', PartnerCorporationController::class);
         Route::get('transaction/export_pdf/{status}', [PartnerTransactionController::class, 'exportPdf']);
         Route::get('transaction/export_excel/{status}', [PartnerTransactionController::class, 'exportExcel']);

@@ -269,7 +269,11 @@
                                 </div>
                                 
                                 <div class="info-box-content">
-                                    <span class="info-box-text text-secondary">23 videos (Total 74 min), 6 readings, 10 quizzes</span>
+                                    <span class="info-box-text text-secondary">
+                                        {{$lesson->totalVideos()->total}} videos (Total {{$lesson->totalVideos()->duration_as_minute}} min),
+                                        {{$lesson->totalbooks()}} readings,
+                                        {{$lesson->totalQuizzes()}} quizzes
+                                    </span>
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>
