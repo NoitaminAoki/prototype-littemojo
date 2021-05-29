@@ -9,6 +9,7 @@ use App\Http\Controllers\Home\{
 
 use App\Http\Controllers\Admins\DashboardController as AdminDashboard;
 use App\Http\Controllers\Admins\AuthController as AdminAuthController;
+use App\Http\Controllers\Admins\BlogController;
 use App\Http\Controllers\Admins\Master\{
     CatalogController,
     CatalogTopicController,
@@ -16,6 +17,7 @@ use App\Http\Controllers\Admins\Master\{
 };
 use App\Http\Controllers\Admins\Manage\UserController;
 use App\Http\Controllers\Admins\Manage\Partner\{CourseController, UserController as PartnerController};
+use App\Http\Controllers\BlogController as PublicBlogController;
 use App\Http\Controllers\Partners\{
     DashboardController as PartnerDashboard,
     AuthController as PartnerAuthController,
@@ -93,6 +95,8 @@ Route::get('payments/unfinish', [PaymentController::class, 'unfinish']);
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('courses', CoursesLive::class)->name('course_home.index');
 
+Route::resource('blog', BlogController::class);
+
 Route::get('/learn/{title}', [HomeController::class, 'detailCourse'])->name('home.detail.course');
 
 Route::middleware(['auth:web'])->group(function () {
@@ -104,6 +108,7 @@ Route::middleware(['auth:web'])->group(function () {
 Route::view('dashboard', 'dashboard')->middleware(['auth:sanctum', 'verified'])->name('dashboard');
 
 Route::middleware('auth:admin')->prefix('admin/management')->name('admin.')->group(function () {
+    Route::resource('blog', BlogController::class);
     Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
     Route::get('user/{id}/update_status', [UserController::class, 'update_status'])->name('update_status');
     Route::resources([

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Home;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\{
+    Blog,
     Course,
 };
 
@@ -14,7 +15,10 @@ class HomeController extends Controller
     {
         $popular_courses = Course::where('is_published', 1)->inRandomOrder()->offset(0)->limit(10)->get();
         $data['courses'] = (object) ['popular_courses' => $popular_courses];
-        // dd($data);
+        $data['popularBlog'] = Blog::where([
+            ['is_publish', true],
+            ['is_highlight', true]
+        ])->latest()->paginate(10);
         return view('homepage.pages.index')->with($data);
     }
 
