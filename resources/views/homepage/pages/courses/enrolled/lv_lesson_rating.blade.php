@@ -73,7 +73,7 @@
 @section('breadcrumb-navbar')
 <div class="d-flex justify-content-between">
     <ol class="breadcrumb mb-0" style="background-color: inherit">
-        <li class="breadcrumb-item"><a href="{{ route('home.dashboard.course.lesson', ['title' => $course->slug_title]) }}">{{$course->title}}</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('home.dashboard.course', ['title' => $course->slug_title]) }}">{{$course->title}}</a></li>
         <li class="breadcrumb-item active">{{$lesson->title}}</li>
     </ol>
     <div class="d-flex align-items-center">

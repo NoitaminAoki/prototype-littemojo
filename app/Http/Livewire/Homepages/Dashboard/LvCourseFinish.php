@@ -24,6 +24,10 @@ class LvCourseFinish extends Component
         ->leftJoin('levels', 'levels.id', 'courses.level_id')
         ->where('slug_title', $title)->firstOrFail();
 
+        if (!$course->isPurchased($user_auth->id)) {
+            return redirect()->route('home.detail.course', ['title' => $title]);
+        }
+
         $this->slug_course_name  = $title;
 
         $get_completed_lesson = UserCourseProgress::where(['customer_id' => $user_auth->id, 'course_id' => $course->id])

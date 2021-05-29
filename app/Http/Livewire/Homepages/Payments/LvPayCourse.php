@@ -12,6 +12,8 @@ use App\Models\{
 };
 use App\Mail\CustomerMail;
 use Mail;
+use DateTime;
+use DateTimeZone;
 
 class LvPayCourse extends Component
 {
@@ -47,13 +49,14 @@ class LvPayCourse extends Component
     public function mount($title)
     {
         $this->slug_course_name  = $title;
+        $date = new DateTime("now", new DateTimeZone('Asia/Jakarta') );
+        $this->start_date = $date->format('d F Y H:i');
+        // dd($this->start_date);
     }
 
     public function render()
     {
         $user_auth = Auth::guard('web')->user();
-
-        $this->start_date = date('d F Y H:i');
         $course = Course::select('courses.*', 'catalog_topics.name as catalog_topic_title', 'catalogs.name as catalog_title', 'levels.name as level_name', 'levels.description as level_desc')
         ->leftJoin('catalogs', 'catalogs.id', 'courses.catalog_id')
         ->leftJoin('catalog_topics', 'catalog_topics.id', 'courses.catalog_topic_id')
@@ -147,6 +150,9 @@ class LvPayCourse extends Component
         if ($unpaid_transaction) {
             if($unpaid_transaction->course_id == $course->id) {
                 $this->snap_token = $unpaid_transaction->snap_token;
+                $start_date_format = \DateTime::createFromFormat('d F Y H:i', $this->start_date)->format('Y-m-d H:i');
+                $unpaid_transaction->start_date = $start_date_format;
+                $unpaid_transaction->save();
                 return $this->dispatchBrowserEvent('midtrans:snap_pay', ['snapToken' => $unpaid_transaction->snap_token]);
             }
             return $this->dispatchBrowserEvent('notification:alert', ['message' => 'You must complete the previous payment!']);
@@ -161,6 +167,7 @@ class LvPayCourse extends Component
         // Set 3DS transaction for credit card to true
         \Midtrans\Config::$is3ds = config('services.midtrans.is_3ds');
         
+        // dd($this->start_date);
         $start_date_format = \DateTime::createFromFormat('d F Y H:i', $this->start_date)->format('Y-m-d H:i');
         $generated_order_id = "TRX".date('Ymd')."CS".$course->id.$user_auth->id.date('His');
         $admin_fee = 5000;

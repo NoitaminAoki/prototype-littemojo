@@ -559,7 +559,7 @@
                                 </a>
                             </li>
                         </ul>
-                        <a href="{{ route('home.dashboard.course.lesson', ['title'=>$course->slug_title]) }}" class="primary-btn text-uppercase">Open the course</a>
+                        <a href="{{ route('home.dashboard.course', ['title'=>$course->slug_title]) }}" class="primary-btn text-uppercase">Open the course</a>
                     </div>
                     @elseif($transaction->status_payment == 'pending')
                     <div class="right-contents">
@@ -584,7 +584,7 @@
                             </li>
                         </ul>
                     </div>
-                    @elseif(in_array($transaction->status_payment, ['deny', 'cancel', 'expire']))
+                    @elseif(in_array($transaction->status_payment, ['waiting', 'deny', 'cancel', 'expire']))
                     <div class="right-contents">
                         @if (!$result_snap['is_open'])
                         <ul>
@@ -731,7 +731,7 @@
     })
     document.addEventListener('livewire:load', function() {
         $('#input_datepicker').on('change', function(e) {
-            @this.set('start_date', e.target.value); 
+            @this.start_date = e.target.value;
         });
     })
     document.addEventListener('notification:alert', function (event) {

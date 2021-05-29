@@ -104,7 +104,7 @@ Route::get('courses', CoursesLive::class)->name('course_home.index');
 
 Route::get('/learn/{title}', [HomeController::class, 'detailCourse'])->name('home.detail.course');
 
-Route::middleware(['auth:web'])->group(function () {
+Route::middleware(['auth:web', 'verified'])->group(function () {
     // Route::get('learn/{title}/enroll', [PaymentController::class, 'index'])->name('home.course.enroll');
     Route::get('learn/{title}/enroll', LvPayCourse::class)->name('home.course.enroll');
 });

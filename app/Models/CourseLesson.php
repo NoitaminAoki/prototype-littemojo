@@ -93,6 +93,7 @@ class CourseLesson extends Model
 
         $total_items = ($lesson->total_videos + $lesson->total_books + $lesson->total_quizzes);
         $data['inprogress'] = $inprogress_lesson;
+        $data['percentage'] = ($total_items > 0)? ($inprogress_lesson/$total_items) * 100 : 100;
         $data['total'] = $total_items;
 
         return (object)$data;

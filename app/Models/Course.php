@@ -11,10 +11,14 @@ use App\Models\{
     Catalog,
     Partner,
     Corporation,
+    CustomerTransaction as UserTransaction,
     CustomerCourseProgress as UserCourseProgress,
     CatalogTopic,
     Level
 };
+use DB;
+use DateTime;
+use DateTimeZone;
 
 class Course extends Model
 {
@@ -70,6 +74,40 @@ class Course extends Model
             }
         }
         return false;
+    }
+
+    public function isAccessible($user_id)
+    {
+        $date_now = new DateTime("now", new DateTimeZone('Asia/Jakarta') );
+        $transaction = UserTransaction::where(['customer_id' => $user_id, 'course_id' => $this->id, 'status_payment' => 'settlement'])->first();
+        if($transaction) {
+            $start_date = new DateTime($transaction->start_date, new DateTimeZone('Asia/Jakarta'));
+            if($start_date <= $date_now) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function isPurchased($user_id)
+    {
+        $transaction = UserTransaction::where(['customer_id' => $user_id, 'course_id' => $this->id, 'status_payment' => 'settlement'])->first();
+        if($transaction) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getDateTransaction($user_id)
+    {
+        $transaction = DB::table('customer_transactions as ct')
+        ->select('ct.course_id', 'course.duration', 'ct.start_date')
+        ->selectRaw('ADDDATE(ct.start_date, INTERVAL (IF(course.duration = "week", 7, 30)) DAY) as end_date')
+        ->leftJoin('courses as course', 'course.id', '=', 'ct.course_id')
+        ->where(['ct.course_id' => $this->id, 'ct.customer_id' => $user_id])
+        ->first();
+
+        return $transaction;
     }
 
     public function catalogTopic()

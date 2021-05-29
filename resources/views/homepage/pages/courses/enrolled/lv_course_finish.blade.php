@@ -1,6 +1,7 @@
 @section('title', 'Course')
 
 @section('css')
+<link rel="stylesheet" href="{{ asset('plugins/sweetalert2/sweetalert2.min.css') }}">
 <style>
     .text-offer-by {
         padding-top: .75rem;
@@ -38,6 +39,10 @@
         color: white;
         background-image: linear-gradient(90deg, rgb(66, 133, 244), rgb(64, 52, 168));
     }
+    .banner-gradient-color-blue-purple {
+        color: white;
+        background-image: linear-gradient(90deg, rgb(43, 85, 165), rgb(78, 34, 113));
+    }
     .text-font-family {
         font-family: 'Open Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     }
@@ -54,17 +59,20 @@
         font-family: OpenSansBoldOptional,Arial,sans-serif;
         font-size: 24px;
     }
-
+    
     .custom-btn-capsule {
         width: 70px;
         border-radius: 500px !important;
         text-align: end;
     }
-
+    
     .mt-4rem {
         margin-top: 4rem;
     }
-
+    
+    .card-start {
+        height: 182.4px;
+    }
     /* Progress Steps 2 */
     
     .progressbar-container {
@@ -229,9 +237,68 @@
     .progress-vertical *::after { box-sizing: border-box; font-family: arial; }
     
     /* End Vertical Progress Steps */
+    
+    
+    /* Custom media query for Vertical Progress */
+    @media (max-width: 576px) {
+        .progress-parent {
+            margin-top: 3rem;
+        }
+        .progress-vertical {
+            margin-left: 0;
+        }
+        .progress-vertical time {
+            padding-right: 0;
+        }
+    }
+    /* End Custom media query for Vertical Progress */
+    
+    /* Countdown Timer */
+    .countdown li {
+        font-family: 'Poppins', sans-serif;
+        color: #ffffff;
+        list-style: none;
+        display: inline-block;
+        margin: 0 20px;
+    }
+    .countdown span {
+        font-size: 25px;
+    }
+    .countdown h3 {
+        font-size: 14px;
+        text-transform: uppercase;
+        margin: 10px 0;
+    }
+    /* EndCountdown Timer */
+    
+    .bg-image {
+        background-position: center center;
+        background-size: cover;
+    }
+    
+    .bg-image .bg-overlay {
+        background: linear-gradient(to top right, #d2b48c, #000000);
+        opacity: 0.9;
+    }
+    .bg-image-countdown-1 {
+        color: #ffffff;
+        background-image: url(http://localhost:8000/page_dist/img/countdown-timer-bg-1.jpg);
+    }
+    .bg-image-countdown-2 {
+        color: #ffffff;
+        background-image: url(http://localhost:8000/page_dist/img/countdown-timer-bg-2.png);
+    }
+    .bg-image-countdown-3 {
+        color: #ffffff;
+        background-image: url(http://localhost:8000/page_dist/img/countdown-timer-bg-3.jpg);
+    }
+    
 </style>
 @endsection
-
+@php
+$date_transaction = $course->getDateTransaction(Auth::guard('web')->user()->id);
+$date_countdown = ($course->isAccessible(Auth::guard('web')->user()->id))? $date_transaction->end_date : $date_transaction->start_date;
+@endphp
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -282,6 +349,85 @@
         </div>
     </div>
     
+    @if ($course->isAccessible(Auth::guard('web')->user()->id))
+    <div class="col-md-4">
+        <div class="card rounded-0 card-outline card-danger card-start">
+            <div class="card-body">
+                <h4 class="text-sm text-muted">EXPIRATION DATE</h4>
+                <h3 class="text-font-family text-right">{{date("d F Y", strtotime($date_transaction->end_date))}}</h3>
+                <h5 class="text-sm text-right">{{date("H:i:s A", strtotime($date_transaction->end_date))}}</h5>
+                <hr class="mb-0">
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card rounded-0 bg-image bg-image-countdown-3">
+            <div class="card-body bg-overlay">
+                <h5 class="text-center text-font-family mb-1 text-lg text-uppercase">Countdown</h5>
+                <h6 class="text-center text-font-family mb-4 text-sm">Your course will end in:</h6>
+                <ul class="countdown list-unstyled text-center mb-0">
+                    <li>
+                        <span class="days">00</span>
+                        <h3>Days</h3>
+                    </li>
+                    <li>
+                        <span class="hours">00</span>
+                        <h3>hours</h3>
+                    </li>
+                    <li>
+                        <span class="minutes">00</span>
+                        <h3>minutes</h3>
+                    </li>
+                    <li>
+                        <span class="seconds">00</span>
+                        <h3>seconds</h3>
+                    </li>     
+                </ul>
+            </div>
+        </div>
+    </div>      
+    @else
+    <div class="col-md-4">
+        <div class="card rounded-0 card-outline card-purple card-start">
+            <div class="card-body">
+                <h4 class="text-sm text-muted">START DATE</h4>
+                <h3 class="text-font-family text-right">{{date("d F Y", strtotime($date_transaction->start_date))}}</h3>
+                <h5 class="text-sm text-right">{{date("H:i:s A", strtotime($date_transaction->start_date))}}</h5>
+                <hr class="mb-0">
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card rounded-0 bg-image bg-image-countdown-1">
+            <div class="card-body">
+                <h5 class="text-center text-font-family mb-1 text-lg text-uppercase">Countdown</h5>
+                <h6 class="text-center text-font-family mb-4 text-sm">Get ready, your course can be accessed in:</h6>
+                <ul class="countdown list-unstyled text-center mb-0">
+                    <li>
+                        <span class="days">00</span>
+                        <h3>Days</h3>
+                    </li>
+                    <li>
+                        <span class="hours">00</span>
+                        <h3>hours</h3>
+                    </li>
+                    <li>
+                        <span class="minutes">00</span>
+                        <h3>minutes</h3>
+                    </li>
+                    <li>
+                        <span class="seconds">00</span>
+                        <h3>seconds</h3>
+                    </li>     
+                </ul>
+            </div>
+        </div>
+    </div>
+    @endif
+    
+    
     <div class="col-12">
         <div class="card rounded">
             <div class="card-body">
@@ -293,16 +439,20 @@
                     <ul class="progress-step list-unstyled d-flex text-font-family">
                         @php
                         $first_ongoing = true;
+                        $ordering = 0;
                         @endphp
                         @foreach ($course->lessons as $lesson)
                         @if ($lesson->isFinished(Auth::guard('web')->user()->id))
                         <li class="flex-fill active">Lesson {{$loop->iteration}}</li>
-                        
+                        @php
+                        $ordering += 1;
+                        @endphp
                         @else
                         @if ($first_ongoing)
                         <li class="flex-fill ongoing">Lesson {{$loop->iteration}}</li>
                         @php
                         $first_ongoing = false;
+                        $ordering += 1;
                         @endphp
                         @else
                         <li class="flex-fill">Lesson {{$loop->iteration}}</li>
@@ -318,27 +468,39 @@
                     @php
                     $user_id = Auth::guard('web')->user()->id;
                     $lesson_progress = $selected_lesson->getTotalProgress($user_id);
-                    $progress_percent = ($lesson_progress->inprogress/$lesson_progress->total) * 100;
                     @endphp
                     <div class="col-md-7 pr-4">
-                        <span class="text-sm small-title text-font-family">Lesson</span>
-                        <h4 class="font-weight-bold lesson-title"> {{$selected_lesson->title}} </h4>
+                        <div class="d-flex">
+                            <div class="border-right pr-2">
+                                <h3 class="text-font-family font-weight-bold mb-0" style="font-size: 3.5rem;">{{$ordering}}</h3>
+                            </div>
+                            <div class="d-flex align-items-center ml-2">
+                                <div>
+                                    <span class="text-sm small-title text-font-family">Lesson</span>
+                                    <h4 class="font-weight-bold lesson-title mb-0"> {{$selected_lesson->title}} </h4>
+                                </div>
+                            </div>
+                        </div>
                         <div class="w-100 mt-4">
                             <div class="d-flex justify-content-between align-items-end mb-1">
-                                <small class="text-secondary"><b>PROGRESS</b> {{$progress_percent}}% complete</small>
+                                <small class="text-secondary"><b>PROGRESS</b> {{$lesson_progress->percentage}}% complete</small>
                                 <h4 class="text-font-family text-lg mb-0 text-secondary">{{$lesson_progress->inprogress}}/{{$lesson_progress->total}}</h4>
                             </div>
                             <div class="progress">
-                                <div class="progress-bar bg-teal" role="progressbar" aria-valuenow="{{$progress_percent}}" aria-valuemin="0" aria-valuemax="100" style="width: {{$progress_percent}}%">
-                                    <span class="sr-only">{{$progress_percent}}% Complete</span>
+                                <div class="progress-bar bg-teal" role="progressbar" aria-valuenow="{{$lesson_progress->percentage}}" aria-valuemin="0" aria-valuemax="100" style="width: {{$lesson_progress->percentage}}%">
+                                    <span class="sr-only">{{$lesson_progress->percentage}}% Complete</span>
                                 </div>
                             </div>
                         </div>
                         <div class="w-100 mt-4rem text-right">
-                            <a href="{{ route('home.dashboard.course.lesson.index', ['title'=>$slug_course_name, 'lesson_id' => $selected_lesson->id]) }}" class="custom-btn-capsule btn btn-primary"><i class="fas fa-arrow-right"></i></a>
+                            @if ($course->isAccessible(Auth::guard('web')->user()->id))
+                            <a href="{{ route('home.dashboard.course.lesson', ['title'=>$slug_course_name, 'lesson_id' => $selected_lesson->id]) }}" class="custom-btn-capsule btn btn-primary"><i class="fas fa-arrow-right"></i></a>
+                            @else
+                            <button id="btn_disable_access" class="btn btn-primary custom-btn-capsule disabled text-center"><i class="far fa-hourglass fa-pulse"></i></button>
+                            @endif
                         </div>
                     </div>
-                    <div class="col-md-5 border-left">
+                    <div class="col-md-5 progress-parent border-left">
                         <ul class="progress-vertical w-100 list-unstyled">
                             @foreach ($selected_lesson->videos as $video)
                             <li class="{{($video->isFinished($user_id))? 'active' : ''}}">
@@ -379,6 +541,63 @@
 
 
 @push('script')
+<script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js')}} "></script>
 <script>
+    // Set the date we're counting down to
+    var countDownDate = new Date("{{date('F, d Y H:i:s A', strtotime($date_countdown))}}").getTime();
+    var now = new Date().getTime();
+    var x_interval;
+    
+    $(document).ready(function() {
+        
+        if(countDownDate >= now) {
+            x_interval = setInterval(startCountDown, 1000);
+        }
+    });
+
+    $("#btn_disable_access").on('click', function() {
+        Swal.fire( {
+            icon: 'warning',
+            title: 'Oops...',
+            html: 'You can access the course when the time has comes.',
+        });
+    });
+    // Update the count down every 1 second
+    function startCountDown() {
+        function leadingZero(number) {
+            return ("00" + number).slice (-2);
+        }
+        // Get today's date and time
+        let now = new Date().getTime();
+        
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+        
+        // Time calculations for days, hours, minutes and seconds
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        // Output the result in an element with id="demo"
+        $('.countdown span.days').text(leadingZero(days));
+        $('.countdown span.hours').text(leadingZero(hours));
+        $('.countdown span.minutes').text(leadingZero(minutes));
+        $('.countdown span.seconds').text(leadingZero(seconds));
+        
+        // If the count down is over, write some text 
+        if (distance < 0) {
+            clearInterval(x_interval);
+            $('.countdown span.days').text("00");
+            $('.countdown span.hours').text("00");
+            $('.countdown span.minutes').text("00");
+            $('.countdown span.seconds').text("00");
+            Swal.fire( {
+                icon: 'success',
+                title: "Horay!",
+                text: "Now you can access the course by refreshing page browser.",
+            });
+        }
+    }
 </script>
 @endpush
