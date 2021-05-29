@@ -49,7 +49,7 @@ use App\Http\Livewire\Partners\{
 
 use App\Http\Livewire\Homepages\{
     Payments\LvPayCourse,
-
+    Course as CoursesLive,
     Dashboard\LvDashboard as DashboardLive,
     Dashboard\LvCourse as DashboardCourseLive,
     Dashboard\LvCourseFinish as DashboardCourseFinishLive,
@@ -100,6 +100,7 @@ Route::get('payments/failed', [PaymentController::class, 'failed']);
 Route::get('payments/unfinish', [PaymentController::class, 'unfinish']);
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::get('courses', CoursesLive::class)->name('course_home.index');
 
 Route::get('/learn/{title}', [HomeController::class, 'detailCourse'])->name('home.detail.course');
 

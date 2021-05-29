@@ -12,6 +12,8 @@ use App\Models\{
     Partner,
     Corporation,
     CustomerCourseProgress as UserCourseProgress,
+    CatalogTopic,
+    Level
 };
 
 class Course extends Model
@@ -68,5 +70,15 @@ class Course extends Model
             }
         }
         return false;
+    }
+
+    public function catalogTopic()
+    {
+        return $this->belongsTo(CatalogTopic::class, 'catalog_topic_id')->select('id', 'name');
+    }
+
+    public function level()
+    {
+        return $this->belongsTo(Level::class, 'level_id')->select('id', 'name');
     }
 }
