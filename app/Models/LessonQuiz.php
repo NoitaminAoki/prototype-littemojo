@@ -10,6 +10,7 @@ use App\Models\{
     CustomerAnswerKey as UserAnswer,
     CustomerQuizScore as UserScore,
     CustomerQuizRating as UserQuizRating,
+    CustomerLessonProgress as UserProgress,
 };
 
 class LessonQuiz extends Model
@@ -68,6 +69,15 @@ class LessonQuiz extends Model
     {
         $rate = UserQuizRating::where([['customer_id', $user_id], ['lesson_id', $this->lesson_id], ['quiz_id', $this->id]])->first();
         if ($rate && $rate->dislike == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    public function isFinished($user_id)
+    {
+        $progress = UserProgress::where(['customer_id' => $user_id, 'lesson_id' => $this->lesson_id, 'quiz_id' => $this->id, 'type' => 'quiz'])->first();
+        if($progress) {
             return true;
         }
         return false;

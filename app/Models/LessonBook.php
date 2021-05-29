@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\{
     CourseLesson as Lesson,
     CustomerBookRating as UserBookRating,
+    CustomerLessonProgress as UserProgress,
 };
 
 class LessonBook extends Model
@@ -44,6 +45,15 @@ class LessonBook extends Model
     {
         $rate = UserBookRating::where([['customer_id', $user_id], ['lesson_id', $this->lesson_id], ['book_id', $this->id]])->first();
         if ($rate && $rate->dislike == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    public function isFinished($user_id)
+    {
+        $progress = UserProgress::where(['customer_id' => $user_id, 'lesson_id' => $this->lesson_id, 'book_id' => $this->id, 'type' => 'book'])->first();
+        if($progress) {
             return true;
         }
         return false;

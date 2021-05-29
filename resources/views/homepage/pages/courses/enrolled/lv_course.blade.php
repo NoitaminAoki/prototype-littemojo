@@ -51,6 +51,11 @@
         cursor: pointer;
         background-color: #dcdcdc;
     }
+
+    .content-hover-not-allowed:hover {
+        cursor: not-allowed;
+        background-color: #dcdcdc;
+    }
     .text-font-family {
         font-family: 'Open Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     }
@@ -86,47 +91,15 @@
         text-align: end;
     }
     
-    /* Star Rating */
-    .rating-fieldset, .rating-label { margin: 0; padding: 0; }
-    
-    /****** Style Star Rating Widget *****/
-    
-    .rating-label {
-        cursor: pointer;
+    .not-allowed {
+        cursor: not-allowed;
     }
-    
-    .rating { 
-        border: none;
-        float: left;
-    }
-    
-    .rating > input { display: none; } 
-    .rating > .rating-label:before { 
-        margin: 5px;
-        font-size: 1.25em;
-        font-family: "Font Awesome 5 Free";
-        display: inline-block;
-        content: "\f005";
-    }
-    
-    .rating > .rating-label { 
-        color: #ddd; 
-        float: right; 
-    }
-    
-    /***** CSS Magic to Highlight Stars on Hover *****/
-    
-    .rating > input:checked ~ .rating-label, /* show gold star when clicked */
-    .rating:not(:checked) > .rating-label:hover, /* hover current star */
-    .rating:not(:checked) > .rating-label:hover ~ .rating-label { color: #FFD700;  } /* hover previous stars in list */
-    
-    .rating > input:checked + .rating-label:hover, /* hover current star when changing rating */
-    .rating > input:checked ~ .rating-label:hover,
-    .rating > .rating-label:hover ~ input:checked ~ .rating-label, /* lighten current selection */
-    .rating > input:checked ~ .rating-label:hover ~ .rating-label { color: #FFED85;  }
-    /* End Star Rating */
 </style>
 @endsection
+
+@php
+    $is_clickable = true;
+@endphp
 
 <div class="row">
     <div class="col-md-3">
@@ -136,8 +109,8 @@
                     <h5 class="">Lesson</h5>
                     <div class="row content-lesson">
                         @foreach ($course->lessons as $lesson)
-                        <div class="col-12 content-single content-hover {{($lesson->id == $selected_lesson->id)? 'content-active' : ''}}">
-                            <div class="info-box part-content-action custom-info-box my-2 pl-0 shadow-none mb-0" data-id="{{$lesson->id}}">
+                        <div class="col-12 content-single {{($is_clickable)? 'content-hover' : 'content-hover-not-allowed'}} {{($lesson->id == $selected_lesson->id)? 'content-active' : ''}}">
+                            <div class="info-box {{($is_clickable)? 'part-content-action' : 'not-allowed'}} custom-info-box my-2 pl-0 shadow-none mb-0" data-id="{{$lesson->id}}">
                                 <span class="info-box-icon custom-info-box-icon"><i class="far">{{$loop->iteration}}</i></span>
                                 
                                 <div class="info-box-content custom-info-box-content">
@@ -153,6 +126,16 @@
                                         {{$lesson->totalQuizzes()}} quizzes
                                         @endif
                                     </span>
+                                    @if ($is_clickable && $lesson->isFinished(Auth::guard('web')->user()->id))
+                                        <div class="w-100">
+                                            <hr class="mb-0">
+                                            <small class="text-success">[COMPLETED]</small>
+                                        </div>
+                                    @else
+                                        @php
+                                            $is_clickable = false;
+                                        @endphp
+                                    @endif
                                 </div>
                                 <!-- /.info-box-content custom-info-box-content -->
                             </div>
@@ -226,17 +209,6 @@
                 </div>
             </div>
         </div>
-        {{-- <div class="card">
-            <div class="card-body">
-                <fieldset class="rating-fieldset rating">
-                    <input type="radio" id="star5" name="rating" value="5" /><label class="rating-label full" for="star5" title="Awesome - 5 stars"></label>
-                    <input type="radio" id="star4" name="rating" value="4" /><label class="rating-label full" for="star4" title="Pretty good - 4 stars"></label>
-                    <input type="radio" id="star3" name="rating" value="3" /><label class="rating-label full" for="star3" title="Good - 3 stars"></label>
-                    <input type="radio" id="star2" name="rating" value="2" /><label class="rating-label full" for="star2" title="Kinda bad - 2 stars"></label>
-                    <input type="radio" id="star1" name="rating" value="1" /><label class="rating-label full" for="star1" title="Bad - 1 star"></label>
-                </fieldset>
-            </div>
-        </div> --}}
     </div>
 </div>
 

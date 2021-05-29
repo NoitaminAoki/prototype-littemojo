@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CustomerLessonProgress extends Model
+class CustomerLessonRating extends Model
 {
     use HasFactory;
     /**
@@ -17,9 +17,7 @@ class CustomerLessonProgress extends Model
         'customer_id',
         'course_id',
         'lesson_id',
-        'video_id',
-        'book_id',
-        'quiz_id',
-        'type',
+        'rating',
+        'description',
     ];
 }

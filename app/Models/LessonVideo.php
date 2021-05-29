@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\{
     CourseLesson as Lesson,
     CustomerVideoRating as UserVideoRating,
+    CustomerLessonProgress as UserProgress,
 };
 
 class LessonVideo extends Model
@@ -41,10 +42,20 @@ class LessonVideo extends Model
         }
         return false;
     }
+
     public function isDisliked($user_id)
     {
         $rate = UserVideoRating::where([['customer_id', $user_id], ['lesson_id', $this->lesson_id], ['video_id', $this->id]])->first();
         if ($rate && $rate->dislike == 1) {
+            return true;
+        }
+        return false;
+    }
+    
+    public function isFinished($user_id)
+    {
+        $progress = UserProgress::where(['customer_id' => $user_id, 'lesson_id' => $this->lesson_id, 'video_id' => $this->id, 'type' => 'video'])->first();
+        if($progress) {
             return true;
         }
         return false;
