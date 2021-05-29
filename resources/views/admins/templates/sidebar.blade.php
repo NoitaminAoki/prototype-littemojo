@@ -64,7 +64,13 @@
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview text-sm ml-3">                        
+                    <ul class="nav nav-treeview text-sm ml-3">
+                        <li class="nav-item">
+                            <a href="{{url('admin/management/blog')}}" class="nav-link {{\Request::is('admin/management/blog*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Blog</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="{{url('admin/management/user')}}" class="nav-link {{\Request::is('admin/management/user*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
