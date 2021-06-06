@@ -117,6 +117,9 @@ Route::middleware(['auth:web'])->group(function () {
 Route::view('dashboard', 'dashboard')->middleware(['auth:sanctum', 'verified'])->name('dashboard');
 
 Route::middleware('auth:admin')->prefix('admin/management')->name('admin.')->group(function () {
+    Route::put('blog/{id}/mark-as-highlight', [BlogController::class, 'markAsHighlight'])->name(
+        'blog.mark-as-highlight'
+    );
     Route::resource('blog', BlogController::class);
     Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
     Route::get('user/{id}/update_status', [UserController::class, 'update_status'])->name('update_status');

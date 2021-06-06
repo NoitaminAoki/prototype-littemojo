@@ -16,14 +16,8 @@ class Blog extends Model
         'content',
         'is_publish',
         'is_highlight',
-        'blog_category_id',
         'user_id'
     ];
-
-    public function blogCategory()
-    {
-        return $this->belongsTo(Blog::class);
-    }
 
     public function user()
     {

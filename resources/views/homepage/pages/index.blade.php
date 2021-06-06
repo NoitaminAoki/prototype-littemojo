@@ -520,7 +520,7 @@
             @foreach ($popularBlog as $blog)
             <div class="col-lg-3 col-md-6 single-blog">
                 <div class="thumb">
-                    <img class="img-fluid" src="{{ asset('storage/blogs/' . $blog->img) }}"
+                    <img class="img-fluid" src="{{ Storage::url($blog->img) }}"
                     alt="{{ $blog->title }}">
                 </div>
                 <p class="meta">
