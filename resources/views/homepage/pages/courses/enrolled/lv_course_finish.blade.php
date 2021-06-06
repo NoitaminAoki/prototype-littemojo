@@ -297,7 +297,8 @@
 @endsection
 @php
 $date_transaction = $course->getDateTransaction(Auth::guard('web')->user()->id);
-$date_countdown = ($course->isAccessible(Auth::guard('web')->user()->id))? $date_transaction->end_date : $date_transaction->start_date;
+$date_countdown = $date_transaction->start_date;
+$date_expired = $date_transaction->end_date;
 @endphp
 <div class="row">
     <div class="col-12">
@@ -544,7 +545,8 @@ $date_countdown = ($course->isAccessible(Auth::guard('web')->user()->id))? $date
 <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js')}} "></script>
 <script>
     // Set the date we're counting down to
-    var countDownDate = new Date("{{date('F, d Y H:i:s A', strtotime($date_countdown))}}").getTime();
+    var countDownDate = new Date("{{$date_countdown}}").getTime();
+    var countDownDateExp = new Date("{{$date_expired}}").getTime();
     var now = new Date().getTime();
     var x_interval;
     
@@ -552,9 +554,11 @@ $date_countdown = ($course->isAccessible(Auth::guard('web')->user()->id))? $date
         
         if(countDownDate >= now) {
             x_interval = setInterval(startCountDown, 1000);
+        } else if(countDownDateExp >= now) {
+            x_interval = setInterval(startCountDownExpired, 1000);
         }
     });
-
+    
     $("#btn_disable_access").on('click', function() {
         Swal.fire( {
             icon: 'warning',
@@ -562,16 +566,25 @@ $date_countdown = ($course->isAccessible(Auth::guard('web')->user()->id))? $date
             html: 'You can access the course when the time has comes.',
         });
     });
+    
+    function leadingZero(number) {
+        return ("00" + number).slice (-2);
+    }
     // Update the count down every 1 second
     function startCountDown() {
-        function leadingZero(number) {
-            return ("00" + number).slice (-2);
-        }
+        showTime(countDownDate, {type: 'success', title: 'Horay!', message: 'Now you can access the course by refreshing page browser.'});
+    }
+
+    function startCountDownExpired() {
+        showTime(countDownDateExp, {type: 'warning', title: 'Oops...', message: 'You have reached the time limit for accessing this course!'});
+    }
+
+    function showTime(date, alert = { type: 'success', title: 'Title', message: 'Message' }) {
         // Get today's date and time
         let now = new Date().getTime();
         
         // Find the distance between now and the count down date
-        var distance = countDownDate - now;
+        var distance = date - now;
         
         // Time calculations for days, hours, minutes and seconds
         var days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -593,9 +606,9 @@ $date_countdown = ($course->isAccessible(Auth::guard('web')->user()->id))? $date
             $('.countdown span.minutes').text("00");
             $('.countdown span.seconds').text("00");
             Swal.fire( {
-                icon: 'success',
-                title: "Horay!",
-                text: "Now you can access the course by refreshing page browser.",
+                icon: alert.type,
+                title: alert.title,
+                text: alert.message,
             });
         }
     }

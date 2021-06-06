@@ -7,21 +7,7 @@
             <nav id="nav-menu-container">
                 <ul class="nav-menu">
                     <li><a href="{{ route('home.index') }}">Home</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="courses.html">Courses</a></li>
-                    <li><a href="events.html">Events</a></li>
-                    <li><a href="gallery.html">Gallery</a></li>
-                    <li class="menu-has-children">
-                        <a href="">
-                            Blog 
-                            <i class="fas fa-angle-down" style="padding-left: 3px;"></i>
-                        </a>
-                        <ul>
-                            <li><a href="blog-home.html">Blog Home</a></li>
-                            <li><a href="blog-single.html">Blog Single</a></li>
-                        </ul>
-                    </li>	
-                    			
+                    <li><a href="{{url('courses')}}">Courses</a></li>
                     @auth('web')
                     <li class="menu-has-children">
                         <a href="">
