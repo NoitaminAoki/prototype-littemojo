@@ -20,7 +20,6 @@ class CreateBlogsTable extends Migration
             $table->longText('content');
             $table->boolean('is_publish')->default(false);
             $table->boolean('is_highlight')->default(false);
-            $table->integer('blog_category_id');
             $table->integer('user_id');
             $table->timestamps();
         });

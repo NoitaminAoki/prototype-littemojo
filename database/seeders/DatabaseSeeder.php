@@ -26,8 +26,7 @@ class DatabaseSeeder extends Seeder
             CustomerTransactionSeeder::class,
             PartnerFundTransactionSeeder::class,
             PartnerWalletSeeder::class,
-            BlogSeeder::class,
-            BlogCategorySeeder::class
+            BlogSeeder::class
         ]);
         // \App\Models\User::factory(10)->create();
     }

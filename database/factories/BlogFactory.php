@@ -24,11 +24,10 @@ class BlogFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(5),
-            'img' => 'article1.png',
+            'img' => 'public/files/article1.png',
             'content' => $this->faker->paragraph(),
             'is_publish' => $this->faker->boolean(60),
             'is_highlight' => $this->faker->boolean(30),
-            'blog_category_id' => rand(1, 4),
             'user_id' => rand(1, Partner::count())
         ];
     }

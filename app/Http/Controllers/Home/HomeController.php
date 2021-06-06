@@ -18,7 +18,7 @@ class HomeController extends Controller
         $data['popularBlog'] = Blog::where([
             ['is_publish', true],
             ['is_highlight', true]
-        ])->latest()->paginate(10);
+        ])->latest()->get();
         return view('homepage.pages.index')->with($data);
     }
 
