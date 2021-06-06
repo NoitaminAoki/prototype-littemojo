@@ -2,6 +2,10 @@
 
 @section('css')
 <style>
+    .text-font-family {
+        font-family: 'Open Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    
     .user-banner {
         background: url('{{asset("page_dist/img/user-banner.jpg")}}') center no-repeat;
         background-size: cover;
@@ -22,6 +26,40 @@
     }
     .about-content {
         padding: 90px 15px;
+    }
+
+    .mt-4rem {
+        margin-top: 4rem;
+    }
+
+    .partner-name {
+        text-transform: uppercase;
+        font-weight: 800;
+        font-size: 12px;
+        min-height: 1em;
+    }
+    .course-title {
+        font-size: 20px;
+        font-weight: 900;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        line-height: 1.5em;
+    }
+    .course-catalog {
+        background-image: -webkit-linear-gradient(90deg, #F0F0F0, #F0F0F0);
+        background-image: -moz-linear-gradient(90deg, #F0F0F0, #F0F0F0);
+        background-image: linear-gradient(90deg, rgb(240, 240, 240), rgb(240, 240, 240));
+        font-size: 0.75rem;
+        width: fit-content;
+        text-decoration: none;
+        color: black;
+        padding: 0.1875rem 1.125rem;
+        font-weight: normal;
+    }
+    .course-img-right {
+        object-fit: cover;
+        height: 100%;
+        /* object-position: top; */
     }
 </style>
 @endsection
@@ -74,13 +112,59 @@
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                             <div class="row">
+                                @foreach ($purchased_courses as $course)
                                 <div class="col-12">
-                                    <div class="card rounded-0">
+                                    <div class="card rounded-0 bg-white">
                                         <div class="card-body">
-                                            test
+                                            <div class="row">
+                                                <div class="col-sm-4 order-sm-2 mb-2">
+                                                    <img class="w-100 course-img-right" src="{{ asset('page_dist/img/park-background-1.jpg') }}" alt="" aria-hidden="true">
+                                                </div>
+                                                <div class="col-sm-8 order-sm-1 mb-2">
+                                                    <div class="d-flex flex-column text-black">
+                                                        <div class="partner-name text-font-family">{{$course->corporation->name}}</div>
+                                                        <h3 class="course-title text-font-family">
+                                                            {{$course->title}}
+                                                        </h3>
+                                                    </div>
+                                                    <div class="w-100">
+                                                        <div class="course-catalog text-uppercase">
+                                                            {{$course->catalog->name}}
+                                                        </div>
+                                                        <div class="text-warning mt-4">
+                                                            <span class="fas fa-star checked"></span>
+                                                            <span class="fas fa-star checked"></span>
+                                                            <span class="fas fa-star checked"></span>
+                                                            <span class="fas fa-star-half-alt checked"></span>
+                                                            <span class="far fa-star"></span>
+                                                            <span class="ml-1 text-black text-rating">4.6</span>
+                                                            <span class="mx-2 border-left border-right"></span>
+                                                            <span class="ml-1 text-black text-rating">86,528 ratings</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="w-100 mt-4rem">
+                                                        @if ($course->isAccessible($user_id))
+                                                        <span class="text-font-family text-lg-left">Finish Date: <b class="text-danger">{{date('d F Y', strtotime($course->getDateTransaction($user_id)->end_date))}}</b></span>
+                                                        @else
+                                                        <span class="text-font-family text-lg-left">Start Date: <b class="text-primary">{{date('d F Y', strtotime($course->getDateTransaction($user_id)->start_date))}}</b></span>
+                                                        @endif
+                                                    </div>
+                                                    <div class="w-100 mt-2">
+                                                        <div class="d-flex justify-content-between align-items-end mb-1">
+                                                            <small class="text-secondary"><b>PROGRESS</b> 40% complete</small>
+                                                        </div>
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-teal" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                                                <span class="sr-only">40% Complete</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                @endforeach
                             </div>
                         </div>
                         <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">...</div>

@@ -495,7 +495,7 @@ $date_expired = $date_transaction->end_date;
                         </div>
                         <div class="w-100 mt-4rem text-right">
                             @if ($course->isAccessible(Auth::guard('web')->user()->id))
-                            <a href="{{ route('home.dashboard.course.lesson', ['title'=>$slug_course_name, 'lesson_id' => $selected_lesson->id]) }}" class="custom-btn-capsule btn btn-primary"><i class="fas fa-arrow-right"></i></a>
+                            <a href="{{ route('home.dashboard.course.lesson', ['title'=>$slug_course_name]) }}" class="custom-btn-capsule btn btn-primary"><i class="fas fa-arrow-right"></i></a>
                             @else
                             <button id="btn_disable_access" class="btn btn-primary custom-btn-capsule disabled text-center"><i class="far fa-hourglass fa-pulse"></i></button>
                             @endif
