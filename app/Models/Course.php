@@ -76,6 +76,24 @@ class Course extends Model
         return false;
     }
 
+    public function getProgress($user_id)
+    {
+        $lesson = Lesson::selectRaw('COUNT(course_lessons.id) as total_lesson, COUNT(ccp.id) as completed_lesson')
+        ->leftJoin('customer_course_progress as ccp', function($join) use($user_id) {
+            $join->on('ccp.course_id', '=', 'course_lessons.course_id')
+            ->on('ccp.lesson_id', '=', 'course_lessons.id')
+            ->where('ccp.customer_id', '=', $user_id);
+        })
+        ->where('course_lessons.course_id', $this->id)
+        ->first();
+
+        $data['percent'] = ($lesson->completed_lesson/$lesson->total_lesson) * 100;
+        $data['total_lesson'] = $lesson->total_lesson;
+        $data['completed_lesson'] = $lesson->completed_lesson;
+
+        return (object)$data;
+    }
+
     public function isAccessible($user_id)
     {
         $date_now = new DateTime("now", new DateTimeZone('Asia/Jakarta') );

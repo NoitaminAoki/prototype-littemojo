@@ -13,6 +13,8 @@ use App\Models\{
 
 class LvLessonRating extends Component
 {
+    protected $listeners = ['redirectToCourse' => 'finishCourse'];
+
     public $slug_course_name;
     
     public $lesson;
@@ -86,5 +88,11 @@ class LvLessonRating extends Component
         ->update(['rating' => $this->rating_value, 'description' => $this->rating_desc]);
         
         return $this->dispatchBrowserEvent('notification:success', ['title' => 'Success!', 'message' => "Thank You for Your Feedback."]);
+    }
+
+    public function finishCourse()
+    {
+        session()->flash('notification', 'You have been finished the course!');
+        return redirect()->route('home.dashboard.course', ['title' => $this->slug_course_name]);
     }
 }

@@ -14,6 +14,7 @@ class LvCourseFinish extends Component
 {
     public $slug_course_name;
     public $selected_lesson;
+    public $is_course_finished = false;
 
     public function mount($title)
     {
@@ -60,7 +61,7 @@ class LvCourseFinish extends Component
         ->leftJoin('catalog_topics', 'catalog_topics.id', 'courses.catalog_topic_id')
         ->leftJoin('levels', 'levels.id', 'courses.level_id')
         ->where('slug_title', $this->slug_course_name)->firstOrFail();
-
+        $this->is_course_finished = $course->isFinished($user_auth->id);
         $data['course'] = $course;
 
         return view('homepage.pages.courses.enrolled.lv_course_finish')

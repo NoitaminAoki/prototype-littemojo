@@ -187,7 +187,7 @@
     })
 
     function redirectToLesson() {
-        window.location = @this.lesson_url;
+        Livewire.emit('redirectToCourse');
     }
 </script>
 @endpush

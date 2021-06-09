@@ -293,6 +293,12 @@
         background-image: url(http://localhost:8000/page_dist/img/countdown-timer-bg-3.jpg);
     }
     
+    .bg-theme-blue {
+        background: linear-gradient(135deg, #5ba8ff 0%, #975efb 100%);
+    }
+    .font-weight-600 {
+        font-weight: 600 !important;
+    }
 </style>
 @endsection
 @php
@@ -354,7 +360,7 @@ $date_expired = $date_transaction->end_date;
     <div class="col-md-4">
         <div class="card rounded-0 card-outline card-danger card-start">
             <div class="card-body">
-                <h4 class="text-sm text-muted">EXPIRATION DATE</h4>
+                <h4 class="text-sm text-muted">FINISH DATE</h4>
                 <h3 class="text-font-family text-right">{{date("d F Y", strtotime($date_transaction->end_date))}}</h3>
                 <h5 class="text-sm text-right">{{date("H:i:s A", strtotime($date_transaction->end_date))}}</h5>
                 <hr class="mb-0">
@@ -428,13 +434,37 @@ $date_expired = $date_transaction->end_date;
     </div>
     @endif
     
+    @if ($is_course_finished)
+    <div class="col-md-4">
+        <div class="card bg-theme-blue rounded-0">
+            <div class="card-body">
+                <div class="d-flex flex-column align-items-center">
+                    <div>
+                        <img class="w-100" src="{{ asset('page_dist/img/trophy.png') }}" alt="">
+                    </div>
+                    <div class="title-progress text-white text-center mt-4 px-4">
+                        <h2 class="title-header text-white font-weight-600 text-font-family mb-3">Congratulations</h2>
+                        <p class="text-font-family text-sm mb-4">You have been finished the course, now you can download your certificate!</p>
+                        <button class="btn bg-teal mt-4">Download</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
     
     <div class="col-12">
-        <div class="card rounded">
+        <div class="card rounded-0">
             <div class="card-body">
                 <div class="title-progress text-center">
                     <h2 class="title-header text-uppercase">Course Progress</h2>
-                    <p class="text-muted">Complete the lesson to go to the next lesson</p>
+                    <p class="text-muted">
+                        @if ($is_course_finished)
+                        You can still access the course until the time expires
+                        @else
+                        Complete the lesson to go to the next lesson
+                        @endif
+                    </p>
                 </div>
                 <div class="progressbar-container table-responsive">
                     <ul class="progress-step list-unstyled d-flex text-font-family">
@@ -543,6 +573,15 @@ $date_expired = $date_transaction->end_date;
 
 @push('script')
 <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js')}} "></script>
+@if (session()->has('notification'))
+<script>
+    Swal.fire( {
+        icon: 'success',
+        title: 'Congratulations!',
+        html: "{{ session('notification') }}",
+    });
+</script>
+@endif
 <script>
     // Set the date we're counting down to
     var countDownDate = new Date("{{$date_countdown}}").getTime();
@@ -574,11 +613,11 @@ $date_expired = $date_transaction->end_date;
     function startCountDown() {
         showTime(countDownDate, {type: 'success', title: 'Horay!', message: 'Now you can access the course by refreshing page browser.'});
     }
-
+    
     function startCountDownExpired() {
         showTime(countDownDateExp, {type: 'warning', title: 'Oops...', message: 'You have reached the time limit for accessing this course!'});
     }
-
+    
     function showTime(date, alert = { type: 'success', title: 'Title', message: 'Message' }) {
         // Get today's date and time
         let now = new Date().getTime();
