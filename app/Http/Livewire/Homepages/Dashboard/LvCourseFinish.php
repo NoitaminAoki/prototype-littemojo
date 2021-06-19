@@ -4,10 +4,14 @@ namespace App\Http\Livewire\Homepages\Dashboard;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use App\Helpers\StringGenerator;
 use App\Models\{
     Course,
     CourseLesson,
     CustomerCourseProgress as UserCourseProgress,
+    CustomerCertificate as UserCertificate,
 };
 
 class LvCourseFinish extends Component
@@ -15,6 +19,9 @@ class LvCourseFinish extends Component
     public $slug_course_name;
     public $selected_lesson;
     public $is_course_finished = false;
+
+    public $course_id;
+    public $user_certificate;
 
     public function mount($title)
     {
@@ -24,6 +31,8 @@ class LvCourseFinish extends Component
         ->leftJoin('catalog_topics', 'catalog_topics.id', 'courses.catalog_topic_id')
         ->leftJoin('levels', 'levels.id', 'courses.level_id')
         ->where('slug_title', $title)->firstOrFail();
+
+        $this->course_id = $course->id;
 
         if (!$course->isPurchased($user_auth->id)) {
             return redirect()->route('home.detail.course', ['title' => $title]);
@@ -62,10 +71,49 @@ class LvCourseFinish extends Component
         ->leftJoin('levels', 'levels.id', 'courses.level_id')
         ->where('slug_title', $this->slug_course_name)->firstOrFail();
         $this->is_course_finished = $course->isFinished($user_auth->id);
+        $this->user_certificate = $course->getCustomerCertificate($user_auth->id);
         $data['course'] = $course;
 
         return view('homepage.pages.courses.enrolled.lv_course_finish')
         ->with($data)
         ->layout('homepage.dashboard_layouts.lv_main');
+    }
+
+    public function generateCertificate()
+    {
+        $user_auth = Auth::guard('web')->user();
+        $certificate = UserCertificate::where(['customer_id' => $user_auth->id, 'course_id' => $this->course_id])->first();
+        if(!$certificate) {
+            $data['course'] = Course::find($this->course_id);
+            $data['generated_hash'] = StringGenerator::hashId(11);
+            $text = $user_auth->name;
+            $fontSize = 90;
+            
+            $length = (Str::length($text) > 8)? Str::length($text) - 7 : 0;
+            $space_length = $length > 8? ceil($length/1.5) + 1 : $length;
+            $data['font_size'] = $fontSize - ($space_length * 5);
+            $data['username'] = $text;
+            $pdf = \PDF::loadview('homepage.pages.certificates.certificate_pdf', $data);
+            $pdf->setPaper('A4', 'landscape');
+            // dd($pdf->stream());
+            $content = $pdf->download()->getOriginalContent();
+    
+            $slug_username = Str::slug($user_auth->name);
+            $uri = "/certificates/user_{$user_auth->id}/{$slug_username}_{$this->slug_course_name}.pdf";
+            Storage::put($uri, $content);
+            
+            $certificate = UserCertificate::create([
+                'customer_id' => $user_auth->id,
+                'course_id' => $this->course_id,
+                'uuid' => Str::uuid(),
+                'hash_id' => $data['generated_hash'],
+                'filename' => "{$slug_username}_{$this->slug_course_name}.pdf",
+                'path' => $uri,
+            ]);
+            return $this->dispatchBrowserEvent('notification:success', ['title' => 'Success!', 'message' => "Your certificate has successfully created!"]);
+            // dd($certificate);
+        }
+        // dd($certificate);
+        // dd($content);
     }
 }

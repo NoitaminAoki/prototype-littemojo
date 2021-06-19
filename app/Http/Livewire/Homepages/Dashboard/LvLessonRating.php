@@ -93,6 +93,6 @@ class LvLessonRating extends Component
     public function finishCourse()
     {
         session()->flash('notification', 'You have been finished the course!');
-        return redirect()->route('home.dashboard.course', ['title' => $this->slug_course_name]);
+        return redirect($this->lesson_url);
     }
 }

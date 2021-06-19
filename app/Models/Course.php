@@ -13,6 +13,7 @@ use App\Models\{
     Corporation,
     CustomerTransaction as UserTransaction,
     CustomerCourseProgress as UserCourseProgress,
+    CustomerCertificate as UserCertificate,
     CatalogTopic,
     Level
 };
@@ -136,5 +137,12 @@ class Course extends Model
     public function level()
     {
         return $this->belongsTo(Level::class, 'level_id')->select('id', 'name');
+    }
+
+    public function getCustomerCertificate($user_id)
+    {
+        $certificate = UserCertificate::where(['customer_id' => $user_id, 'course_id' => $this->id])->first();
+
+        return $certificate;
     }
 }

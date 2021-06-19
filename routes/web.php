@@ -73,9 +73,18 @@ Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
+Route::get('verify/{hash_id}', function ($hash_id) {
+    return $hash_id;
+})->name('home.certificate.verify');
+
+Route::view('certificates', 'homepage.pages.certificates.certificate');
+Route::view('certificates/pdf', 'homepage.pages.certificates.certificate_pdf_2');
+Route::view('certificates/print', 'homepage.pages.certificates.certificate_print');
+Route::get('certificates/download', [HomeController::class, 'pdfCertificate']);
 // Route::view('/', 'homepage.pages.index');
 
 Route::middleware(['auth:web', 'verified'])->group(function () {
+    Route::get('certificates/download/{uuid}/pdf/{filename}', [HomeController::class, 'getCertificate'])->name('home.certificate.download');
     Route::prefix('dashboard')->name('home.dashboard.')->group(function () {
         Route::get('/home', DashboardLive::class)->name('index');
 

@@ -85,7 +85,7 @@
     <div class="col-md-6 col-sm-8 mx-auto">
         <div class="card card-primary card-outline">
             <div class="card-header">
-                <h5> Give Your Feedback Here </h5>
+                <h5> Give Your Feedback Here</h5>
             </div>
             <div class="card-body">
                 <div class="overlay-wrapper">

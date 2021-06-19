@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Models\{
     Blog,
     Course,
+    CustomerCertificate as UserCertificate,
 };
 
 class HomeController extends Controller
@@ -33,5 +35,35 @@ class HomeController extends Controller
         // dd($course);
         $data['course'] = $course;
         return view('homepage.pages.courses.detail')->with($data);
+    }
+
+    public function pdfCertificate()
+    {
+        $text = "ABBIULLAH AYASSY";
+        $fontSize = 90;
+        
+        $length = (Str::length($text) > 8)? Str::length($text) - 7 : 0;
+        $space_length = $length > 8? ceil($length/1.5) + 1 : $length;
+        $calculate = $fontSize - ($space_length * 5);
+        // dd($calculate);
+        return view('homepage.pages.certificates.certificate_pdf')->with(['font_size' => $calculate, 'name' => $text]);
+        $pdf = \PDF::loadview('homepage.pages.certificates.certificate_pdf',[]);
+        $pdf->setPaper('A4', 'landscape');
+        return $pdf->stream();
+    }
+
+    public function getCertificate($uuid)
+    {
+        $file = UserCertificate::where('uuid', $uuid)->firstOrFail();
+        $path = storage_path("app/{$file->path}");
+        
+        if (file_exists($path)) {
+            
+            return response()
+            ->file($path, array('Cache-Control' => 'no-cache, no-store, must-revalidate', 'Pragma' => 'no-cache', 'Expires' => '0', 'Content-Type' =>'application/pdf'));
+            
+        }
+        
+        abort(404);
     }
 }

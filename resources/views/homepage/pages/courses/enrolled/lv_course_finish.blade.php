@@ -356,6 +356,56 @@ $date_expired = $date_transaction->end_date;
         </div>
     </div>
     
+    
+    @if ($is_course_finished)
+    <div class="col-md-4">
+        <div class="card bg-theme-blue rounded-0">
+            <div class="card-body">
+                <div class="d-flex flex-column align-items-center">
+                    <div>
+                        <img class="w-100" src="{{ asset('page_dist/img/trophy.png') }}" alt="">
+                    </div>
+                    <div class="title-progress text-white text-center mt-4 px-4">
+                        <h2 class="title-header text-white font-weight-600 text-font-family mb-3">Congratulations</h2>
+                        <p class="text-font-family text-sm mb-4">You have been finished the course, now you can download your certificate!</p>
+                        @if ($user_certificate)
+                        <a href="{{ route('home.certificate.download', ['uuid'=>$user_certificate->uuid, 'filename' => $user_certificate->filename]) }}" target="_blank" class="btn bg-teal mt-4">Download</a>
+                        @else
+                        <button wire:loading.remove wire:target="generateCertificate" wire:click="generateCertificate" class="btn bg-teal mt-4">Download</button>
+                        @endif
+                        <button wire:loading wire:target="generateCertificate" id="btn_disable_download" class="btn bg-teal disabled text-center mt-4" style="width: 95px; display: none;"><i class="far fa-hourglass fa-pulse"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card rounded-0">
+            <div class="card-body">
+                <div class="title-progress text-center">
+                    <h2 class="title-header text-uppercase">My Certificate</h2>
+                </div>
+                <div class="text-muted">
+                    <p class="text-sm">DATE
+                        <b class="d-block">{{($user_certificate)? date('d F Y', strtotime($user_certificate->created_at)) : '-'}}</b>
+                    </p>
+                    <p class="text-sm">Verify Link
+                        <b id="link_verify" class="d-block">
+                            @if ($user_certificate)
+                            {{route('home.certificate.verify', ['hash_id'=>$user_certificate->hash_id])}}
+                            <i id="copy_verify_link" data-toggle="tooltip" data-placement="top" title="Copy to clipboard" class="ml-1 fas fa-copy" style="cursor: pointer"></i>
+                            @else
+                            -
+                            @endif
+                        </b>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+    
     @if ($course->isAccessible(Auth::guard('web')->user()->id))
     <div class="col-md-4">
         <div class="card rounded-0 card-outline card-danger card-start">
@@ -369,7 +419,7 @@ $date_expired = $date_transaction->end_date;
     </div>
     
     <div class="col-md-8">
-        <div class="card rounded-0 bg-image bg-image-countdown-3">
+        <div wire:ignore class="card rounded-0 bg-image bg-image-countdown-3">
             <div class="card-body bg-overlay">
                 <h5 class="text-center text-font-family mb-1 text-lg text-uppercase">Countdown</h5>
                 <h6 class="text-center text-font-family mb-4 text-sm">Your course will end in:</h6>
@@ -407,7 +457,7 @@ $date_expired = $date_transaction->end_date;
     </div>
     
     <div class="col-md-8">
-        <div class="card rounded-0 bg-image bg-image-countdown-1">
+        <div wire:ignore class="card rounded-0 bg-image bg-image-countdown-1">
             <div class="card-body">
                 <h5 class="text-center text-font-family mb-1 text-lg text-uppercase">Countdown</h5>
                 <h6 class="text-center text-font-family mb-4 text-sm">Get ready, your course can be accessed in:</h6>
@@ -429,25 +479,6 @@ $date_expired = $date_transaction->end_date;
                         <h3>seconds</h3>
                     </li>     
                 </ul>
-            </div>
-        </div>
-    </div>
-    @endif
-    
-    @if ($is_course_finished)
-    <div class="col-md-4">
-        <div class="card bg-theme-blue rounded-0">
-            <div class="card-body">
-                <div class="d-flex flex-column align-items-center">
-                    <div>
-                        <img class="w-100" src="{{ asset('page_dist/img/trophy.png') }}" alt="">
-                    </div>
-                    <div class="title-progress text-white text-center mt-4 px-4">
-                        <h2 class="title-header text-white font-weight-600 text-font-family mb-3">Congratulations</h2>
-                        <p class="text-font-family text-sm mb-4">You have been finished the course, now you can download your certificate!</p>
-                        <button class="btn bg-teal mt-4">Download</button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -589,7 +620,63 @@ $date_expired = $date_transaction->end_date;
     var now = new Date().getTime();
     var x_interval;
     
+    function fallbackCopyTextToClipboard(text) {
+        var textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            var successful = document.execCommand("copy");
+            var msg = successful ? "successful" : "unsuccessful";
+            console.log("Fallback: Copying text command was " + msg);
+        } catch (err) {
+            console.error("Fallback: Oops, unable to copy", err);
+        }
+        
+        document.body.removeChild(textArea);
+    }
+    async function copyTextToClipboard(text) {
+        if (!navigator.clipboard) {
+            fallbackCopyTextToClipboard(text);
+            return;
+        }
+        var status = await new Promise(function(resolve, reject) {
+            navigator.clipboard.writeText(text).then(
+            function() {
+                resolve(true)
+                // console.log("Async: Copying to clipboard was successful!");
+            },
+            function(err) {
+                reject(false)
+                // console.error("Async: Could not copy text: ", err);
+            }
+            );
+        })
+        return status;
+    }
+    
+    $(document).on('click', '#copy_verify_link', async function() {
+        var text = $('#link_verify').text();
+        var tooltip = await copyTextToClipboard(text);
+        var this_el = $(this);
+        console.log(tooltip);
+        if (tooltip) {
+            $('#copy_verify_link').attr('data-original-title', 'Copied!');
+            $('#copy_verify_link').tooltip('show');
+        } else {
+            $('#copy_verify_link').attr('data-original-title', 'Could not copy text!');
+            $('#copy_verify_link').tooltip('show');
+        }
+        setTimeout(function() {
+            this_el.attr('data-original-title', 'Copy to clipboard');
+        }, 600);
+    })
+    
     $(document).ready(function() {
+        
+        $('[data-toggle="tooltip"]').tooltip()
         
         if(countDownDate >= now) {
             x_interval = setInterval(startCountDown, 1000);
@@ -651,5 +738,14 @@ $date_expired = $date_transaction->end_date;
             });
         }
     }
+
+    
+    document.addEventListener('notification:success', function (event) {
+        Swal.fire( {
+            icon: 'success',
+            title: event.detail.title,
+            text: event.detail.message,
+        });
+    })
 </script>
 @endpush
