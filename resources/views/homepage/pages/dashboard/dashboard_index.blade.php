@@ -134,7 +134,7 @@
                                 $course_progress = $course->getProgress($user_id);
                                 $course_accessible = $course->isAccessible($user_id);
                                 @endphp
-                                <div class="col-12">
+                                <div class="col-12 mb-4">
                                     <div class="card rounded-0 bg-white">
                                         <div class="card-body">
                                             <div class="row">
@@ -167,7 +167,11 @@
                                                     </div>
                                                     <div class="w-100 mt-4rem">
                                                         @if ($course_accessible)
+                                                        @if ($course_progress->percent == 100)
+                                                        <span class="text-font-family text-lg-left d-block">Status: <b class="badge badge-primary text-uppercase">Completed</b></span>
+                                                        @else
                                                         <span class="text-font-family text-lg-left d-block">Status: <b class="badge badge-success text-uppercase">In progress</b></span>
+                                                        @endif
                                                         <span class="text-font-family text-lg-left d-block">Finish Date: <b class="text-danger">{{date('d F Y', strtotime($course->getDateTransaction($user_id)->end_date))}}</b></span>
                                                         @else
                                                         <span class="text-font-family text-lg-left d-block">Status: <b class="badge badge-secondary text-uppercase">not yet accessible</b></span>
@@ -198,8 +202,133 @@
                                 @endforeach
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">...</div>
-                        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...</div>
+                        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                            <div class="row">
+                                @foreach ($inprogress_courses as $course)
+                                @php
+                                $course_progress = $course->getProgress($user_id);
+                                @endphp
+                                <div class="col-12 mb-4">
+                                    <div class="card rounded-0 bg-white">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-4 order-sm-2 mb-2">
+                                                    <img class="w-100 course-img-right" src="{{ asset('page_dist/img/park-background-1.jpg') }}" alt="" aria-hidden="true">
+                                                </div>
+                                                <div class="col-sm-8 order-sm-1 mb-2">
+                                                    <div class="d-flex flex-column text-black">
+                                                        <div class="partner-name text-font-family">{{$course->corporation->name}}</div>
+                                                        <a href="{{ route('home.dashboard.course', ['title'=>$course->slug_title]) }}">
+                                                            <h3 class="course-title text-font-family">
+                                                                {{$course->title}}
+                                                            </h3>
+                                                        </a>
+                                                    </div>
+                                                    <div class="w-100">
+                                                        <div class="course-catalog text-uppercase">
+                                                            {{$course->catalog->name}}
+                                                        </div>
+                                                        <div class="text-warning mt-4">
+                                                            <span class="fas fa-star checked"></span>
+                                                            <span class="fas fa-star checked"></span>
+                                                            <span class="fas fa-star checked"></span>
+                                                            <span class="fas fa-star-half-alt checked"></span>
+                                                            <span class="far fa-star"></span>
+                                                            <span class="ml-1 text-black text-rating">4.6</span>
+                                                            <span class="mx-2 border-left border-right"></span>
+                                                            <span class="ml-1 text-black text-rating">86,528 ratings</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="w-100 mt-4rem">
+                                                        <span class="text-font-family text-lg-left d-block">Status: <b class="badge badge-success text-uppercase">In progress</b></span>
+                                                        <span class="text-font-family text-lg-left d-block">Finish Date: <b class="text-danger">{{date('d F Y', strtotime($course->getDateTransaction($user_id)->end_date))}}</b></span>
+                                                    </div>
+                                                    <div class="w-100 mt-2">
+                                                        <div class="d-flex justify-content-between align-items-end mb-1">
+                                                            <small class="text-secondary"><b>PROGRESS</b> {{$course_progress->percent}}% complete</small>
+                                                        </div>
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-teal" role="progressbar" aria-valuenow="{{$course_progress->percent}}" aria-valuemin="0" aria-valuemax="100" style="width: {{$course_progress->percent}}%">
+                                                                <span class="sr-only">{{$course_progress->percent}}% Complete</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="w-100 text-right mt-4">
+                                                        <a href="{{ route('home.dashboard.course', ['title'=>$course->slug_title]) }}" class="custom-btn-capsule btn btn-primary btn-sm"><i class="fas fa-arrow-right"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- <div class="card-footer bg-white  text-right">
+                                        </div> --}}
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                            <div class="row">
+                                @foreach ($completed_courses as $course)
+                                <div class="col-12 mb-4">
+                                    <div class="card rounded-0 bg-white">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-4 order-sm-2 mb-2">
+                                                    <img class="w-100 course-img-right" src="{{ asset('page_dist/img/park-background-1.jpg') }}" alt="" aria-hidden="true">
+                                                </div>
+                                                <div class="col-sm-8 order-sm-1 mb-2">
+                                                    <div class="d-flex flex-column text-black">
+                                                        <div class="partner-name text-font-family">{{$course->corporation->name}}</div>
+                                                        <a href="{{ route('home.dashboard.course', ['title'=>$course->slug_title]) }}">
+                                                            <h3 class="course-title text-font-family">
+                                                                {{$course->title}}
+                                                            </h3>
+                                                        </a>
+                                                    </div>
+                                                    <div class="w-100">
+                                                        <div class="course-catalog text-uppercase">
+                                                            {{$course->catalog->name}}
+                                                        </div>
+                                                        <div class="text-warning mt-4">
+                                                            <span class="fas fa-star checked"></span>
+                                                            <span class="fas fa-star checked"></span>
+                                                            <span class="fas fa-star checked"></span>
+                                                            <span class="fas fa-star-half-alt checked"></span>
+                                                            <span class="far fa-star"></span>
+                                                            <span class="ml-1 text-black text-rating">4.6</span>
+                                                            <span class="mx-2 border-left border-right"></span>
+                                                            <span class="ml-1 text-black text-rating">86,528 ratings</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="w-100 mt-4rem">
+                                                        <span class="text-font-family text-lg-left d-block">Status: <b class="badge badge-primary text-uppercase">Completed</b></span>
+                                                        <span class="text-font-family text-lg-left d-block">Finish Date: <b class="text-danger">{{date('d F Y', strtotime($course->getDateTransaction($user_id)->end_date))}}</b></span>
+                                                    </div>
+                                                    <div class="w-100 mt-2">
+                                                        <div class="d-flex justify-content-between align-items-end mb-1">
+                                                            <small class="text-secondary"><b>PROGRESS</b> 100% complete</small>
+                                                        </div>
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-teal" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                                                <span class="sr-only">100% Complete</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="w-100 text-right mt-4">
+                                                        <a href="{{ route('home.dashboard.course', ['title'=>$course->slug_title]) }}" class="custom-btn-capsule btn btn-primary btn-sm"><i class="fas fa-arrow-right"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- <div class="card-footer bg-white  text-right">
+                                        </div> --}}
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

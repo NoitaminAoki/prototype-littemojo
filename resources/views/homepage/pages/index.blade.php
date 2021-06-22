@@ -21,7 +21,7 @@
     }
     .custom-div-2 {
         position: absolute;
-        background-color: rgb(111 111 111);
+        background-color: rgb(93 116 140);
         transform: skewY(70deg);
         -webkit-transform: skewY(70deg);
         height: 100%;
@@ -76,6 +76,11 @@
         /* background-color: rgba(255, 255, 255, 0.493); */
         border-color: rgb(189, 189, 189);
         color: rgb(255, 255, 255);
+    }
+    
+    .img-bg-course {
+        object-fit: cover;
+        min-height: 200px;
     }
 </style>
 @endsection
@@ -169,7 +174,7 @@
                         <div class="thumb-wrap relative">
                             <div class="thumb relative">
                                 <div class="overlay overlay-bg"></div>	
-                                <img class="img-fluid" src="{{ asset('page_dist/img/p'.rand(1, 4).'.jpg')}}" alt="">
+                                <img class="img-fluid img-bg-course" src="{{ asset('page_dist/img/p'.rand(1, 5).'.jpg')}}" alt="">
                             </div>
                             <div class="meta d-flex justify-content-between">
                                 <br>
@@ -194,7 +199,7 @@
                                 </div>
                                 <div class="custom-bottom-div">
                                     {{-- <div class="meta d-flex justify-content-between">
-                                    <p><span class="lnr lnr-users"></span> {{rand(100, 3000)}} <span class="lnr lnr-bubble"></span>{{rand(10, 250)}}</p>
+                                        <p><span class="lnr lnr-users"></span> {{rand(100, 3000)}} <span class="lnr lnr-bubble"></span>{{rand(10, 250)}}</p>
                                     </div> --}}
                                     <small class="text-uppercase text-light">{{$popular_course->catalog->name}}</small>
                                 </div>
@@ -531,7 +536,7 @@
                     <h5>{{ Str::limit($blog->title, 25) }}</h5>
                 </a>
                 <a href="{{ route('blog.show', $blog->id) }}" 
-                class="btn btn-primary text-white d-inline-flex align-items-center">
+                    class="btn btn-primary text-white d-inline-flex align-items-center">
                     <span class="details mr-2">Details</span>
                     <span class="lnr lnr-arrow-right"></span>
                 </a>

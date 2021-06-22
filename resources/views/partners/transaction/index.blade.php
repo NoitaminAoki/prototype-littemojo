@@ -38,7 +38,7 @@
                             <th>Course Title</th>
                             <th>Price</th>
                             <th>Status</th>
-                            <th>Start Date</th>
+                            <th>Date</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -48,9 +48,17 @@
                             <td>{{$transaction->name_customer}}</td>
                             <td>{{$transaction->title_course}}</td>
                             <td>{{$transaction->price}}</td>
-                            <td class="text-{{ ($transaction->status_payment == 'waiting' || $transaction->status_payment == 'pending' ? 'yellow' : ($transaction->status_payment == 'settlement' ? 'green' : 'red')) }}">{{$transaction->status_payment}}</td>
-                            <td>{{!is_null($transaction->start_date) ? date_format( date_create($transaction->start_date), 'd-M-Y H:i:s'  ) : ''}}</td>
-
+                            <td class="text-{{ ($transaction->status_payment == 'waiting' || $transaction->status_payment == 'pending' ? 'yellow' : ($transaction->status_payment == 'settlement' ? 'green' : 'red')) }}">
+                                @if ($transaction->status_payment == 'settlement')
+                                Paid
+                                @elseif ($transaction->status_payment == 'waiting')
+                                Waiting for Payment
+                                @else
+                                {{$transaction->status_payment}}
+                                @endif
+                            </td>
+                            <td>{{!is_null($transaction->created_at) ? date_format( date_create($transaction->created_at), 'd-M-Y H:i:s'  ) : ''}}</td>
+                            
                         </tr>
                         @endforeach
                     </tbody>
@@ -71,7 +79,7 @@
             let status = $('[name="status"] option:selected').val()
             $(this).attr('href', 'transaction/export_pdf/'+status)
         })
-
+        
         $('#btn-exportExcel').click(function(){
             let status = $('[name="status"] option:selected').val()
             $(this).attr('href', 'transaction/export_excel/'+status)

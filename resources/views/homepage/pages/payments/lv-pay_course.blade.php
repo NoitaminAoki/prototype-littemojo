@@ -32,7 +32,7 @@
     }
     .custom-div-2 {
         position: absolute;
-        background-color: rgb(111 111 111);
+        background-color: rgb(93 116 140);
         transform: skewY(70deg);
         -webkit-transform: skewY(70deg);
         height: 100%;
