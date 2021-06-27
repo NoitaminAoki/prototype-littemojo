@@ -13,7 +13,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-12">
+    {{-- <div class="col-12">
         <div class="card">
             <div class="card-header">
                 <h4 class="card-title text-secondary">Learning Sequence</h4>
@@ -57,7 +57,7 @@
     </div>
     <div class="col-12 mb-2">
         <hr style="border-top: 2px solid rgb(132 132 132);">
-    </div>
+    </div> --}}
     <div class="col-12">
         <div class="card">
             <div class="card-header">

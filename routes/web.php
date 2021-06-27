@@ -18,12 +18,14 @@ use App\Http\Controllers\Admins\Master\{
 use App\Http\Controllers\Admins\Manage\UserController;
 use App\Http\Controllers\Admins\Manage\Partner\{CourseController, UserController as PartnerController};
 use App\Http\Controllers\BlogController as PublicBlogController;
+
 use App\Http\Controllers\Partners\{
     DashboardController as PartnerDashboard,
     AuthController as PartnerAuthController,
     CourseController as PartnerCourseController,
     CorporationController as PartnerCorporationController,
     TransactionController as PartnerTransactionController,
+    WithdrawalController as PartnerWithdrawalController,
 
     Courses\ExperienceController as PartnerExpController,
     Courses\LessonController as PartnerLessonController,
@@ -37,6 +39,9 @@ use App\Http\Controllers\Partners\{
 
 use App\Http\Livewire\Partners\{
     LvCourseInsert as CourseInsertLive,
+
+    Withdrawals\LvBank as PartnerBankLive,
+    LvWithdrawal as WithdrawalLive,
 
     Courses\Experience as PartnerExpLive,
     Courses\Skill as PartnerSkillLive,
@@ -200,6 +205,9 @@ Route::group([
         Route::get('transaction/export_pdf/{status}', [PartnerTransactionController::class, 'exportPdf']);
         Route::get('transaction/export_excel/{status}', [PartnerTransactionController::class, 'exportExcel']);
         Route::resource('transaction', PartnerTransactionController::class);
+
+        Route::get('withdrawal', WithdrawalLive::class)->name('withdrawal');
+        Route::get('withdrawal/bank-accounts', PartnerBankLive::class)->name('withdrawal.bank_account');
     });
 });
 

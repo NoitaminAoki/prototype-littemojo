@@ -17,7 +17,8 @@ class CreatePartnerBankInformationTable extends Migration
             $table->id();
             $table->bigInteger('partner_id')->unsigned()->nullable();
             $table->string('bank_name');
-            $table->string('bank_account');
+            $table->string('bank_account_name');
+            $table->string('bank_account_number');
             $table->boolean('is_main_bank')->default(false);
             $table->timestamps();
         });

@@ -46,6 +46,12 @@
                         <p>Transaction</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{route('partner.manage.withdrawal')}}" class="nav-link {{ (Request::routeIs('partner.manage.withdrawal*'))? 'active' : '' }}">
+                        <i class="nav-icon fas fa-credit-card"></i>
+                        <p>Withdrawal</p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

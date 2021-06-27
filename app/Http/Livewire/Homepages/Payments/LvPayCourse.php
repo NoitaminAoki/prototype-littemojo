@@ -9,6 +9,7 @@ use App\Models\{
     Course,
     CustomerTransaction,
     CustomerTransactionDetail,
+    PartnerFundTransaction,
 };
 use App\Mail\CustomerMail;
 use Mail;
@@ -170,7 +171,7 @@ class LvPayCourse extends Component
         // dd($this->start_date);
         $start_date_format = \DateTime::createFromFormat('d F Y H:i', $this->start_date)->format('Y-m-d H:i');
         $generated_order_id = "TRX".date('Ymd')."CS".$course->id.$user_auth->id.date('His');
-        $admin_fee = 5000;
+        $admin_fee = 10000;
 
         $total_amount = ($course->price+$admin_fee);
 
@@ -210,7 +211,7 @@ class LvPayCourse extends Component
         $snapToken = \Midtrans\Snap::getSnapToken($params);
         $this->snap_token = $snapToken;
 
-        CustomerTransaction::create([
+        $customer_transaction = CustomerTransaction::create([
             'customer_id' => $user_auth->id,
             'course_id' => $course->id,
             'transaction_code' => $generated_order_id,
@@ -220,6 +221,14 @@ class LvPayCourse extends Component
             'snap_token' => $snapToken,
             'status_payment' => 'waiting',
             'start_date' => $start_date_format
+        ]);
+
+        PartnerFundTransaction::create([
+            'partner_id' => $course->user_id,
+            'customer_transaction_id' => $customer_transaction->id,
+            'type_transaction' => 'income',
+            'amount' => $course->price,
+            'final_amount' => $course->price,
         ]);
 
         $this->dispatchBrowserEvent('midtrans:snap_pay', ['snapToken' => $snapToken]);

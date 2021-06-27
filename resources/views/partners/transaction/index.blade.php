@@ -57,7 +57,7 @@
                                 {{$transaction->status_payment}}
                                 @endif
                             </td>
-                            <td>{{!is_null($transaction->created_at) ? date_format( date_create($transaction->created_at), 'd-M-Y H:i:s'  ) : ''}}</td>
+                            <td>{{!is_null($transaction->created_at) ? date_format( date_create($transaction->created_at), 'd-M-Y H:i'  ) : ''}}</td>
                             
                         </tr>
                         @endforeach
