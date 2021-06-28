@@ -99,4 +99,14 @@ class LvBank extends Component
         $this->resetInput();
         return $this->dispatchBrowserEvent('notification:success', ['title' => 'Success!', 'message' => 'Successfully updating data.']);
     }
+
+    public function delete($id)
+    {
+        $account = BankAccount::findOrFail($id);
+        if($account->is_main_bank) {
+            return ['status_code' => 403, 'message' => 'Unable to delete your main Bank Account.'];
+        }
+        $account->delete();
+        return ['status_code' => 200, 'message' => 'Your file has been deleted.'];
+    }
 }

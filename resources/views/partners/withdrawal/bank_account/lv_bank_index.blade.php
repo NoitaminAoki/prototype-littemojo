@@ -58,7 +58,7 @@
                             <td class="text-right py-0 align-middle">
                                 <div class="btn-group btn-group-sm">
                                     <button wire:click="setBank({{$bank_account->id}})" wire:loading.attr="disabled" data-toggle="modal" data-target="#modal-update" class="btn btn-warning"><i class="fas fa-edit"></i></button>
-                                    <button data-id="{{$bank_account->id}}" wire:loading.attr="disabled" class="btn btn-danger btn-delete btn-process"><i class="fas fa-trash"></i></button>
+                                    <button data-id="{{$bank_account->id}}" wire:loading.attr="disabled" class="btn btn-danger btn-delete"><i class="fas fa-trash"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -82,20 +82,20 @@
                     <div class="modal-body">
                         <div class="w-100 mb-3">
                             <label for="name">Bank Name</label>
-                            <input wire:model.defer="bank_account.name" type="text" name="bank_name" class="form-control">
+                            <input wire:model.defer="bank_account.name" type="text" name="bank_name" class="form-control" required>
                         </div>
                         <div class="w-100 mb-3">
                             <label for="bank_account_name">Account Name</label>
-                            <input wire:model.defer="bank_account.account_name" type="text" name="bank_account_name" class="form-control">
+                            <input wire:model.defer="bank_account.account_name" type="text" name="bank_account_name" class="form-control" required>
                         </div>
                         <div class="w-100 mb-3">
                             <label for="bank_account_number">Account Number</label>
-                            <input wire:model.defer="bank_account.account_number" type="text" name="bank_account_number" class="form-control">
+                            <input wire:model.defer="bank_account.account_number" type="text" name="bank_account_number" class="form-control" required>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" wire:loading.attr="disabled" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" wire:loading.attr="disabled" id="btn-insert btn-process" class="btn btn-primary">Save</button>
+                        <button type="submit" wire:loading.attr="disabled" id="btn-insert" class="btn btn-primary">Save</button>
                     </div>
                 </form>
             </div>
@@ -117,15 +117,15 @@
                     <div class="modal-body">
                         <div class="w-100 mb-3">
                             <label for="name">Bank Name</label>
-                            <input wire:model.defer="bank_account.name" type="text" name="bank_name" class="form-control">
+                            <input wire:model.defer="bank_account.name" type="text" name="bank_name" class="form-control" required>
                         </div>
                         <div class="w-100 mb-3">
                             <label for="bank_account_name">Account Name</label>
-                            <input wire:model.defer="bank_account.account_name" type="text" name="bank_account_name" class="form-control">
+                            <input wire:model.defer="bank_account.account_name" type="text" name="bank_account_name" class="form-control" required>
                         </div>
                         <div class="w-100 mb-3">
                             <label for="bank_account_number">Account Number</label>
-                            <input wire:model.defer="bank_account.account_number" type="text" name="bank_account_number" class="form-control">
+                            <input wire:model.defer="bank_account.account_number" type="text" name="bank_account_number" class="form-control" required>
                         </div>
                         <div class="w-100 mb-3">
                             <div class="custom-control custom-checkbox">
@@ -136,7 +136,7 @@
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" wire:loading.attr="disabled" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" wire:loading.attr="disabled" id="btn-insert btn-process" class="btn btn-primary">Update</button>
+                        <button type="submit" wire:loading.attr="disabled" id="btn-process" class="btn btn-primary">Update</button>
                     </div>
                 </form>
             </div>
@@ -156,8 +156,46 @@
     $(document).ready(function () {
         bsCustomFileInput.init();
     });
+    
+    document.addEventListener('livewire:load', function () {
+        $(document).on('click', '.btn-delete', function() {
+            var id = $(this).attr('data-id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                showLoaderOnConfirm: true,
+                preConfirm: async () => {
+                    var data = await @this.delete(id)
+                    return data
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then(async (result) => {
+                console.log(result);
+                if (result.value.status_code == 200) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: result.value.message,
+                    });
+                }
+                else if (result.value.status_code == 403) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed!',
+                        text: result.value.message,
+                    });
+                }
+            })
+        })
+    })
     document.addEventListener('notification:success', function (event) {
         $('.modal').modal('hide');
+        
         Swal.fire({
             icon: 'success',
             title: event.detail.title,

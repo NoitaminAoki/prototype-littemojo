@@ -48,7 +48,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('partner.manage.withdrawal')}}" class="nav-link {{\Request::is('partner/management/transaction*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-credit-card"></i>
+                        <i class="nav-icon fas fa-money-check-alt"></i>
                         <p>Withdrawal</p>
                     </a>
                 </li>
