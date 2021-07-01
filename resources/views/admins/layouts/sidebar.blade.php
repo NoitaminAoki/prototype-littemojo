@@ -110,7 +110,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('admin.finance.request.withdrawal')}}" class="nav-link {{ (Request::routeIs('admin.finance.request.withdrawal*'))? 'active' : '' }}">
+                    <a href="{{route('partner.manage.withdrawal')}}" class="nav-link {{ (Request::routeIs('partner.manage.withdrawal*'))? 'active' : '' }}">
                         <i class="nav-icon fas fa-money-check-alt"></i>
                         <p>Request Withdraw</p>
                     </a>

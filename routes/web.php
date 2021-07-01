@@ -37,6 +37,10 @@ use App\Http\Controllers\Partners\{
 
 };
 
+use App\Http\Livewire\Admins\{
+    LvRequestWithdrawal as ReqWithdrawalLive,
+};
+
 use App\Http\Livewire\Partners\{
     LvCourseInsert as CourseInsertLive,
 
@@ -143,6 +147,11 @@ Route::middleware('auth:admin')->prefix('admin/management')->name('admin.')->gro
         'level'         => LevelController::class,
         'user'          => UserController::class,
     ]);
+    
+    Route::prefix('finance')->name('finance.')->group(function(){
+        Route::get('request-withdrawal', ReqWithdrawalLive::class)->name('request.withdrawal');
+    });
+
     Route::prefix('partner')->group(function(){
         Route::get('verif_course/{course_id}/lessons', [CourseController::class, 'lesson'])->name('verif_course.lesson.index');
         Route::resource('verif_course', CourseController::class);
