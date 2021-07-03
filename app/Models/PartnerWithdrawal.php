@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\{
+    Partner,
     PartnerBankInformation as BankAccount,
 };
 
@@ -29,5 +30,10 @@ class PartnerWithdrawal extends Model
     public function bank_account()
     {
         return $this->belongsTo(BankAccount::class, 'bank_id');
+    }
+
+    public function partner()
+    {
+        return $this->belongsTo(Partner::class, 'bank_id');
     }
 }

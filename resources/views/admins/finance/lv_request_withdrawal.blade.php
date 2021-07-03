@@ -13,20 +13,6 @@
         width: 200px;
         height: 24px;
     }
-    .shine {
-        background: #f6f7f8;
-        background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
-        background-repeat: no-repeat;
-        background-size: 800px 104px; 
-        display: inline-block;
-        position: relative; 
-        
-        -webkit-animation-duration: 1s;
-        -webkit-animation-fill-mode: forwards; 
-        -webkit-animation-iteration-count: infinite;
-        -webkit-animation-name: placeholderShimmer;
-        -webkit-animation-timing-function: linear;
-    }
     .shine-gray {
         background: #e8e8e8;
         background-image: linear-gradient(to right, #e8e8e8 0%, #cccccc 20%, #e8e8e8 40%, #e8e8e8 100%);
@@ -132,12 +118,12 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    
                     <table id="example1" class="table table-bordered table-striped table-hover">
                         <thead>
                             <tr role="row">
                                 <th>No</th>
                                 <th>Bank Information</th>
+                                <th>Partner</th>
                                 <th>Amount</th>
                                 <th>Status</th>
                                 <th class="text-center">Action</th>
@@ -148,11 +134,19 @@
                             <tr>
                                 <td class="align-middle" width="40px;">{{($loop->index+1)}}</td>
                                 <td> 
-                                    <p class="text-sm mb-0">
-                                        <b>{{$withdrawal->bank_account->bank_name}}</b>
-                                        <br>
-                                        {{$withdrawal->bank_account->bank_account_name}} - {{$withdrawal->bank_account->bank_account_number}}    
-                                    </p>    
+                                    <div class="d-flex justify-content-between">
+                                        <p class="text-sm mb-0">
+                                            <b>{{$withdrawal->bank_account->bank_name}}</b>
+                                            <br>
+                                            {{$withdrawal->bank_account->bank_account_name}} - {{$withdrawal->bank_account->bank_account_number}}    
+                                        </p>
+                                        <div>
+                                            <button wire:click="setBank({{$withdrawal->bank_id}})" data-toggle="modal" data-target="#modal-bank-info" class="btn btn-xs btn-primary"><i class="fas fa-search"></i></button>    
+                                        </div>
+                                    </div>    
+                                </td>
+                                <td>
+                                    {{$withdrawal->partner->name}}
                                 </td>
                                 <td class="align-middle">IDR {{number_format($withdrawal->amount, 0, ',', '.')}}</td>
                                 <td class="align-middle">
@@ -170,15 +164,15 @@
                                     </div>
                                     @elseif($withdrawal->status_number == 1)
                                     <div class="btn-group btn-group-xs">
-                                        <button data-id="{{$withdrawal->id}}" class="btn btn-primary btn-sm">Finish</button>
-                                        <button class="btn btn-secondary btn-sm">Cancel</button>
+                                        <button wire:click="setWithdrawal({{$withdrawal->id}})" data-toggle="modal" data-target="#modal-finish" class="btn btn-primary btn-sm">Finish</button>
+                                        <button data-id="{{$withdrawal->id}}" class="btn btn-cancel btn-secondary btn-sm">Cancel</button>
                                     </div>
                                     @endif
                                 </td>
                             </tr>
                             @empty
                             <tr class="border bg-light">
-                                <td colspan="5" class="text-center text-secondary">No Data</td>
+                                <td colspan="6" class="text-center text-secondary">No Data</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -187,7 +181,60 @@
             </div>
         </div>        
     </div>
-    <div wire:ignore.self class="modal fade" tabindex="-1" id="modal-insert">
+    
+    <div wire:ignore.self class="modal fade" tabindex="-1" id="modal-bank-info">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Bank Information</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="w-100">
+                        <div wire:loading.class="d-block" class="card bg-light d-none">
+                            <div class="card-header border-bottom-0">
+                                <div class="loading-text-title shine-gray"></div>
+                            </div>
+                            <div class="card-body pt-0">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h2 class="lead"><div class="loading-text-name shine-gray"></div></h2>
+                                        <div class="loading-text-number shine-gray"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div wire:loading.remove class="card bg-light">
+                            <div class="card-header border-bottom-0">
+                                {{$bank_account['name']}}
+                            </div>
+                            <div class="card-body pt-0">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h2 class="lead"><b>{{$bank_account['account_name']}}</b></h2>
+                                        
+                                        <div class="d-flex align-items-end">
+                                            <p class="mb-0 text-sm mr-2"><b><i class="fas fa-money-check mr-2"></i>: </b></p>
+                                            <h4 class="mb-0">{{$bank_account['account_number']}}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer float-right">
+                    <button type="button" wire:loading.attr="disabled" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+    <div wire:ignore.self class="modal fade" tabindex="-1" id="modal-finish">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -196,44 +243,28 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form wire:submit.prevent="insert">
+                <form wire:submit.prevent="finishRequest" x-data="{ isUploading: false, progress: 0 }" x-on:livewire-upload-start="isUploading = true" x-on:livewire-upload-finish="isUploading = false" x-on:livewire-upload-error="isUploading = false" x-on:livewire-upload-progress="progress = $event.detail.progress">
                     <div class="modal-body">
-                        <div class="w-100 mb-3">
-                            <label for="name">Bank Account</label>
-                            <button type="button" data-target-close="#modal-insert" data-toggle="modal" data-target="#modal-list-bank" class="btn btn-warning btn-xs float-right"><i class="fas fa-edit"></i></button>
-                            <div class="w-100">
-                                <div wire:loading.class="d-block" class="card bg-light d-none">
-                                    <div class="card-header border-bottom-0">
-                                        <div class="loading-text-title shine-gray"></div>
-                                    </div>
-                                    <div class="card-body pt-0">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <h2 class="lead"><div class="loading-text-name shine-gray"></div></h2>
-                                                <div class="loading-text-number shine-gray"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div wire:loading.remove class="card bg-light">
-                                    <div class="card-header border-bottom-0">
-                                        {{$bank_account['name']}}
-                                    </div>
-                                    <div class="card-body pt-0">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <h2 class="lead"><b>{{$bank_account['account_name']}}</b></h2>
-                                                <p class=""><b><i class="fas fa-money-check mr-2"></i>: </b> {{$bank_account['account_number']}} </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="w-100 mt-2">
+                            <label for="">File</label>
+                            <input type="file" wire:model="file" accept="image/*" class="form-control" id="upload{{$iteration}}" required>
+                        </div>
+                        @error('file')
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                        <div x-show="isUploading">
+                            <progress max="100" class="w-100" x-bind:value="progress"></progress>
+                        </div>
+                        <div class="w-100">
+                            @if ($file)
+                            Image Preview:
+                            <img src="{{ $file->temporaryUrl() }}" class="w-100 border shadow">
+                            @endif
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" wire:loading.attr="disabled" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" wire:loading.attr="disabled" id="btn-insert btn-process" class="btn btn-primary">Save</button>
+                        <button type="submit" wire:loading.attr="disabled" id="btn-insert btn-process" class="btn btn-primary">Submit</button>
                     </div>
                 </form>
             </div>
@@ -249,6 +280,7 @@
 <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js')}} "></script>
 <script>
     document.addEventListener('livewire:load', function () {
+        
         $(document).on('click', '.btn-accept', function() {
             var id = $(this).attr('data-id');
             Swal.fire({
@@ -280,6 +312,39 @@
                 }
             })
         })
+        
+        $(document).on('click', '.btn-cancel', function() {
+            var id = $(this).attr('data-id');
+            Swal.fire({
+                title: "Do you want to cancel the process?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                showLoaderOnConfirm: true,
+                preConfirm: async () => {
+                    var data = await @this.cancelRequest(id)
+                    return data
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then(async (result) => {
+                console.log(result);
+                if (result.value.status_code == 200) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: result.value.message,
+                    });
+                }
+                else if (result.value.status_code == 403) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed!',
+                        text: result.value.message,
+                    });
+                }
+            })
+        })
+        
     })
     document.addEventListener('notification:success', function (event) {
         $('.modal').modal('hide');

@@ -26,4 +26,19 @@ class WithdrawalController extends Controller
         $data['withdrawals'] = [];
         return view('partners.withdrawal.index')->with($data);
     }
+
+    public function image($uuid)
+    {
+        $file = PartnerWithdrawal::where('uuid', $uuid)->firstOrFail();
+        $path = storage_path('app/'.$file->path);
+        
+        if (file_exists($path)) {
+            
+            return response()
+            ->file($path, array('Cache-Control' => 'no-cache, no-store, must-revalidate', 'Pragma' => 'no-cache', 'Expires' => '0', 'Content-Type' =>'image'));
+            
+        }
+        
+        abort(404);
+    }
 }

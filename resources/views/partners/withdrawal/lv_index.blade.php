@@ -13,11 +13,29 @@
         width: 200px;
         height: 24px;
     }
+    .loading-image-block {
+        width: 100%;
+        height: 200px;
+    }
     .shine {
         background: #f6f7f8;
         background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
         background-repeat: no-repeat;
         background-size: 800px 104px; 
+        display: inline-block;
+        position: relative; 
+        
+        -webkit-animation-duration: 1s;
+        -webkit-animation-fill-mode: forwards; 
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-name: placeholderShimmer;
+        -webkit-animation-timing-function: linear;
+    }
+    .shine-image {
+        background: #f6f7f8;
+        background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+        background-repeat: no-repeat;
+        background-size: 800px 304px; 
         display: inline-block;
         position: relative; 
         
@@ -85,32 +103,36 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($withdrawals as $withdrawal)
+                        @forelse ($withdrawals as $item_withdraw)
                         <tr>
                             <td class="align-middle" width="40px;">{{($loop->index+1)}}</td>
                             <td> 
                                 <p class="text-sm mb-0">
-                                    <b>{{$withdrawal->bank_account->bank_name}}</b>
+                                    <b>{{$item_withdraw->bank_account->bank_name}}</b>
                                     <br>
-                                    {{$withdrawal->bank_account->bank_account_name}} - {{$withdrawal->bank_account->bank_account_number}}    
+                                    {{$item_withdraw->bank_account->bank_account_name}} - {{$item_withdraw->bank_account->bank_account_number}}    
                                 </p>    
                             </td>
-                            <td class="align-middle">IDR {{number_format($withdrawal->amount, 0, ',', '.')}}</td>
+                            <td class="align-middle">IDR {{number_format($item_withdraw->amount, 0, ',', '.')}}</td>
                             <td class="align-middle">
-                                @if ($withdrawal->status_number == 1)
+                                @if ($item_withdraw->status_number == 0)
+                                <span class="text-sm text-lightblue"><i class="fas fa-hourglass-end fa-pulse mr-1"></i> Waiting for Approval</span>
+                                @elseif ($item_withdraw->status_number == 1)
                                 <span class="text-sm text-orange"><i class="fas fa-circle-notch fa-spin mr-1"></i> On Process</span>
-                                @else
-                                <span class="text-sm text-lightblue"><i class="fas fa-hourglass-end fa-pulse mr-1"></i> Waiting for Approval</span>   
+                                @elseif ($item_withdraw->status_number == 2)   
+                                <span class="text-sm text-teal"><i class="fas fa-check-circle mr-1"></i> Already Transferred</span>
                                 @endif
                             </td>
                             <td class="text-center py-0 align-middle"  width="100px;">
-                                @if ($withdrawal->status_number == 0)
+                                @if ($item_withdraw->status_number == 0)
                                 <div class="btn-group btn-group-sm">
-                                    <button wire:click="setWithdrawal({{$withdrawal->id}})" wire:loading.attr="disabled" data-toggle="modal" data-target="#modal-update" class="btn btn-warning"><i class="fas fa-edit"></i></button>
-                                    <button data-id="{{$withdrawal->id}}" wire:loading.attr="disabled" class="btn btn-danger btn-delete"><i class="fas fa-trash"></i></button>
+                                    <button wire:click="setWithdrawal({{$item_withdraw->id}})" wire:loading.attr="disabled" data-toggle="modal" data-target="#modal-update" class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                                    <button data-id="{{$item_withdraw->id}}" wire:loading.attr="disabled" class="btn btn-danger btn-delete"><i class="fas fa-trash"></i></button>
                                 </div>
-                                @elseif ($withdrawal->status_number == 1)
+                                @elseif ($item_withdraw->status_number == 1)
                                 <small class="text-muted">No Action</small>
+                                @elseif ($item_withdraw->status_number == 2)
+                                <button wire:click="setWithdrawal({{$item_withdraw->id}})" wire:loading.attr="disabled" data-toggle="modal" data-target="#modal-transfer-info" class="btn btn-primary btn-xs">Look up <i class="fas fa-search ml-1"></i></button>
                                 @endif
                             </td>
                         </tr>
@@ -249,6 +271,61 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+    
+    <div wire:ignore.self class="modal fade" tabindex="-1" id="modal-transfer-info">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Transfer Information</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="w-100 mt-2">
+                        <div wire:loading.class="d-block" class="card bg-light d-none">
+                            <div class="card-header border-bottom-0">
+                                <div class="loading-text-title shine-gray"></div>
+                            </div>
+                            <div class="card-body pt-0">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h2 class="lead"><div class="loading-text-name shine-gray"></div></h2>
+                                        <div class="loading-text-number shine-gray"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div wire:loading.remove class="card bg-light">
+                            <div class="card-header border-bottom-0">
+                                {{$bank_account['name']}}
+                            </div>
+                            <div class="card-body pt-0">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h2 class="lead"><b>{{$bank_account['account_name']}}</b></h2>
+                                        <p class=""><b><i class="fas fa-money-check mr-2"></i>: </b> {{$bank_account['account_number']}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-100 mt-2">
+                        <div wire:loading.class="d-block" class="loading-image-block shine-image d-none"></div>
+                        @if($withdrawal)
+                        <img wire:loading.remove src="{{ route('withdrawal.transfer.images', ['uuid'=>$withdrawal->uuid]) }}" class="w-100 border shadow">
+                        @endif
+                    </div>
+                </div>
+                <div class="modal-footer float-right">
+                    <button type="button" wire:loading.attr="disabled" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
     <div wire:ignore.self class="modal fade" tabindex="-1" id="modal-list-bank">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -271,19 +348,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($bank_accounts as $bank_account)
+                            @forelse ($bank_accounts as $bank_acc)
                             <tr>
                                 <td width="40px;">{{($loop->index+1)}}</td>
-                                <td class="text-capitalize">{{$bank_account->bank_name}}</td>
-                                <td>{{$bank_account->bank_account_name}}</td>
-                                <td>{{$bank_account->bank_account_number}}</td>
+                                <td class="text-capitalize">{{$bank_acc->bank_name}}</td>
+                                <td>{{$bank_acc->bank_account_name}}</td>
+                                <td>{{$bank_acc->bank_account_number}}</td>
                                 <td class="text-center">
-                                    @if ($bank_account->is_main_bank)
+                                    @if ($bank_acc->is_main_bank)
                                     <i class="fas fa-check-circle text-success"></i>
                                     @endif
                                 </td>
                                 <td class="text-center py-0 align-middle">
-                                    <button wire:click="setBankAccount({{$bank_account->id}})" wire:loading.attr="disabled" class="btn btn-primary btn-xs">Choose</button>
+                                    <button wire:click="setBankAccount({{$bank_acc->id}})" wire:loading.attr="disabled" class="btn btn-primary btn-xs">Choose</button>
                                 </td>
                             </tr>
                             @empty

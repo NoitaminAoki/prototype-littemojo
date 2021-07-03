@@ -163,6 +163,8 @@ class LvWithdrawal extends Component
         $this->bank_account['account_name'] = $withdrawal->bank_account_name;
         $this->bank_account['account_number'] = $withdrawal->bank_account_number;
         $this->bank_account['is_main_bank'] = $withdrawal->is_main_bank;
+        // dd($this->bank_account);
+
     }
 
     public function update()

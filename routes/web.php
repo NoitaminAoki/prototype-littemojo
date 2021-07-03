@@ -120,7 +120,7 @@ Route::get('payments/failed', [PaymentController::class, 'failed']);
 Route::get('payments/unfinish', [PaymentController::class, 'unfinish']);
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
-Route::get('courses', CoursesLive::class)->name('course_home.index');
+Route::get('courses', CoursesLive::class)->name('home.course.index');
 
 Route::resource('blog', BlogController::class);
 
@@ -244,6 +244,9 @@ Route::middleware(['auth:partner'])->group(function (){
     Route::get('quizzes/questions/options/get/{uuid}/image', [
         QuestionController::class, 'optionIndex'
     ])->name('question.option.images');
+    Route::get('withdrawals/get/{uuid}/image', [
+        PartnerWithdrawalController::class, 'image'
+    ])->name('withdrawal.transfer.images');
 });
 
 Route::middleware(['auth:web', 'verified'])->prefix('assets/')->name('home.asset.')->group(function (){

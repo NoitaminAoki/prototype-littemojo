@@ -7,6 +7,12 @@
 <head>
     @include('admins.layouts.css')
     @yield('css')
+
+    <style>
+        input[type="file"] {
+            height: calc(2.25rem + 8px);
+        }
+    </style>
     {{-- @livewireStyles --}}
 
     <!-- Scripts -->
