@@ -90,7 +90,9 @@
                 <!-- /.social-auth-links -->
                 
                 <p class="mb-1">
-                    <a href="forgot-password.html" class="text-sm">Forgot password?</a>
+                    <a href="{{ url('/forgot-password') }}" class="text-sm">
+                        Forgot password?
+                    </a>
                 </p>
                 <p class="mb-0">
                     <a href="{{ route('register') }}" class="text-center text-sm">Register for free</a>
