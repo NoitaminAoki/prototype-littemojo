@@ -5,14 +5,17 @@
         </x-slot>
 
         <div class="mb-4 text-sm text-gray-600">
-            {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+            {{ __('Lupa password? Tidak masalah. Masukkan email anda, dan nanti anda akan mendapat link reset password di email.') }}
         </div>
 
         @if (session('status'))
-            <div class="mb-4 font-medium text-sm text-green-600">
+        <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">
                 {{ session('status') }}
-            </div>
+            </span>
+        </div>
         @endif
+        
 
         <x-jet-validation-errors class="mb-4" />
 
@@ -26,7 +29,7 @@
 
             <div class="flex items-center justify-end mt-4">
                 <x-jet-button>
-                    {{ __('Email Password Reset Link') }}
+                    {{ __('Kirim link reset password') }}
                 </x-jet-button>
             </div>
         </form>

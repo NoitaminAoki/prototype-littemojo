@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Home\{
     HomeController,
     PaymentController,
@@ -20,6 +21,7 @@ use App\Http\Controllers\Admins\Manage\Partner\{CourseController, UserController
 use App\Http\Controllers\BlogController as PublicBlogController;
 
 use App\Http\Controllers\Partners\{
+    ResetPasswordController as ResetPasswordPartner,
     DashboardController as PartnerDashboard,
     AuthController as PartnerAuthController,
     CourseController as PartnerCourseController,
@@ -208,6 +210,7 @@ Route::group([
         });
         Route::get('course/publish/{id}', [PartnerCourseController::class, 'publish'])->name('publish');
         
+        Route::get('course/suggestTopic/{id}', [PartnerCourseController::class, 'suggestTopic'])->name('suggestTopic');
         Route::resource('course', PartnerCourseController::class);
         Route::get('course/create', CourseInsertLive::class)->name('course.create');
         Route::resource('corporation', PartnerCorporationController::class);
@@ -274,3 +277,7 @@ Route::get('pass-login-admin', function () {
     }
     return redirect('login');
 });
+Route::post('partner/custom_password', [ResetPasswordPartner::class, 'reset'])->name('password.email');
+Route::get('partner/{token}/reset-password', [ResetPasswordPartner::class, 'getPassword']);
+Route::post('partner/reset-password', [ResetPasswordPartner::class, 'updatePassword'])->name('partner.updatePassword');
+Route::view('test-mail', 'test');

@@ -11,6 +11,14 @@
                 {{ session('error') }}
             </div>
         @endif
+        
+        @if (session('status'))
+        <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">
+                {{ session('status') }}
+            </span>
+        </div>
+        @endif
 
         <form method="POST" action="{{ route('partner.login') }}">
             @csrf
