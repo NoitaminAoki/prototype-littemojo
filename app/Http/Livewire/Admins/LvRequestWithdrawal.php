@@ -92,6 +92,14 @@ class LvRequestWithdrawal extends Component
         return ['status_code' => 200, 'message' => 'You have been canceled the process!'];
     }
 
+    public function rejectRequest($id)
+    {
+        $withdrawal = PartnerWithdrawal::findOrFail($id);
+        $withdrawal->status = 'rejected';
+        $withdrawal->save();
+        return ['status_code' => 200, 'message' => 'You have been rejected the request!'];
+    }
+
     public function setBank($id)
     {
         $account = BankAccount::findOrFail($id);

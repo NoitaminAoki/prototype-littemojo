@@ -17,11 +17,12 @@ class CreatePartnerWithdrawalsTable extends Migration
             $table->id();
             $table->bigInteger('partner_id')->unsigned()->nullable();
             $table->bigInteger('bank_id')->unsigned()->nullable();
+            $table->string('withdrawal_code', 100);
             $table->uuid('uuid');
             $table->string('image')->nullable();
             $table->string('path')->nullable();
             $table->integer('amount');
-            $table->enum('status', ['pending', 'process', 'success']);
+            $table->enum('status', ['pending', 'process', 'success', 'rejected']);
             $table->timestamps();
         });
     }

@@ -16,12 +16,13 @@
         transform: skewY(-10deg);
         -webkit-transform: skewY(-10deg);
         height: 100%;
-        width: 100%;
+        width: calc(100% + 2px);
         top: 190px;
+        left: -1px;
     }
     .custom-div-2 {
         position: absolute;
-        background-color: rgb(93 116 140);
+        background-color: rgb(6 16 27 / 57%);
         transform: skewY(70deg);
         -webkit-transform: skewY(70deg);
         height: 100%;
@@ -80,7 +81,7 @@
     
     .img-bg-course {
         object-fit: cover;
-        min-height: 200px;
+        min-height: 215px;
     }
 </style>
 @endsection

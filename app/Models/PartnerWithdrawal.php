@@ -34,6 +34,6 @@ class PartnerWithdrawal extends Model
 
     public function partner()
     {
-        return $this->belongsTo(Partner::class, 'bank_id');
+        return $this->belongsTo(Partner::class, 'partner_id');
     }
 }

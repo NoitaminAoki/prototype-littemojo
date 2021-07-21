@@ -122,6 +122,7 @@
                         <thead>
                             <tr role="row">
                                 <th>No</th>
+                                <th>Ticket ID</th>
                                 <th>Bank Information</th>
                                 <th>Partner</th>
                                 <th>Amount</th>
@@ -133,6 +134,9 @@
                             @forelse ($withdrawals as $withdrawal)
                             <tr>
                                 <td class="align-middle" width="40px;">{{($loop->index+1)}}</td>
+                                <td class="align-middle">
+                                    {{$withdrawal->withdrawal_code}}
+                                </td>
                                 <td> 
                                     <div class="d-flex justify-content-between">
                                         <p class="text-sm mb-0">
@@ -145,8 +149,12 @@
                                         </div>
                                     </div>    
                                 </td>
-                                <td>
-                                    {{$withdrawal->partner->name}}
+                                <td class="align-middle">
+                                    <p class="text-sm mb-0">
+                                        <b>{{$withdrawal->partner->corporation->name}}</b>
+                                        <br>
+                                        {{$withdrawal->partner->name}}    
+                                    </p>
                                 </td>
                                 <td class="align-middle">IDR {{number_format($withdrawal->amount, 0, ',', '.')}}</td>
                                 <td class="align-middle">
@@ -160,7 +168,7 @@
                                     @if ($withdrawal->status_number == 0)
                                     <div class="btn-group btn-group-xs">
                                         <button data-id="{{$withdrawal->id}}" class="btn btn-accept btn-success btn-sm">Accept</button>
-                                        <button class="btn btn-danger btn-sm">Reject</button>
+                                        <button data-id="{{$withdrawal->id}}" class="btn btn-reject btn-danger btn-sm">Reject</button>
                                     </div>
                                     @elseif($withdrawal->status_number == 1)
                                     <div class="btn-group btn-group-xs">
@@ -172,7 +180,7 @@
                             </tr>
                             @empty
                             <tr class="border bg-light">
-                                <td colspan="6" class="text-center text-secondary">No Data</td>
+                                <td colspan="7" class="text-center text-secondary">No Data</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -296,14 +304,14 @@
                 allowOutsideClick: () => !Swal.isLoading()
             }).then(async (result) => {
                 console.log(result);
-                if (result.value.status_code == 200) {
+                if (result.value && result.value.status_code == 200) {
                     Swal.fire({
                         icon: 'success',
                         title: 'Success!',
                         text: result.value.message,
                     });
                 }
-                else if (result.value.status_code == 403) {
+                else if (result.value && result.value.status_code == 403) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Failed!',
@@ -328,14 +336,45 @@
                 allowOutsideClick: () => !Swal.isLoading()
             }).then(async (result) => {
                 console.log(result);
-                if (result.value.status_code == 200) {
+                if (result.value && result.value.status_code == 200) {
                     Swal.fire({
                         icon: 'success',
                         title: 'Success!',
                         text: result.value.message,
                     });
                 }
-                else if (result.value.status_code == 403) {
+                else if (result.value && result.value.status_code == 403) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed!',
+                        text: result.value.message,
+                    });
+                }
+            })
+        })
+        $(document).on('click', '.btn-reject', function() {
+            var id = $(this).attr('data-id');
+            Swal.fire({
+                title: "Do you want to reject the request?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                showLoaderOnConfirm: true,
+                preConfirm: async () => {
+                    var data = await @this.rejectRequest(id)
+                    return data
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then(async (result) => {
+                console.log(result);
+                if (result.value && result.value.status_code == 200) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: result.value.message,
+                    });
+                }
+                else if (result.value && result.value.status_code == 403) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Failed!',
