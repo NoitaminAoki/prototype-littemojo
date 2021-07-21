@@ -97,6 +97,10 @@ class CourseController extends Controller
         return view('partners.course.edit', compact('catalogs', 'levels', 'data'));
     }
 
+    public function suggestTopic($cat_id){
+        return CatalogTopic::where('catalog_id', $cat_id)->get();
+    }
+
     public function update(CourseRequest $request, $id){
         $a = Course::findOrFail($id)->orderBy('id', 'DESC')->first();
         $request['old_file'] = $a->uuid;

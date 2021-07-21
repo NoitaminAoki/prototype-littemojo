@@ -20,52 +20,79 @@
                 {{ method_field('PATCH') }}
                 <div class="card-body">
                     @include('partials.alert')
-                    <div class="form-group">
-                        <label>Nama Catalog</label>
-                        <select class="form-control select2" style="width: 100%;" name="catalog_id" required>
-                            <option selected="selected" value=""></option>
-                            @foreach($catalogs as $catalog)
-                            <option value="{{$catalog->id}}" {{$catalog->id == $data->catalog_id ? 'selected' : ''}} >{{$catalog->name}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Topic</label>
-                        <input type="text" class="form-control" name="name" value="{{$data->name_catalog_topic}}" placeholder="Masukkan Nama Topic" required autocomplete="off">
-                    </div>
-                    <div class="form-group">
-                        <label>Level</label>
-                        <select class="form-control select2" style="width: 100%;" name="level_id" required>
-                            <option selected="selected" value=""></option>
-                            @foreach($levels as $level)
-                            <option value="{{$level->id}}" {{$level->id == $data->level_id ? 'selected' : ''}}>{{$level->name}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" class="form-control" name="title" value="{{$data->title}}" placeholder="Masukkan Title" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Deskripsi</label>
-                        <textarea name="description" id="summernote" placeholder="Masukkan Deskripsi">{{$data->description}}</textarea>
-                        <!-- <div id="summernote" name="description"></div> -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Nama Catalog</label>
+                                <select class="form-control select2" style="width: 100%;" name="catalog_id" required>
+                                    <option selected="selected" value=""></option>
+                                    @foreach($catalogs as $catalog)
+                                    <option value="{{$catalog->id}}" {{$data->catalog_id == $catalog->id ? 'selected' : ''}}>{{$catalog->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Topic</label>
+                                <input type="text" name="name" value="{{$data->name_catalog_topic}}" class="form-control">
+                                <input type="hidden" class="form-control" name="catalog_topic_id"  placeholder="Masukkan Nama Topic" required autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="attachment-block custom-attachment-block">
+                                <div class="border-bottom pb-1">
+                                    <span>Suggested Topics</span>
+                                </div>
+                                <div class="list-topic">
+                                    <div class="d-flex flex-wrap mt-3" id="div-konten">
+                                        <!-- konten -->                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" class="form-control" name="title" value="{{$data->title}}" placeholder="Masukkan Title" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Level</label>
+                                <select class="form-control select2" style="width: 100%;" name="level_id" required>
+                                    <option selected="selected" value=""></option>
+                                    @foreach($levels as $level)
+                                    <option value="{{$level->id}}" {{$data->level_id == $level->id ? 'selected' : ''}}>{{$level->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Harga</label>
+                                <input type="text" class="form-control" name="price" value="{{$data->price}}" placeholder="Masukkan Harga" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Durasi</label>
+                                <select class="form-control select2" style="width: 100%;" name="duration" required>
+                                    <option selected="selected" value=""></option>
+                                    <option value="week" {{$data->duration == 'week' ? 'selected' : ''}}>7 Hari</option>
+                                    <option value="month" {{$data->duration == 'month' ? 'selected' : ''}}>30 Hari</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Cover</label>
                         <input type="file" class="form-control" name="filename" placeholder="Masukkan Cover">
                     </div>
                     <div class="form-group">
-                        <label>Harga</label>
-                        <input type="text" class="form-control" name="price" value="{{$data->price}}" placeholder="Masukkan Harga" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Durasi</label>
-                        <select class="form-control select2" style="width: 100%;" name="duration" required>
-                            <option selected="selected" value=""></option>
-                            <option value="week" {{$data->duration == 'week' ? 'selected' : ''}}>7 Hari</option>
-                            <option value="month" {{$data->duration == 'month' ? 'selected' : ''}}>30 Hari</option>
-                        </select>
+                        <label>Deskripsi</label>
+                        <textarea name="description" id="summernote" placeholder="Masukkan Deskripsi">{!! $data->description !!}</textarea>
+                        <!-- <div id="summernote" name="description"></div> -->
                     </div>
                     <div class="d-flex justify-content-between">
                         <a href="{{ route('partner.manage.course.index') }}" class="btn btn-warning btn-sm">Back</a>
@@ -92,5 +119,28 @@
         width: '100%'
     })
     $('#summernote').summernote()
+    $('[name="catalog_id"]').change(function(){
+        let id = $(this).val()
+        $.ajax({
+            url: "{{url('partner/management/course/suggestTopic')}}" + '/' + id,
+            method: 'GET',
+            success: function(data){
+                console.log(data)
+                var html = '';
+                $.each(data, function(k, v){
+                    html += '<div class="item__suggess-topic rounded bg-outline-blue py-1 px-2 my-1 mx-2">'
+                    html += '<button class="btn btn-sm btn-outline-primary" id="btn-sugest" data-id='+v.id+'>'+v.name+'</button>'
+                    html += '</div>'
+                })
+                $('#div-konten').html(html)
+            }
+
+        })
+    })
+    $('body').on('click', '#btn-sugest', function(e){
+        e.preventDefault()        
+        $('[name="name"]').val($(this).text())
+        $('[name="catalog_topic_id"]').val($(this).data('id'))
+    })
 </script>
 @endsection
