@@ -18,6 +18,7 @@ class PartnerWithdrawal extends Model
      * @var array
      */
     protected $fillable = [
+        'withdrawal_code',
         'partner_id',
         'bank_id',
         'uuid',

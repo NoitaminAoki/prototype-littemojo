@@ -34,7 +34,7 @@ class Course extends Component
 	{
 		$this->input_name = $this->title;
 
-		$this->limit_data = 2;
+		$this->limit_data = 10;
 	}
 
     public function render()
@@ -116,11 +116,13 @@ class Course extends Component
 			$filter['catalog_topic_id'] = $this->topic_id;
 		}
 		$this->filter_data = $filter;
+		$this->page = 1;
 	}
 
 	public function searchCourse()
 	{
 		$this->title = $this->input_name;
+		$this->page = 1;
 	}
 
 	public function goToPage($page)

@@ -41,6 +41,7 @@ use App\Http\Controllers\Partners\{
 
 use App\Http\Livewire\Admins\{
     LvRequestWithdrawal as ReqWithdrawalLive,
+    LvTransaction as TransactionLive,
 };
 
 use App\Http\Livewire\Partners\{
@@ -48,6 +49,8 @@ use App\Http\Livewire\Partners\{
 
     Withdrawals\LvBank as PartnerBankLive,
     LvWithdrawal as WithdrawalLive,
+
+    LvHistoryTransaction as HistoryTransactionLive,
 
     Courses\Experience as PartnerExpLive,
     Courses\Skill as PartnerSkillLive,
@@ -152,6 +155,7 @@ Route::middleware('auth:admin')->prefix('admin/management')->name('admin.')->gro
     
     Route::prefix('finance')->name('finance.')->group(function(){
         Route::get('request-withdrawal', ReqWithdrawalLive::class)->name('request.withdrawal');
+        Route::get('transaction', TransactionLive::class)->name('transaction');
     });
 
     Route::prefix('partner')->group(function(){
@@ -219,6 +223,7 @@ Route::group([
         Route::resource('transaction', PartnerTransactionController::class);
 
         Route::get('withdrawal', WithdrawalLive::class)->name('withdrawal');
+        Route::get('history/transaction', HistoryTransactionLive::class)->name('history.transaction');
         Route::get('withdrawal/bank-accounts', PartnerBankLive::class)->name('withdrawal.bank_account');
     });
 });

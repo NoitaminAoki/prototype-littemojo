@@ -132,7 +132,7 @@ class LvWithdrawal extends Component
         $data['amount'] = $this->amount;
         $data['status'] = 'pending';
 
-        $withdrawal = PartnerWithdrawal::insert($data);
+        $withdrawal = PartnerWithdrawal::create($data);
         $this->resetInput();
         return $this->dispatchBrowserEvent('notification:success', ['title' => 'Success!', 'message' => 'Successfully adding data.']);
     }

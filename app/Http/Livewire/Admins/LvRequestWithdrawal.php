@@ -30,6 +30,7 @@ class LvRequestWithdrawal extends Component
     public $iteration;
 
     public $withdrawal;
+    public $withdrawal_id;
     public $bank_account;
     
     public function mount()
@@ -118,7 +119,7 @@ class LvRequestWithdrawal extends Component
         if(!$withdrawal) {
             abort(404);
         }
-        // dd($withdrawal);
+        $this->withdrawal_id = $withdrawal->id;
         $this->withdrawal = $withdrawal;
         $this->bank_account['name'] = $withdrawal->bank_name;
         $this->bank_account['account_name'] = $withdrawal->bank_account_name;

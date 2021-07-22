@@ -104,13 +104,13 @@
                 </li>
                 <li class="nav-header">FINANCE</li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link {{\Request::is('partner/management/transaction*') ? 'active' : '' }}">
+                    <a href="{{route('admin.finance.transaction')}}" class="nav-link {{ (Request::routeIs('admin.finance.transaction*'))? 'active' : '' }}">
                         <i class="nav-icon fas fa-credit-card"></i>
                         <p>Transaction</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('partner.manage.withdrawal')}}" class="nav-link {{ (Request::routeIs('partner.manage.withdrawal*'))? 'active' : '' }}">
+                    <a href="{{route('admin.finance.request.withdrawal')}}" class="nav-link {{ (Request::routeIs('admin.finance.request.withdrawal*'))? 'active' : '' }}">
                         <i class="nav-icon fas fa-money-check-alt"></i>
                         <p>Request Withdraw</p>
                     </a>

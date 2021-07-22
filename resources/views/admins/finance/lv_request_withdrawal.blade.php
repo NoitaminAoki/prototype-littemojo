@@ -40,7 +40,7 @@
 </style>
 @endsection
 
-@section('Page-Header', 'Request Withdrawal')
+@section('Page-Header', 'Finance - Request Withdrawal')
 
 
 @section('breadcrumbs')
@@ -99,7 +99,7 @@
             </div>
             <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="info-box bg-maroon">
-                    <span class="info-box-icon"><i class="fas fa-sign-in-alt"></i></span>
+                    <span class="info-box-icon"><i class="fas fa-sign-out-alt"></i></span>
                     
                     <div class="info-box-content">
                         <span class="info-box-text">Outcomes</span>
@@ -172,7 +172,7 @@
                                     </div>
                                     @elseif($withdrawal->status_number == 1)
                                     <div class="btn-group btn-group-xs">
-                                        <button wire:click="setWithdrawal({{$withdrawal->id}})" data-toggle="modal" data-target="#modal-finish" class="btn btn-primary btn-sm">Finish</button>
+                                        <button id="btn-finish-{{$withdrawal->id}}" wire:click="setWithdrawal({{$withdrawal->id}})" data-toggle="modal" data-target="#modal-finish" class="btn btn-primary btn-sm">Finish</button>
                                         <button data-id="{{$withdrawal->id}}" class="btn btn-cancel btn-secondary btn-sm">Cancel</button>
                                     </div>
                                     @endif

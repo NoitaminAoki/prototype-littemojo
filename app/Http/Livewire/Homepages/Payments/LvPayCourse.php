@@ -228,7 +228,7 @@ class LvPayCourse extends Component
             'customer_transaction_id' => $customer_transaction->id,
             'type_transaction' => 'income',
             'amount' => $course->price,
-            'final_amount' => $course->price,
+            'final_amount' => $total_amount,
         ]);
 
         $this->dispatchBrowserEvent('midtrans:snap_pay', ['snapToken' => $snapToken]);
