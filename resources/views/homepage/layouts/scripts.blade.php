@@ -11,3 +11,4 @@
 <script src="{{ asset('page_dist/js/jquery.nice-select.min.js') }}"></script>
 <script src="{{ asset('page_dist/js/owl.carousel.min.js') }}"></script>
 <script src="{{ asset('page_dist/js/main.js') }}"></script>
+<script src="{{ asset('plugins/select2/js/select2.js')}} "></script>

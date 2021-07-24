@@ -59,7 +59,7 @@ class LvBank extends Component
         $data['bank_account_name'] = $this->bank_account['account_name'];
         $data['bank_account_number'] = $this->bank_account['account_number'];
 
-        $count = BankAccount::count();
+        $count = BankAccount::where('partner_id', $user_auth->id)->count();
         if($count == 0) {
             $data['is_main_bank'] = true;
         }

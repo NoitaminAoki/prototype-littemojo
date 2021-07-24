@@ -10,6 +10,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\PartnerWallet as Wallet;
+use App\Models\Corporation;
 
 class Partner extends Authenticatable
 {
@@ -63,5 +64,10 @@ class Partner extends Authenticatable
     public function wallet()
     {
         return $this->hasOne(Wallet::class, 'partner_id', 'id');
+    }
+
+    public function corporation()
+    {
+        return $this->hasOne(Corporation::class, 'partner_id');
     }
 }

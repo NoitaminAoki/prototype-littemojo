@@ -18,6 +18,7 @@ class PartnerWithdrawal extends Model
      * @var array
      */
     protected $fillable = [
+        'withdrawal_code',
         'partner_id',
         'bank_id',
         'uuid',
@@ -34,6 +35,6 @@ class PartnerWithdrawal extends Model
 
     public function partner()
     {
-        return $this->belongsTo(Partner::class, 'bank_id');
+        return $this->belongsTo(Partner::class, 'partner_id');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Partners;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use App\Helpers\StringGenerator;
 use App\Models\{
     PartnerFundTransaction as FundTransaction,
     PartnerWithdrawal,
@@ -26,6 +27,7 @@ class LvWithdrawal extends Component
     {
         $user_auth = Auth::guard('partner')->user();
         $account = BankAccount::where(['partner_id' => $user_auth->id, 'is_main_bank' => 1])->first();
+        $this->has_bank = false;
         if ($account) {
             $this->bank_account['id'] = $account->id;
             $this->bank_account['name'] = $account->bank_name;
@@ -63,9 +65,10 @@ class LvWithdrawal extends Component
         WHEN 'pending' THEN 0
         WHEN 'process' THEN 1
         WHEN 'success' THEN 2
+        WHEN 'rejected' THEN 3
         END as status_number")
         ->where('partner_id', $user_auth->id)
-        ->orderBy('status_number')
+        ->orderBy('updated_at', 'desc')
         ->get();
         
         $this->bank_accounts = BankAccount::where('partner_id', $user_auth->id)->get();
@@ -122,13 +125,14 @@ class LvWithdrawal extends Component
             'amount' => 'required|numeric|min:10000',
         ]);
         $data = [];
+        $data['withdrawal_code'] = "WTH".date('dmY').StringGenerator::hashId(8);
         $data['partner_id'] = $user_auth->id;
         $data['bank_id'] = $this->bank_account['id'];
         $data['uuid'] = Str::uuid();
         $data['amount'] = $this->amount;
         $data['status'] = 'pending';
 
-        $withdrawal = PartnerWithdrawal::insert($data);
+        $withdrawal = PartnerWithdrawal::create($data);
         $this->resetInput();
         return $this->dispatchBrowserEvent('notification:success', ['title' => 'Success!', 'message' => 'Successfully adding data.']);
     }
@@ -189,5 +193,15 @@ class LvWithdrawal extends Component
         $withdrawal->save();
         $this->resetInput();
         return $this->dispatchBrowserEvent('notification:success', ['title' => 'Success!', 'message' => 'Successfully updating data.']);
+    }
+
+    public function delete($id)
+    {
+        $withdrawal = PartnerWithdrawal::findOrFail($id);
+        if($withdrawal->status != 'pending') {
+            return ['status_code' => 403, 'message' => 'Unable to delete, your request has been accepted by admin.'];
+        }
+        $withdrawal->delete();
+        return ['status_code' => 200, 'message' => 'Your request has been deleted.'];
     }
 }

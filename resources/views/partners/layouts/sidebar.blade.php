@@ -52,6 +52,13 @@
                         <p>Withdrawal</p>
                     </a>
                 </li>
+                <li class="nav-header">HISTORY</li>
+                <li class="nav-item">
+                    <a href="{{route('partner.manage.history.transaction')}}" class="nav-link {{\Request::routeIs('partner.manage.history.transaction*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-credit-card"></i>
+                        <p>Transaction</p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

@@ -32,18 +32,7 @@
         -webkit-animation-timing-function: linear;
     }
     .shine-image {
-        background: #f6f7f8;
-        background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
-        background-repeat: no-repeat;
-        background-size: 800px 304px; 
-        display: inline-block;
-        position: relative; 
-        
-        -webkit-animation-duration: 1s;
-        -webkit-animation-fill-mode: forwards; 
-        -webkit-animation-iteration-count: infinite;
-        -webkit-animation-name: placeholderShimmer;
-        -webkit-animation-timing-function: linear;
+        background-size: 800px 304px !important; 
     }
     .shine-gray {
         background: #e8e8e8;
@@ -85,10 +74,10 @@
         <div class="card">
             <div class="card-body">
                 <div class="col-12 mb-4">
-                    @if ($can_add_withdrawal)
+                    @if ($can_add_withdrawal && $has_bank)
                     <button wire:click="resetInput" data-toggle="modal" data-target="#modal-insert" class="btn btn-primary mr-2">Add Withdrawal</button>
                     @else
-                    <button id="btn-prevent-add" class="btn btn-primary mr-2">Add Withdrawal</button>
+                    <button id="btn-prevent-add" data-message="{{($has_bank)? 'Previous withdrawal are still being processed.' : 'You need to have bank account first!'}}" class="btn btn-primary mr-2">Add Withdrawal</button>
                     @endif
                     <a href="{{ route('partner.manage.withdrawal.bank_account') }}" class="btn btn-primary">Manage Bank Account</a>
                 </div>
@@ -96,6 +85,7 @@
                     <thead>
                         <tr role="row">
                             <th>No</th>
+                            <th>Ticket ID</th>
                             <th>Bank Information</th>
                             <th>Amount</th>
                             <th>Status</th>
@@ -106,6 +96,7 @@
                         @forelse ($withdrawals as $item_withdraw)
                         <tr>
                             <td class="align-middle" width="40px;">{{($loop->index+1)}}</td>
+                            <td class="align-middle">{{($item_withdraw->withdrawal_code)}}</td>
                             <td> 
                                 <p class="text-sm mb-0">
                                     <b>{{$item_withdraw->bank_account->bank_name}}</b>
@@ -120,7 +111,9 @@
                                 @elseif ($item_withdraw->status_number == 1)
                                 <span class="text-sm text-orange"><i class="fas fa-circle-notch fa-spin mr-1"></i> On Process</span>
                                 @elseif ($item_withdraw->status_number == 2)   
-                                <span class="text-sm text-teal"><i class="fas fa-check-circle mr-1"></i> Already Transferred</span>
+                                <span class="text-sm text-teal"><i class="fas fa-check-circle mr-1"></i> Already Transferred.</span>
+                                @elseif ($item_withdraw->status_number == 3)   
+                                <span class="text-sm text-danger"><i class="fas fa-times-circle mr-1"></i> Request Rejected by Admin.</span>
                                 @endif
                             </td>
                             <td class="text-center py-0 align-middle"  width="100px;">
@@ -129,7 +122,7 @@
                                     <button wire:click="setWithdrawal({{$item_withdraw->id}})" wire:loading.attr="disabled" data-toggle="modal" data-target="#modal-update" class="btn btn-warning"><i class="fas fa-edit"></i></button>
                                     <button data-id="{{$item_withdraw->id}}" wire:loading.attr="disabled" class="btn btn-danger btn-delete"><i class="fas fa-trash"></i></button>
                                 </div>
-                                @elseif ($item_withdraw->status_number == 1)
+                                @elseif ($item_withdraw->status_number == 1 || $item_withdraw->status_number == 3)
                                 <small class="text-muted">No Action</small>
                                 @elseif ($item_withdraw->status_number == 2)
                                 <button wire:click="setWithdrawal({{$item_withdraw->id}})" wire:loading.attr="disabled" data-toggle="modal" data-target="#modal-transfer-info" class="btn btn-primary btn-xs">Look up <i class="fas fa-search ml-1"></i></button>
@@ -138,7 +131,7 @@
                         </tr>
                         @empty
                         <tr class="border bg-light">
-                            <td colspan="5" class="text-center text-secondary">No Data</td>
+                            <td colspan="6" class="text-center text-secondary">No Data</td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -311,7 +304,7 @@
                         </div>
                     </div>
                     <div class="w-100 mt-2">
-                        <div wire:loading.class="d-block" class="loading-image-block shine-image d-none"></div>
+                        <div wire:loading.class="d-block" class="loading-image-block shine shine-image d-none"></div>
                         @if($withdrawal)
                         <img wire:loading.remove src="{{ route('withdrawal.transfer.images', ['uuid'=>$withdrawal->uuid]) }}" class="w-100 border shadow">
                         @endif
@@ -387,10 +380,11 @@
 <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js')}} "></script>
 <script>
     $(document).on('click', '#btn-prevent-add', function() {
+        var msg = $(this).attr('data-message');
         Swal.fire({
             icon: 'error',
             title: "Failed!",
-            text: 'Previous withdrawal are still being processed.',
+            text: msg,
         });
     })
     
@@ -403,6 +397,40 @@
             {
                 $(this).val(max_amount)
             }
+        })
+        $(document).on('click', '.btn-delete', function() {
+            var id = $(this).attr('data-id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                showLoaderOnConfirm: true,
+                preConfirm: async () => {
+                    var data = await @this.delete(id)
+                    return data
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then(async (result) => {
+                console.log(result);
+                if (result.value.status_code == 200) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: result.value.message,
+                    });
+                }
+                else if (result.value.status_code == 403) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed!',
+                        text: result.value.message,
+                    });
+                }
+            })
         })
     })
     document.addEventListener('notification:success', function (event) {

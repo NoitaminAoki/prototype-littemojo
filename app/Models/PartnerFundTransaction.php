@@ -4,6 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\{
+    CustomerTransaction,
+    PartnerWithdrawal,
+};
 
 class PartnerFundTransaction extends Model
 {
@@ -21,4 +25,14 @@ class PartnerFundTransaction extends Model
         'amount',
         'final_amount',
     ];
+
+    public function customerTransaction()
+    {
+        return $this->belongsTo(CustomerTransaction::class, 'customer_transaction_id');
+    }
+
+    public function withdrawal()
+    {
+        return $this->belongsTo(PartnerWithdrawal::class, 'partner_withdrawal_id');
+    }
 }

@@ -104,7 +104,7 @@
                 </li>
                 <li class="nav-header">FINANCE</li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link {{\Request::is('partner/management/transaction*') ? 'active' : '' }}">
+                    <a href="{{route('admin.finance.transaction')}}" class="nav-link {{ (Request::routeIs('admin.finance.transaction*'))? 'active' : '' }}">
                         <i class="nav-icon fas fa-credit-card"></i>
                         <p>Transaction</p>
                     </a>

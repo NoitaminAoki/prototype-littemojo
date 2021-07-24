@@ -16,4 +16,9 @@ class Converter
             return $size;
         }
     }
+
+    public static function pageToOffset($page, $limit)
+    {
+        return ($page - 1) * $limit;
+    }
 }
