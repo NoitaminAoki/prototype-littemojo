@@ -45,7 +45,7 @@
                                     <span>Suggested Topics</span>
                                 </div>
                                 <div class="list-topic">
-                                    <div class="d-flex flex-wrap mt-3" id="div-konten">
+                                    <div class="d-flex flex-wrap mt-3" id="div-konten" style="height: 80px;">
                                         <!-- konten -->                                        
                                     </div>
                                 </div>
@@ -119,28 +119,33 @@
         width: '100%'
     })
     $('#summernote').summernote()
-    $('[name="catalog_id"]').change(function(){
-        let id = $(this).val()
+    function getTopic(id){
         $.ajax({
             url: "{{url('partner/management/course/suggestTopic')}}" + '/' + id,
             method: 'GET',
             success: function(data){
-                console.log(data)
                 var html = '';
                 $.each(data, function(k, v){
-                    html += '<div class="item__suggess-topic rounded bg-outline-blue py-1 px-2 my-1 mx-2">'
+                    html += '<div class="item__suggess-topic rounded bg-outline-blue mx-2">'
                     html += '<button class="btn btn-sm btn-outline-primary" id="btn-sugest" data-id='+v.id+'>'+v.name+'</button>'
                     html += '</div>'
                 })
                 $('#div-konten').html(html)
             }
-
         })
+    }
+    getTopic('{{$data->catalog_id}}')
+    $('[name="catalog_id"]').change(function(){
+        let id = $(this).val()
+        getTopic(id)
+        
     })
     $('body').on('click', '#btn-sugest', function(e){
         e.preventDefault()        
+        let id = $(this).data('id')
         $('[name="name"]').val($(this).text())
-        $('[name="catalog_topic_id"]').val($(this).data('id'))
+        $('[name="catalog_topic_id"]').val(id)
+        $('#btn-sugest:not([data-id="'+id+'"])').remove()
     })
 </script>
 @endsection

@@ -77,7 +77,7 @@ use App\Http\Livewire\Homepages\{
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
-
+Route::view('ea', 'auth.verify_password');
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
 
