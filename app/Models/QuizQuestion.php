@@ -44,7 +44,7 @@ class QuizQuestion extends Model
 
     public function lastOrder()
     {
-        $last_question = $this->orderBy('orders', 'DESC')->first();
+        $last_question = QuizQuestion::where('quiz_id', $this->quiz_id)->orderBy('orders', 'DESC')->first();
 
         if($last_question) {
             return $last_question->orders;

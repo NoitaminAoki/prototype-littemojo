@@ -10,6 +10,7 @@ use App\Models\{
     CustomerTransaction as UserTransaction,
     CustomerCourseProgress as UserCourseProgress,
 };
+use DB;
 use DateTime;
 use DateTimeZone;
 
@@ -39,7 +40,7 @@ class LvDashboard extends Component
     public function getInprogressCourse($user_id)
     {
         $date_now = date_format(new DateTime("now", new DateTimeZone('Asia/Jakarta')), 'Y-m-d H:i:s');
-        $course = Course::select('courses.id', 'courses.user_id', 'courses.title', 'courses.slug_title', 'courses.catalog_id')
+        $course = Course::select('courses.id', 'courses.user_id', 'courses.title', 'courses.slug_title', 'courses.catalog_id', 'courses.duration')
         ->selectRaw('COUNT(DISTINCT cl.id) as total_lesson, COUNT(DISTINCT ccp.id) as lesson_progress')
         ->leftJoin('course_lessons as cl', 'cl.course_id', '=', 'courses.id')
         ->leftJoin('customer_course_progress as ccp', function($join) use($user_id) {
@@ -47,10 +48,11 @@ class LvDashboard extends Component
             ->where('ccp.customer_id', '=', $user_id);
         })
         ->rightJoin('customer_transactions as ct', 'ct.course_id', '=', 'courses.id')
-        ->groupBy('courses.id', 'courses.user_id', 'courses.title', 'courses.slug_title', 'courses.catalog_id')
+        ->groupBy('courses.id', 'courses.user_id', 'courses.title', 'courses.slug_title', 'courses.catalog_id', 'courses.duration')
         ->havingRaw('lesson_progress < total_lesson')
         ->where(['ct.customer_id' => $user_id, 'ct.status_payment' => 'settlement'])
         ->where('ct.start_date', '<=', $date_now)
+        ->where(DB::raw('ADDDATE(ct.start_date, INTERVAL (IF(courses.duration = "week", 7, 30)) DAY)'), '>=', $date_now)
         ->orderBy('lesson_progress')
         ->get();
 

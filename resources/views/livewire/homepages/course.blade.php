@@ -220,7 +220,7 @@
                                     <div class="col-md-6">
                                         <h5 class="text-uppercase text-secondary font-weight-normal mb-3">Search</h5>
                                         <div class="form-group">
-                                            <label for="name">Course Name</label>
+                                            <label for="name">Course</label>
                                             <input wire:model.defers="input_name" id="input-name" type="text" class="form-control">
                                         </div>
                                         <div class="w-100 text-right">
@@ -272,7 +272,7 @@
                             <select id="level_select" class="nice-select">
                                 <option value="" datd-display="">-- All --</option>
                                 @foreach($levels as $level)
-                                <option value="{{$level->id}}">{{$level->name}}</option>
+                                <option value="{{$level->name}}" {{(strcasecmp($level_name, $level->name) == 0)? 'selected' : ''}}>{{$level->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -284,8 +284,8 @@
                         <div class="form-select">
                             <select id="duration_select" class="nice-select">
                                 <option value="" datd-display="">-- All --</option>
-                                <option value="week">Week</option>
-                                <option value="month">Month</option>
+                                <option value="week" {{(strcasecmp($duration_name, 'week') == 0)? 'selected' : ''}}>Week</option>
+                                <option value="month" {{(strcasecmp($duration_name, 'month') == 0)? 'selected' : ''}}>Month</option>
                             </select>
                         </div>
                     </div>
@@ -295,9 +295,13 @@
                         <label>Catalog</label>
                         <div wire:ignore>
                             <select id="catalog_select2" name="catalog_id" class="form-control select2" style="width: 100%;" required>
+                                @if($catalog_name)
+                                <option value=""></option>
+                                @else
                                 <option selected="selected" value=""></option>
+                                @endif
                                 @foreach($catalogs as $catalog)
-                                <option value="{{$catalog->id}}">{{$catalog->name}}</option>
+                                <option value="{{$catalog->name}}" {{(strcasecmp($catalog_name, $catalog->name) == 0)? 'selected' : ''}}>{{$catalog->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -491,11 +495,11 @@
         });
         $('#level_select').on('change', function (e) {
             var data = $(this).val();
-            @this.set("level_id", data);
+            @this.set("level_name", data);
         });
         $('#duration_select').on('change', function (e) {
             var data = $(this).val();
-            @this.set("duration", data);
+            @this.set("duration_name", data);
         });
         $('#btn-reset-filter').on('click', function() {
             $('#level_select').val(null).niceSelect('update');

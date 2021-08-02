@@ -539,6 +539,31 @@
                     @if ($transaction)
                     @if ($transaction->status_payment == 'settlement')
                     <div class="right-contents">
+                        @if ($course->getAccess(Auth::guard('web')->user()->id)->status_number == 3)
+                        <ul>
+                            <li>
+                                <a class="justify-content-between d-flex" style="cursor: default;" href="javascript:void(0);">
+                                    <p>Course Price </p>
+                                    <span>{{number_format($course->price, 0, ',', '.')}} IDR</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="justify-content-between d-flex" style="cursor: default;" href="javascript:void(0);">
+                                    <p>End Date </p>
+                                    @php
+                                        $day = ($course->duration == 'week')? "+7 days" : "+30 days";
+                                    @endphp
+                                    <span>{{date('d M Y H:i', strtotime($transaction->start_date." ".$day))}}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="justify-content-between d-flex" style="cursor: default;" href="javascript:void(0);">
+                                    <p>Status </p>
+                                    <span class="text-danger"><small>Course has Ended</small></span>
+                                </a>
+                            </li>
+                        </ul>
+                        @else
                         <ul>
                             <li>
                                 <a class="justify-content-between d-flex" style="cursor: default;" href="javascript:void(0);">
@@ -560,6 +585,7 @@
                             </li>
                         </ul>
                         <a href="{{ route('home.dashboard.course', ['title'=>$course->slug_title]) }}" class="primary-btn text-uppercase">Open the course</a>
+                        @endif
                     </div>
                     @elseif($transaction->status_payment == 'pending')
                     <div class="right-contents">

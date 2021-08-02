@@ -225,6 +225,11 @@
                             <tr>
                                 <td class="align-top" style="width: 25px;"><span class="text-font-family font-weight-bold">{{$selected_question->orders}}.</span></td>
                                 <td>
+                                    @if ($selected_question->image)
+                                    <div class="w-100">
+                                        <img class="col-md-6 col-sm-8 col-12 border shadow-sm" id="img-question-{{$selected_question->id}}" src="{{ route('home.asset.question.images', ['uuid'=>$selected_question->uuid]) }}" alt="{{$selected_question->title}}">
+                                    </div>
+                                    @endif
                                     <div class="w-100">
                                         <span class="text-font-family font-weight-bold">{{$selected_question->title}}</span>
                                     </div>
@@ -232,10 +237,19 @@
                                         <ul class="list-unstyled">
                                             @foreach ($selected_question->options as $option)
                                             <li class="form-group">
+                                                @if($option->image)
+                                                <div class="custom-control custom-radio">
+                                                    <input wire:model.defer="selected_option_value" class="custom-control-input input-cursor" type="radio" value="{{$option->id}}" id="option_radio_{{$option->id}}" name="customRadio">
+                                                    <label for="option_radio_{{$option->id}}" class="input-cursor custom-control-label font-weight-normal text-font-family">
+                                                        <img class="col-md-6 col-sm-8 col-12 border shadow-sm" src="{{ route('home.asset.question.option.images', ['uuid'=>$option->uuid]) }}" alt="{{$option->title}}">
+                                                    </label>
+                                                </div>
+                                                @else
                                                 <div class="custom-control custom-radio">
                                                     <input wire:model.defer="selected_option_value" class="custom-control-input input-cursor" type="radio" value="{{$option->id}}" id="option_radio_{{$option->id}}" name="customRadio">
                                                     <label for="option_radio_{{$option->id}}" class="input-cursor custom-control-label font-weight-normal text-font-family">{{$option->title}}</label>
                                                 </div>
+                                                @endif
                                             </li>
                                             @endforeach
                                         </ul>

@@ -24,7 +24,27 @@ use DateTimeZone;
 class Course extends Model
 {
     use HasFactory;
-    protected $guarded  = [];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'user_id',
+        'catalog_id',
+        'catalog_topic_id',
+        'level_id',
+        'title',
+        'slug_title',
+        'description',
+        'price',
+        'duration',
+        'uuid',
+        'cover',
+        'is_verified',
+        'is_published',
+        'date_verified',
+    ];
     
     public function corporation()
     {
@@ -106,6 +126,32 @@ class Course extends Model
             }
         }
         return false;
+    }
+
+    public function getAccess($user_id)
+    {
+        $date_now = new DateTime("now", new DateTimeZone('Asia/Jakarta') );
+        $transaction = UserTransaction::where(['customer_id' => $user_id, 'course_id' => $this->id, 'status_payment' => 'settlement'])->first();
+        if($transaction) {
+            $start_date = new DateTime($transaction->start_date, new DateTimeZone('Asia/Jakarta'));
+            $end_date = new DateTime($transaction->start_date, new DateTimeZone('Asia/Jakarta'));
+            if($this->duration == 'week') {
+                $end_date->modify("+7 days");
+            } 
+            else if($this->duration == 'month') {
+                $end_date->modify("+30 days");
+            }
+            if($start_date <= $date_now) {
+                if($date_now > $end_date) {
+                    return (object) ['status' => 'expired', 'status_number' => 3];
+                } else {
+                    return (object) ['status' => 'accessible', 'status_number' => 2];
+                }
+            } else {
+                return (object) ['status' => 'inaccessible', 'status_number' => 1];
+            }
+        }
+        return (object) ['status' => 'restricted', 'status_number' => 0];
     }
 
     public function isPurchased($user_id)

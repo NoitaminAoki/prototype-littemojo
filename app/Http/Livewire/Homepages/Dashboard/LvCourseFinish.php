@@ -34,6 +34,11 @@ class LvCourseFinish extends Component
 
         $this->course_id = $course->id;
 
+        $course_status = $course->getAccess($user_auth->id);
+        if($course_status->status_number == 3 || $course_status->status_number == 0) {
+            abort(404);
+        }
+
         if (!$course->isPurchased($user_auth->id)) {
             return redirect()->route('home.detail.course', ['title' => $title]);
         }

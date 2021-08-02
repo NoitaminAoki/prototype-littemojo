@@ -1,6 +1,7 @@
 @section('title', "Dashboard - ".Auth::guard('web')->user()->name)
 
 @section('css')
+<link rel="stylesheet" href="{{ asset('plugins/sweetalert2/sweetalert2.min.css') }}">
 <style>
     .text-font-family {
         font-family: 'Open Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -129,10 +130,10 @@
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                             <div class="row">
-                                @foreach ($purchased_courses as $course)
+                                @forelse ($purchased_courses as $course)
                                 @php
                                 $course_progress = $course->getProgress($user_id);
-                                $course_accessible = $course->isAccessible($user_id);
+                                $course_access = $course->getAccess($user_id);
                                 @endphp
                                 <div class="col-12 mb-4">
                                     <div class="card rounded-0 bg-white">
@@ -144,11 +145,17 @@
                                                 <div class="col-sm-8 order-sm-1 mb-2">
                                                     <div class="d-flex flex-column text-black">
                                                         <div class="partner-name text-font-family">{{$course->corporation->name}}</div>
+                                                        @if($course_access->status_number == 3)
+                                                        <h3 class="course-title text-font-family">
+                                                            {{$course->title}}
+                                                        </h3>
+                                                        @else
                                                         <a href="{{ route('home.dashboard.course', ['title'=>$course->slug_title]) }}">
                                                             <h3 class="course-title text-font-family">
                                                                 {{$course->title}}
                                                             </h3>
                                                         </a>
+                                                        @endif
                                                     </div>
                                                     <div class="w-100">
                                                         <div class="course-catalog text-uppercase">
@@ -166,16 +173,19 @@
                                                         </div>
                                                     </div>
                                                     <div class="w-100 mt-4rem">
-                                                        @if ($course_accessible)
+                                                        @if ($course_access->status_number == 2)
                                                         @if ($course_progress->percent == 100)
                                                         <span class="text-font-family text-lg-left d-block">Status: <b class="badge badge-primary text-uppercase">Completed</b></span>
                                                         @else
                                                         <span class="text-font-family text-lg-left d-block">Status: <b class="badge badge-success text-uppercase">In progress</b></span>
                                                         @endif
                                                         <span class="text-font-family text-lg-left d-block">Finish Date: <b class="text-danger">{{date('d F Y', strtotime($course->getDateTransaction($user_id)->end_date))}}</b></span>
-                                                        @else
-                                                        <span class="text-font-family text-lg-left d-block">Status: <b class="badge badge-secondary text-uppercase">not yet accessible</b></span>
+                                                        @elseif($course_access->status_number == 1)
+                                                        <span class="text-font-family text-lg-left d-block">Status: <b class="badge badge-secondary text-uppercase">not yet Accessible</b></span>
                                                         <span class="text-font-family text-lg-left d-block">Start Date: <b class="text-primary">{{date('d F Y', strtotime($course->getDateTransaction($user_id)->start_date))}}</b></span>
+                                                        @elseif($course_access->status_number == 3)
+                                                        <span class="text-font-family text-lg-left d-block">Status: <b class="badge badge-danger text-uppercase">{{$course_access->status}}</b></span>
+                                                        <span class="text-font-family text-lg-left d-block">Finish Date: <b class="text-danger">{{date('d F Y', strtotime($course->getDateTransaction($user_id)->end_date))}}</b></span>
                                                         @endif
                                                     </div>
                                                     <div class="w-100 mt-2">
@@ -189,9 +199,15 @@
                                                         </div>
                                                     </div>
                                                     
+                                                    @if($course_access->status_number == 3)
+                                                    <div class="w-100 text-right mt-4">
+                                                        <button class="custom-btn-capsule btn-course-expired btn btn-secondary btn-sm" style="cursor: not-allowed"><i class="fas fa-ban"></i></button>
+                                                    </div>
+                                                    @else
                                                     <div class="w-100 text-right mt-4">
                                                         <a href="{{ route('home.dashboard.course', ['title'=>$course->slug_title]) }}" class="custom-btn-capsule btn btn-primary btn-sm"><i class="fas fa-arrow-right"></i></a>
                                                     </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -199,14 +215,24 @@
                                         </div> --}}
                                     </div>
                                 </div>
-                                @endforeach
+                                @empty
+                                <div class="col-12">
+                                    <div class="card shadow-sm content-loading">
+                                        <div class="card-body">
+                                            <div class="col-12 text-center">
+                                                <h5 class="font-weight-normal">No result.</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforelse
                             </div>
                         </div>
                         <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                             <div class="row">
-                                @foreach ($inprogress_courses as $course)
+                                @forelse ($inprogress_courses as $course)
                                 @php
-                                $course_progress = $course->getProgress($user_id);
+                                $course_2_progress = $course->getProgress($user_id);
                                 @endphp
                                 <div class="col-12 mb-4">
                                     <div class="card rounded-0 bg-white">
@@ -245,11 +271,11 @@
                                                     </div>
                                                     <div class="w-100 mt-2">
                                                         <div class="d-flex justify-content-between align-items-end mb-1">
-                                                            <small class="text-secondary"><b>PROGRESS</b> {{$course_progress->percent}}% complete</small>
+                                                            <small class="text-secondary"><b>PROGRESS</b> {{$course_2_progress->percent}}% complete</small>
                                                         </div>
                                                         <div class="progress">
-                                                            <div class="progress-bar bg-teal" role="progressbar" aria-valuenow="{{$course_progress->percent}}" aria-valuemin="0" aria-valuemax="100" style="width: {{$course_progress->percent}}%">
-                                                                <span class="sr-only">{{$course_progress->percent}}% Complete</span>
+                                                            <div class="progress-bar bg-teal" role="progressbar" aria-valuenow="{{$course_2_progress->percent}}" aria-valuemin="0" aria-valuemax="100" style="width: {{$course_2_progress->percent}}%">
+                                                                <span class="sr-only">{{$course_2_progress->percent}}% Complete</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -264,12 +290,22 @@
                                         </div> --}}
                                     </div>
                                 </div>
-                                @endforeach
+                                @empty
+                                <div class="col-12">
+                                    <div class="card shadow-sm content-loading">
+                                        <div class="card-body">
+                                            <div class="col-12 text-center">
+                                                <h5 class="font-weight-normal">No result.</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforelse
                             </div>
                         </div>
                         <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
                             <div class="row">
-                                @foreach ($completed_courses as $course)
+                                @forelse ($completed_courses as $course)
                                 <div class="col-12 mb-4">
                                     <div class="card rounded-0 bg-white">
                                         <div class="card-body">
@@ -326,7 +362,17 @@
                                         </div> --}}
                                     </div>
                                 </div>
-                                @endforeach
+                                @empty
+                                <div class="col-12">
+                                    <div class="card shadow-sm content-loading">
+                                        <div class="card-body">
+                                            <div class="col-12 text-center">
+                                                <h5 class="font-weight-normal">No result.</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforelse
                             </div>
                         </div>
                     </div>
@@ -338,6 +384,14 @@
 </div>
 
 @push('script')
+<script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js')}} "></script>
 <script>
+    $(document).on('click', '.btn-course-expired', function() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Failed!',
+            text: 'Your course has ended.',
+        });
+    });  
 </script>
 @endpush

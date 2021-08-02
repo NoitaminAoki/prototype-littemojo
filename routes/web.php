@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Home\{
     HomeController,
+    EmailTesterController,
     PaymentController,
     Dashboard\CourseController as DashCouseController,
 };
@@ -286,3 +287,6 @@ Route::post('partner/custom_password', [ResetPasswordPartner::class, 'reset'])->
 Route::get('partner/{token}/reset-password', [ResetPasswordPartner::class, 'getPassword']);
 Route::post('partner/reset-password', [ResetPasswordPartner::class, 'updatePassword'])->name('partner.updatePassword');
 Route::view('test-mail', 'test');
+
+Route::get('/email/view', [EmailTesterController::class, 'index']);
+Route::get('/email/send', [EmailTesterController::class, 'sendTester']);

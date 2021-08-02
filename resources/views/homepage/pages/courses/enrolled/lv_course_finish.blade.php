@@ -371,7 +371,7 @@ $date_expired = $date_transaction->end_date;
                         @if ($user_certificate)
                         <a href="{{ route('home.certificate.download', ['uuid'=>$user_certificate->uuid, 'filename' => $user_certificate->filename]) }}" target="_blank" class="btn bg-teal mt-4">Download</a>
                         @else
-                        <button wire:loading.remove wire:target="generateCertificate" wire:click="generateCertificate" class="btn bg-teal mt-4">Download</button>
+                        <button wire:loading.remove wire:target="generateCertificate" wire:click="generateCertificate" class="btn bg-teal mt-4">Create My Certificate</button>
                         @endif
                         <button wire:loading wire:target="generateCertificate" id="btn_disable_download" class="btn bg-teal disabled text-center mt-4" style="width: 95px; display: none;"><i class="far fa-hourglass fa-pulse"></i></button>
                     </div>
