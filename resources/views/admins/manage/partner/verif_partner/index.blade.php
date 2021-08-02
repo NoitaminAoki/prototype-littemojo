@@ -57,7 +57,7 @@
                                     </div>
                                     @else
                                     <div class="mx-1">
-                                        <a href="{javascript::void(0)" class="btn btn-primary btn-sm" id="btn-verified" data-toggle="tooltip" data-placement="bottom" title="Edit">
+                                        <a href="javascript::void(0)" class="btn btn-primary btn-sm" id="btn-verified" data-toggle="tooltip" data-placement="bottom" title="Edit">
                                             Verified
                                         </a>
                                     </div>

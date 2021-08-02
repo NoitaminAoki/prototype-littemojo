@@ -35,9 +35,9 @@
                         <tr>
                             <td width="40px;">{{($loop->index+1)}}</td>
                             <td>{{$corporation->name}}</td>
-                            <td><img src="{{url('uploaded_files/corporation/'.$corporation->image)}}" class="img-fluid" alt="" style="width: 150px;height: 150px;"></td>
-                            <td><img src="{{url('uploaded_files/corporation/'.$corporation->logo)}}" class="img-fluid" alt=""></td>
-                            <td><img src="{{url('uploaded_files/corporation/'.$corporation->thumbnail)}}" class="img-fluid" alt=""></td>
+                            <td><img src="{{url('uploaded_files/corporation/'.$corporation->uuid, $corporation->image)}}" class="img-fluid" alt="" style="width: 150px;height: 150px;"></td>
+                            <td><img src="{{url('uploaded_files/corporation/'.$corporation->uuid, $corporation->logo)}}" class="img-fluid" alt=""></td>
+                            <td><img src="{{url('uploaded_files/corporation/'.$corporation->uuid, $corporation->thumbnail)}}" class="img-fluid" alt=""></td>
                             <td width="100px;" class="text-center">
                                 <div class="d-flex justify-content-center">
                                     @include('partials.button', ['action' => ['edit'], 'id' => $corporation->id ])

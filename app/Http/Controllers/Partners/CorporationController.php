@@ -17,7 +17,7 @@ class CorporationController extends Controller
      */
     public function index()
     {
-        $corporations = Corporation::select('id', 'name', 'image', 'logo', 'thumbnail')
+        $corporations = Corporation::select('id', 'name', 'image', 'logo', 'thumbnail', 'uuid')
         ->latest()
         ->get();
         return view('partners.corporation.index', compact('corporations'));
