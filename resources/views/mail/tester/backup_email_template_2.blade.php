@@ -47,7 +47,7 @@
             </h6>
             @endif
         </div>
-        <div style="width:100%;height:5px;margin-top:.5rem;background: linear-gradient(45deg,#04091e 0%,#122267 100%);"></div>
+        <div style="width:100%;height:5px;margin-top:.5rem;background: linear-gradient(45deg,rgba(4,9,30,0.9) 0%,rgb(18 34 103 / 90%) 100%);"></div>
         <table style="background-color:#c9c8f1;border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
             <tbody>
                 <tr style="padding:0;text-align:left;vertical-align:top">
@@ -109,10 +109,10 @@
             </h1>
             <hr style="margin-top: 1rem;margin-bottom: 1rem;border: 0; border-top: 1px solid rgba(0,0,0,.1);box-sizing: content-box;height: 0;overflow: visible;">
             <p style="color:#555555;font-family: verdana;font-size: 13px;font-weight: 400;line-height: 14pt;margin:0;margin-bottom:10px;padding:0;text-align:left">
-                {!! $details['message'] !!}
+                {!!$details['message']!!}
             </p>
             @isset($details['button_link'])
-            <div style="width:100%;height:3rem;"></div>
+            <div style="width:100%;height:4rem;"></div>
             <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'">
                 <tbody>
                     <tr>

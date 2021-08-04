@@ -436,23 +436,26 @@
     document.addEventListener('notification:success', function (event) {
         $('.modal').modal('hide');
         
-        Swal.fire({
-            icon: 'success',
-            title: event.detail.title,
-            text: event.detail.message,
-        });
+        setTimeout(function() {
+            Swal.fire({
+                icon: 'success',
+                title: event.detail.title,
+                text: event.detail.message,
+            });
+        }, 600);
     })
     document.addEventListener('modal:close', function (event) {
         $(event.detail.target).modal('hide');
     })
     document.addEventListener('notification:error', function (event) {
         $('.modal').modal('hide');
-        
-        Swal.fire({
-            icon: 'error',
-            title: event.detail.title,
-            text: event.detail.message,
-        });
+        setTimeout(function() {
+            Swal.fire({
+                icon: 'error',
+                title: event.detail.title,
+                text: event.detail.message,
+            });
+        }, 600);
     })
     
     $('#modal-list-bank').on('show.bs.modal', function (event) {

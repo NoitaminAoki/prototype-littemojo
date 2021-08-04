@@ -38,7 +38,7 @@
 <body style="background-color: #e8e5ef;">
     <div style="width: 100%; height: 40px;background-color: transparent;"></div>
     <div class="col-md-6" style="margin-left:auto;margin-right:auto;border: 0;position: relative; overflow-wrap: break-word; background-color: rgb(255, 255, 255); background-clip: border-box;">
-        <div class="" style="background: linear-gradient(45deg,#04091e 0%,#122267 100%);color:#ffffff;border-radius:0;margin-bottom: 0px;padding: 0.75rem 1.25rem;border-bottom: 1px solid rgba(0, 0, 0, 0.125);">
+        <div class="" style="background-color:rgba(4,9,30,0.9);color:#ffffff;border-radius:0;margin-bottom: 0px;padding: 0.75rem 1.25rem;border-bottom: 1px solid rgba(0, 0, 0, 0.125);">
             <h3 class="" style="font-weight: 700;margin-top: 0;margin-bottom: 0px;font-size: 1.75rem;line-height: 1.2;">LittleMonjo</h3>
             @if ($details['title'])
             <div style="width:230px; height:1px;background-color: #ffffff;margin: 10px 0;"></div>
@@ -47,7 +47,7 @@
             </h6>
             @endif
         </div>
-        <div style="width:100%;height:5px;margin-top:.5rem;background: linear-gradient(45deg,#04091e 0%,#122267 100%);"></div>
+        <div style="width:100%;height:5px;margin-top:.5rem;background-color:rgba(4,9,30,0.9);"></div>
         <table style="background-color:#c9c8f1;border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
             <tbody>
                 <tr style="padding:0;text-align:left;vertical-align:top">
@@ -109,20 +109,8 @@
             </h1>
             <hr style="margin-top: 1rem;margin-bottom: 1rem;border: 0; border-top: 1px solid rgba(0,0,0,.1);box-sizing: content-box;height: 0;overflow: visible;">
             <p style="color:#555555;font-family: verdana;font-size: 13px;font-weight: 400;line-height: 14pt;margin:0;margin-bottom:10px;padding:0;text-align:left">
-                {!! $details['message'] !!}
+                {{$details['message']}}
             </p>
-            @isset($details['button_link'])
-            <div style="width:100%;height:3rem;"></div>
-            <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'">
-                <tbody>
-                    <tr>
-                        <td style="text-align:center;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'">
-                            <a href="{{$details['button_link']['url']}}" rel="noopener" style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';border-radius:4px;color:#fff;display:inline-block;overflow:hidden;text-decoration:none;background-color:#2d3748;border-bottom:8px solid #2d3748;border-left:18px solid #2d3748;border-right:18px solid #2d3748;border-top:8px solid #2d3748" target="_blank">{{$details['button_link']['button_text']}}</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            @endisset
             @isset($details['bank_information'])
             <table cellspacing="0" cellpadding="0" style="margin-top:3rem;border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
                 <tbody>
@@ -177,28 +165,6 @@
                     LittleMonjo
                 </p>
             </div>
-            @isset($details['button_link'])
-            @if ($details['button_link']['with_text'])
-            <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';border-top:1px solid #e8e5ef;margin-top:25px;padding-top:25px">
-                <tbody>
-                    <tr>
-                        <td style="box-sizing:border-box;font-family: verdana">
-                            <p style="font-size: 14px;font-weight: 400;line-height: 14pt;color:#555555;box-sizing:border-box;font-family: verdana;line-height:1.5em;margin-top:0;text-align:left;">
-                                If you’re having trouble clicking the "{{$details['button_link']['button_text']}}" button, copy and paste the URL below
-                                into your web browser: 
-                                <span style="box-sizing:border-box;font-family: verdana;word-break:break-all">
-                                    <a href="{{$details['button_link']['url']}}" style="box-sizing:border-box;font-family: verdana;color:#3869d4" target="_blank">
-                                    {{$details['button_link']['url']}}
-                                    </a>
-                                </span>
-                            </p>
-                            
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            @endif
-            @endisset
         </div>
     </div>
     <div class="col-md-6" style="margin-left: auto; margin-right: auto;background-color: rgb(38, 22, 70);">
@@ -223,7 +189,7 @@
                                                             </tbody>
                                                         </table>
                                                         <p style="Margin:0;Margin-bottom:10px;color:#c1c1c1;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;font-weight:400;line-height:19px;margin:0;margin-bottom:10px;padding:0;text-align:center">
-                                                            For more information about your @isset($details['codes']){{$details['codes']['type']}}@endisset, please contact:<br>
+                                                            For more information about your withdrawal, please contact:<br>
                                                             email: 
                                                             <a href="mailto:littlemonjo@gmail.com" style="Margin:0;color:#00b4ed;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left;text-decoration:none" target="_blank">
                                                                 littlemonjo@gmail.com

@@ -10,6 +10,7 @@ use App\Models\{
     CustomerTransactionDetail,
 };
 use App\Mail\CustomerMail;
+use App\Mail\HomepageMail;
 use Mail;
 
 class PaymentController extends Controller
@@ -53,10 +54,12 @@ class PaymentController extends Controller
         \Midtrans\Config::$is3ds = config('services.midtrans.is_3ds');
         
         $paymentNotification = new \Midtrans\Notification();
-        $customer_transaction = CustomerTransaction::select('users.email', 'customer_transactions.*')
+        $customer_transaction = CustomerTransaction::select('users.name', 'users.email', 'customer_transactions.*')
         ->leftJoin('users', 'users.id', '=', 'customer_transactions.customer_id')
         ->where('transaction_code', $paymentNotification->order_id)->firstOrFail();
         // dd($detail_transaction, $customer_transaction);
+
+        $course = Course::where('id', $customer_transaction->course_id)->first();
         
         $transaction = $paymentNotification->transaction_status;
         $type = $paymentNotification->payment_type;
@@ -72,7 +75,14 @@ class PaymentController extends Controller
         
         $detail_mail = [
             'subject' => "",
-            'body' => ""
+            'title' => "ORDER TRANSACTION",
+            'date' => "{$date_now}UTC+7",
+            'codes' => [
+                'type' => 'transaction',
+                'code' => $customer_transaction->transaction_code,
+            ],
+            'username' => $customer_transaction->name,
+            'message' => '',
         ];
         //['waiting', 'pending', 'settlement', 'deny', 'expire', 'cancel']
         $paymentStatus = null;
@@ -95,6 +105,12 @@ class PaymentController extends Controller
         } else if ($transaction == 'pending') {
             // TODO set payment status in merchant's database to 'Pending'
             $detail_mail['subject'] = "Your payment process has not been completed - LittleMonjo - {$customer_transaction->transaction_code}";
+            $detail_mail['message'] = "thank you for ordering the <b>{$course->name}</b> course provided by <b>{$course->corporation->name}</b>. Please complete your payment before due time.<br><br> You will receive email from <b>Midtrans <small>&lt;noreply@midtrans.com&gt;</small></b> for procedure of payment.";
+            // $detail_mail['button_link'] = [
+            //     'url' => 'https://app.sandbox.midtrans.com/snap/v1/transactions/47e755db-0cd6-44fc-a409-a8a2cf9da953/pdf',
+            //     'button_text' => 'Download',
+            //     'with_text' => true,
+            // ];
             $paymentStatus = 'pending';
         } else if ($transaction == 'deny') {
             // TODO set payment status in merchant's database to 'Denied'
@@ -137,8 +153,10 @@ class PaymentController extends Controller
 			);
 		}
 
-        $customer_mail = new CustomerMail($detail_mail);
-        \Mail::to($customer_transaction->email)->send($customer_mail);
+        $homepage_mail = new HomepageMail($detail_mail);
+        \Mail::to($customer_transaction->email)->send($homepage_mail);
+        // $customer_mail = new CustomerMail($detail_mail);
+        // \Mail::to($customer_transaction->email)->send($customer_mail);
 
         $message = 'Payment status is : '. $paymentStatus;
 

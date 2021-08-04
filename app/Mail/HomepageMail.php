@@ -30,6 +30,6 @@ class HomepageMail extends Mailable
      */
     public function build()
     {
-        return $this->from('support@sendihadi.com', 'Support LittleMojo')->subject($this->details['subject'])->view('mail.tester.email-tester');
+        return $this->from('support@sendihadi.com', 'Support LittleMojo')->subject($this->details['subject'])->view('mail.notification.sample_notification');
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Helpers;
+use Illuminate\Support\Str;
 
 class Converter
 {
@@ -20,5 +21,13 @@ class Converter
     public static function pageToOffset($page, $limit)
     {
         return ($page - 1) * $limit;
+    }
+
+    public static function NumberFormattedAttribute($number, $prefix, $start_length = 3, $end_length = 2)
+    {
+        $length = Str::length($number);
+        $prefix_len = ($length-($start_length+$end_length));
+        $prefixes = Str::padBoth('', $prefix_len, $prefix);
+        return substr($number, 0, $start_length) . $prefixes . substr($number, (-1*$end_length));
     }
 }

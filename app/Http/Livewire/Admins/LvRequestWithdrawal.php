@@ -13,9 +13,12 @@ use App\Models\{
     PartnerBankInformation as BankAccount,
     PartnerFundTransaction,
 };
-use App\Mail\CustomerMail;
+use App\Helpers\Converter;
+use App\Mail\HomepageMail;
 use Mail;
 use DB;
+use Datetime;
+use DateTimeZone;
 
 class LvRequestWithdrawal extends Component
 {
@@ -82,6 +85,30 @@ class LvRequestWithdrawal extends Component
         $withdrawal = PartnerWithdrawal::findOrFail($id);
         $withdrawal->status = 'process';
         $withdrawal->save();
+
+        $partner = $withdrawal->partner;
+        $bank_account = $withdrawal->bank_account;
+        
+        $date_now = date_format(new DateTime("now", new DateTimeZone('Asia/Jakarta')), 'd F Y H:i:s');
+        $detail_mail = [
+            'subject' => "Withdrawal request has been received - {$withdrawal->withdrawal_code}",
+            'title' => "Withdrawal Request",
+            'date' => "{$date_now}UTC+7",
+            'codes' => [
+                'type' => 'withdrawal',
+                'code' => $withdrawal->withdrawal_code,
+            ],
+            'username' => $partner->name,
+            'message' => 'Your withdrawal request has been processed by Admin. Details of your withdrawal information as follows.',
+            'bank_information' => [
+                'bank_name' => $bank_account->bank_name,
+                'bank_account_name' => $bank_account->bank_account_name,
+                'bank_account_number' => Converter::numberFormattedAttribute($bank_account->bank_account_number, 'x', 3, 3),
+                'amount' => $withdrawal->amount,
+            ],
+        ];
+        $homepage_mail = new HomepageMail($detail_mail);
+        \Mail::to($partner->email)->send($homepage_mail);
         return ['status_code' => 200, 'message' => 'You have been accepted the request!'];
     }
 
@@ -98,6 +125,30 @@ class LvRequestWithdrawal extends Component
         $withdrawal = PartnerWithdrawal::findOrFail($id);
         $withdrawal->status = 'rejected';
         $withdrawal->save();
+
+        $partner = $withdrawal->partner;
+        $bank_account = $withdrawal->bank_account;
+        
+        $date_now = date_format(new DateTime("now", new DateTimeZone('Asia/Jakarta')), 'd F Y H:i:s');
+        $detail_mail = [
+            'subject' => "Withdrawal request has been rejected - {$withdrawal->withdrawal_code}",
+            'title' => "Withdrawal Request",
+            'date' => "{$date_now}UTC+7",
+            'codes' => [
+                'type' => 'withdrawal',
+                'code' => $withdrawal->withdrawal_code,
+            ],
+            'username' => $partner->name,
+            'message' => 'Your withdrawal request has been rejected by Admin. Details of your withdrawal information as follows.',
+            'bank_information' => [
+                'bank_name' => $bank_account->bank_name,
+                'bank_account_name' => $bank_account->bank_account_name,
+                'bank_account_number' => Converter::numberFormattedAttribute($bank_account->bank_account_number, 'x', 3, 3),
+                'amount' => $withdrawal->amount,
+            ],
+        ];
+        $homepage_mail = new HomepageMail($detail_mail);
+        \Mail::to($partner->email)->send($homepage_mail);
         return ['status_code' => 200, 'message' => 'You have been rejected the request!'];
     }
 
@@ -149,6 +200,31 @@ class LvRequestWithdrawal extends Component
             'amount' => $withdrawal->amount,
             'final_amount' => $withdrawal->amount,
         ]);
+
+        $partner = $withdrawal->partner;
+        $bank_account = $withdrawal->bank_account;
+        
+        $date_now = date_format(new DateTime("now", new DateTimeZone('Asia/Jakarta')), 'd F Y H:i:s');
+        $detail_mail = [
+            'subject' => "Your withdrawal is successful - {$withdrawal->withdrawal_code}",
+            'title' => "Withdrawal Request",
+            'date' => "{$date_now}UTC+7",
+            'codes' => [
+                'type' => 'withdrawal',
+                'code' => $withdrawal->withdrawal_code,
+            ],
+            'username' => $partner->name,
+            'message' => 'The withdrawal request has been completed by the Admin. Your funds have been forwarded to your bank account. Details of your withdrawal information as follows.',
+            'message_bottom' => 'To see evidence of transfer, you can view it on the website. For security reasons, you must sign in first.',
+            'bank_information' => [
+                'bank_name' => $bank_account->bank_name,
+                'bank_account_name' => $bank_account->bank_account_name,
+                'bank_account_number' => Converter::numberFormattedAttribute($bank_account->bank_account_number, 'x', 3, 3),
+                'amount' => $withdrawal->amount,
+            ],
+        ];
+        $homepage_mail = new HomepageMail($detail_mail);
+        \Mail::to($partner->email)->send($homepage_mail);
 
         $this->resetInput();
         return $this->dispatchBrowserEvent('notification:success', ['title' => 'Success!', 'message' => 'You have been finished the process!']);

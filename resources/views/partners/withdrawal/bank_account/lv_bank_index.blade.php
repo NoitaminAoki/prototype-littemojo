@@ -196,11 +196,13 @@
     document.addEventListener('notification:success', function (event) {
         $('.modal').modal('hide');
         
-        Swal.fire({
-            icon: 'success',
-            title: event.detail.title,
-            text: event.detail.message,
-        });
+        setTimeout(function() {
+            Swal.fire({
+                icon: 'success',
+                title: event.detail.title,
+                text: event.detail.message,
+            });
+        }, 600);
     })
 </script> 
 @endpush

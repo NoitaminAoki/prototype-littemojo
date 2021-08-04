@@ -23,7 +23,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Nama Catalog</label>
+                                <label>Catalog Name</label>
                                 <select class="form-control select2" style="width: 100%;" name="catalog_id" required>
                                     <option selected="selected" value=""></option>
                                     @foreach($catalogs as $catalog)
@@ -70,13 +70,13 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Harga</label>
+                                <label>Price</label>
                                 <input type="text" class="form-control" name="price" value="{{$data->price}}" placeholder="Masukkan Harga" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Durasi</label>
+                                <label>Duration</label>
                                 <select class="form-control select2" style="width: 100%;" name="duration" required>
                                     <option selected="selected" value=""></option>
                                     <option value="week" {{$data->duration == 'week' ? 'selected' : ''}}>7 Hari</option>
@@ -90,7 +90,7 @@
                         <input type="file" class="form-control" name="filename" placeholder="Masukkan Cover">
                     </div>
                     <div class="form-group">
-                        <label>Deskripsi</label>
+                        <label>Description</label>
                         <textarea name="description" id="summernote" placeholder="Masukkan Deskripsi">{!! $data->description !!}</textarea>
                         <!-- <div id="summernote" name="description"></div> -->
                     </div>
@@ -107,15 +107,15 @@
 @section('script')
 <script>
     $('[name="catalog_id"]').select2({
-        placeholder: '-- Pilih Catalog --',
+        placeholder: '-- Choose Catalog --',
         width: '100%'
     })
     $('[name="level_id"]').select2({
-        placeholder: '-- Pilih Level --',
+        placeholder: '-- Choose Level --',
         width: '100%'
     })
     $('[name="duration"]').select2({
-        placeholder: '-- Pilih Durasi --',
+        placeholder: '-- Choose Duration --',
         width: '100%'
     })
     $('#summernote').summernote()
