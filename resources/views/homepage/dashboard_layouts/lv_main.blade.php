@@ -10,7 +10,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>LittleMojo | @yield('title')</title>
+    <title>{{config('app.name')}} | @yield('title')</title>
     
     @include('homepage.dashboard_layouts.css')
     @yield('css')

@@ -67,7 +67,7 @@
                 Prototype Design
             </div>
             <!-- Default to the left -->
-            <strong>Copyright &copy; 2020-{{Date('Y')}} <a href="https://adminlte.io">LittleMojo</a>.</strong> All rights reserved.
+            <strong>Copyright &copy; 2020-{{Date('Y')}} <a href="{{url('/')}}">{{config('app.name')}}</a>.</strong> All rights reserved.
         </footer>
     </div>
     <!-- ./wrapper -->

@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     
-    <title>LittleMojo | @yield('title')</title>
+    <title>{{config('app.name')}} | @yield('title')</title>
     
     @include('homepage.dashboard_layouts.css')
     <!-- Google Font: Source Sans Pro -->

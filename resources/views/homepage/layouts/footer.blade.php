@@ -70,7 +70,7 @@
         </div>
         <div class="footer-bottom row align-items-center justify-content-between">
             <p class="footer-text m-0 col-lg-6 col-md-12">
-                &copy;{{Date('Y')}} LittleMojo All rights reserved | Made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                &copy;{{Date('Y')}} {{config('app.name')}} All rights reserved | Made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
             </p>
             <div class="col-lg-6 col-sm-12 footer-social">
                 <a href="#"><i class="fab fa-facebook"></i></a>
