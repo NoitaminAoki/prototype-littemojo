@@ -8,8 +8,8 @@
     
     {{-- <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;500;600;700;900&display=swap" rel="stylesheet"> --}}
     {{-- <link href="https://fonts.googleapis.com/css2?family=Gelasio:wght@400;500;600&display=swap" rel="stylesheet"> --}}
-    <link rel="stylesheet" href="{{public_path('/page_dist/css/bootstrap/bootstrap.min.css') }}">
-    {{-- <link rel="stylesheet" href="{{ public_path('/page_dist/css/bootstrap/bootstrap.min.css') }}"> --}}
+    <link rel="stylesheet" href="{{url('/page_dist/css/bootstrap/bootstrap.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ url('/page_dist/css/bootstrap/bootstrap.min.css') }}"> --}}
     <style>
         html{
             min-height:100%;/* make sure it is at least as tall as the viewport */
@@ -25,25 +25,31 @@
             font-family: 'Montserrat';
             font-style: normal;
             font-weight: 300;
-            src: url("{{public_path('/fonts/Montserrat-Light.ttf')}}") format('truetype');
+            src: url("{{url('/fonts/Montserrat-Light.ttf')}}") format('truetype');
         }
         @font-face {
             font-family: 'Montserrat';
             font-style: normal;
             font-weight: 500;
-            src: url("{{public_path('/fonts/Montserrat-Medium.ttf')}}") format('truetype');
+            src: url("{{url('/fonts/Montserrat-Medium.ttf')}}") format('truetype');
         }
         @font-face {
             font-family: 'Montserrat';
             font-style: normal;
             font-weight: 700;
-            src: url("{{public_path('/fonts/Montserrat-Bold.ttf')}}") format('truetype');
+            src: url("{{url('/fonts/Montserrat-Bold.ttf')}}") format('truetype');
+        }
+        @font-face {
+            font-family: 'Gelasio';
+            font-style: normal;
+            font-weight: 600;
+            src: url("{{url('/fonts/Gelasio-SemiBold.ttf')}}") format('truetype');
         }
         @font-face {
             font-family: 'Gelasio';
             font-style: normal;
             font-weight: 700;
-            src: url("{{public_path('/fonts/Gelasio-Bold.ttf')}}") format('truetype');
+            src: url("{{url('/fonts/Gelasio-Bold.ttf')}}") format('truetype');
         }
         
         .font-main {
@@ -68,7 +74,7 @@
         .content {
             height:100%;
             width:100%;
-            background-image: url("{{public_path('page_dist/img/certificates/background.png')}}");
+            background-image: url("{{url('page_dist/img/certificates/background.png')}}");
             background-color: #ffffff;
             background-size: cover;
         }
@@ -94,7 +100,7 @@
             position: absolute;
             top: 40rem;
             left: 2rem;
-            width: 350px;
+            width: 360px;
         }
         
         .text-corporation {
@@ -224,8 +230,8 @@
         
         
         .text-footer {
-            font-size: 11px;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: 600;
             color: #989898;
         }
         
@@ -248,7 +254,7 @@
             <div class="w-100 h-100 box-content">
                 <div class="content-body">
                     <div class="content-img">
-                        <img src="{{public_path($course->corporation->path_thumbnail)}}" alt="{{$course->corporation->name}}" title="{{$course->corporation->name}}">
+                        <img src="{{url($course->corporation->path_thumbnail)}}" alt="{{$course->corporation->name}}" title="{{$course->corporation->name}}">
                     </div>
                     <h5 class="font-main text-corporation font-weight-normal">{{env('APP_NAME_CERTIFICATE')}}</h5>
                     <h2 class="font-main text-certificate font-weight-bold">CERTIFICATE</h2>

@@ -12,6 +12,8 @@ use App\Models\{
 use App\Mail\CustomerMail;
 use App\Mail\HomepageMail;
 use Mail;
+use DateTime;
+use DateTimeZone;
 
 class PaymentController extends Controller
 {
@@ -73,6 +75,8 @@ class PaymentController extends Controller
             $vendorName = (strlen($paymentNotification->va_numbers[0]->bank) == 3)? \Str::upper($paymentNotification->va_numbers[0]->bank) : $paymentNotification->va_numbers[0]->bank;
         }
         
+        $date_now = date_format(new DateTime("now", new DateTimeZone('Asia/Jakarta')), 'd F Y H:i:s');
+
         $detail_mail = [
             'subject' => "",
             'title' => "ORDER TRANSACTION",
@@ -100,29 +104,34 @@ class PaymentController extends Controller
             }
         } else if ($transaction == 'settlement') {
             // TODO set payment status in merchant's database to 'Settlement'
-            $detail_mail['subject'] = "Thank you for your payment - LittleMonjo - {$customer_transaction->transaction_code}";
+            $detail_mail['subject'] = "Thank you for your payment - ".config('app.name')." - {$customer_transaction->transaction_code}";
             $paymentStatus = 'settlement';
         } else if ($transaction == 'pending') {
             // TODO set payment status in merchant's database to 'Pending'
-            $detail_mail['subject'] = "Your payment process has not been completed - LittleMonjo - {$customer_transaction->transaction_code}";
-            $detail_mail['message'] = "thank you for ordering the <b>{$course->name}</b> course provided by <b>{$course->corporation->name}</b>. Please complete your payment before due time.<br><br> You will receive email from <b>Midtrans <small>&lt;noreply@midtrans.com&gt;</small></b> for procedure of payment.";
-            // $detail_mail['button_link'] = [
-            //     'url' => 'https://app.sandbox.midtrans.com/snap/v1/transactions/47e755db-0cd6-44fc-a409-a8a2cf9da953/pdf',
-            //     'button_text' => 'Download',
-            //     'with_text' => true,
-            // ];
+            $trx_detail = CustomerTransactionDetail::where('customer_transaction_id', $customer_transaction->id)->first();
+            $detail_mail['subject'] = "Your payment process has not been completed - ".config('app.name')." - {$customer_transaction->transaction_code}";
+            if($trx_detail) {
+                $detail_mail['message'] = "thank you for ordering the <b>{$course->name}</b> course provided by <b>{$course->corporation->name}</b>. Please complete your payment before due time.<br><br> You will receive email from <b>Midtrans <small>&lt;noreply@midtrans.com&gt;</small></b> for procedure of payment <b>or</b> click the button below to download pdf payment method.";
+                $detail_mail['button_link'] = [
+                    'url' => $trx_detail->link_pdf_payment_method,
+                    'button_text' => 'Download',
+                    'with_text' => true,
+                ];
+            } else {
+                $detail_mail['message'] = "thank you for ordering the <b>{$course->name}</b> course provided by <b>{$course->corporation->name}</b>. Please complete your payment before due time.<br><br> You will receive email from <b>Midtrans <small>&lt;noreply@midtrans.com&gt;</small></b> for procedure of payment.";
+            }
             $paymentStatus = 'pending';
         } else if ($transaction == 'deny') {
             // TODO set payment status in merchant's database to 'Denied'
-            $detail_mail['subject'] = "Your payment process has been declined - LittleMonjo - {$customer_transaction->transaction_code}";
+            $detail_mail['subject'] = "Your payment process has been declined - ".config('app.name')." - {$customer_transaction->transaction_code}";
             $paymentStatus = 'deny';
         } else if ($transaction == 'expire') {
             // TODO set payment status in merchant's database to 'expire'
-            $detail_mail['subject'] = "Your payment process has been declined - LittleMonjo - {$customer_transaction->transaction_code}";
+            $detail_mail['subject'] = "Your payment process has been declined - ".config('app.name')." - {$customer_transaction->transaction_code}";
             $paymentStatus = 'expire';
         } else if ($transaction == 'cancel') {
             // TODO set payment status in merchant's database to 'Denied'
-            $detail_mail['subject'] = "Your payment process has been canceled - LittleMonjo - {$customer_transaction->transaction_code}";
+            $detail_mail['subject'] = "Your payment process has been canceled - ".config('app.name')." - {$customer_transaction->transaction_code}";
             $paymentStatus = 'cancel';
         }
         

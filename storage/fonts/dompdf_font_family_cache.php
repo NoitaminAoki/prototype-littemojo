@@ -80,6 +80,7 @@
   'gelasio' => array(
     '600' => $fontDir . '/gelasio_600_24eeba22096d037189bad28cff782c1a',
     'normal' => $fontDir . '/gelasio_normal_276b954f6c19116acf64ca48a77c58b5',
+    'bold' => $fontDir . '/gelasio_bold_c716c118be97b0019597ac506af81d49',
   ),
   'montserrat' => array(
     '300' => $fontDir . '/montserrat_300_c3119889deca762b265e7a46132e78c0',

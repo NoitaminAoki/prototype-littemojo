@@ -10,6 +10,7 @@ use App\Models\{
     Course,
     CustomerCertificate as UserCertificate,
 };
+use App\Helpers\StringGenerator;
 
 class HomeController extends Controller
 {
@@ -46,8 +47,11 @@ class HomeController extends Controller
         $space_length = $length > 8? ceil($length/1.5) + 1 : $length;
         $calculate = $fontSize - ($space_length * 5);
         // dd($calculate);
-        return view('homepage.pages.certificates.certificate_pdf')->with(['font_size' => $calculate, 'name' => $text]);
-        $pdf = \PDF::loadview('homepage.pages.certificates.certificate_pdf',[]);
+        $data = ['font_size' => $calculate, 'username' => $text];
+        $data['course'] = Course::find(5);
+        $data['generated_hash'] = StringGenerator::hashId(11);
+        // return view('homepage.pages.certificates.certificate_pdf_view')->with($data);
+        $pdf = \PDF::loadview('homepage.pages.certificates.certificate_pdf',$data);
         $pdf->setPaper('A4', 'landscape');
         return $pdf->stream();
     }
