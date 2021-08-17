@@ -331,6 +331,15 @@
         width: 85%;
     }
     
+    @media (max-width: 576px) {
+        .custom-div {
+            width: 93%;
+            left: 3.5%;
+        }
+        .custom-div-2 {
+            width: 31%;
+        }
+    }
 </style>
 @endsection
 

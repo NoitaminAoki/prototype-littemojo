@@ -4,6 +4,7 @@
 @endsection
 @section('css')
 <style>
+    
     .single-popular-carusel .details h4:hover {
         color: #ffffff !important;
     }
@@ -82,6 +83,15 @@
     .img-bg-course {
         object-fit: cover;
         min-height: 215px;
+    }
+    @media (max-width: 576px) {
+        .custom-div {
+            width: 93%;
+            left: 3.5%;
+        }
+        .custom-div-2 {
+            width: 31%;
+        }
     }
 </style>
 @endsection

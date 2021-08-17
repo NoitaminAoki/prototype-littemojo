@@ -228,7 +228,7 @@
                                                             <a href="mailto:{{env('MAIL_CS_APP')}}" style="Margin:0;color:#00b4ed;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left;text-decoration:none" target="_blank">
                                                                 {{env('MAIL_CS_APP')}}
                                                             </a> | 
-                                                            phone: +6285159116034
+                                                            phone: {{env('APP_PHONE_NUMBER')}}
                                                         </p>
                                                     </th>
                                                     <th style="Margin:0;color:#0a0a0a;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:19px;margin:0;padding:0!important;text-align:left;width:0"></th>

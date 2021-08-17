@@ -257,6 +257,32 @@
             width: 1440px;
         }
     }
+    .content-box-icon {
+        padding-left: 1.5rem;
+    }
+    @media (max-width: 960px) {
+        .banner-gradient-color {
+            background-image: linear-gradient(90deg, rgb(66, 133, 244), rgb(52, 168, 141));
+        }
+    }
+    @media (max-width: 768px) {
+        .content-box-icon {
+            margin-top: 2rem;
+            padding-left: 15px;
+        }
+        .banner-gradient-color {
+            background-image: linear-gradient(90deg, rgb(66, 133, 244), rgb(52, 131, 168));
+        }
+        .offer-area {
+            border-top: 1px solid #ffffff;
+            margin-top: 2rem;
+            padding-left: 15px;
+        }
+        .text-offer-by {
+            padding-left: 0;
+            padding-bottom: 1rem;
+        }
+    }
 </style>
 @endsection
 
@@ -361,7 +387,7 @@
                     </div>
                     
                 </div>
-                <div class="col-md-4 pl-4">
+                <div class="col-md-4 content-box-icon">
                     <div class="info-box custom-info-box shadow-none p-0">
                         <div class="custom-info-box-content">
                             <span class="custom-info-box-icon rounded-circle text-primary"><i class="far fa-clock"></i></span>

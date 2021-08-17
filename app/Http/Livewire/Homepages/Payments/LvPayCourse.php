@@ -71,12 +71,13 @@ class LvPayCourse extends Component
             ['customer_transactions.course_id', '=', $course->id],
         ])
         ->leftJoin('customer_transaction_details as tr_detail', 'tr_detail.customer_transaction_id', '=', 'customer_transactions.id')
-        ->orderBy('created_at', 'desc')
+        ->orderBy('customer_transactions.created_at', 'desc')
         ->first();
 
         // dd($transaction);
         if($transaction && $transaction->status_payment == 'pending') {
             $midtrans_status = $this->getStatus($transaction->order_id);
+            // dd($midtrans_status);
             if(in_array($midtrans_status->transaction_status, ['deny', 'cancel', 'expire'])) {
                 
                 $transaction->status_payment = $midtrans_status->transaction_status;
@@ -90,7 +91,7 @@ class LvPayCourse extends Component
             $this->result_snap['order_id'] = $transaction['order_id'];
             $this->result_snap['total_amount'] = $transaction['total_amount'];
             $this->result_snap['payment_type'] = $transaction['payment_type'];
-            $this->result_snap['pdf_payment_method'] = $transaction['pdf_url'];
+            $this->result_snap['pdf_payment_method'] = $transaction['link_pdf_payment_method'];
             
             if($transaction['payment_type'] == 'bank_transfer') {
                 $this->result_snap['payment_type_readable'] = 'Bank Transfer';
@@ -243,8 +244,9 @@ class LvPayCourse extends Component
         $unpaid_transaction = CustomerTransaction::where([
             ['customer_id', '=', $user_auth->id], 
             ['course_id', '=', $course->id],
-        ])->firstOrFail();
+        ])->orderBy('created_at', 'desc')->firstOrFail();
             
+        // dd($unpaid_transaction, $response);
         if($response['type'] == 'success' || $response['type'] == 'pending') {
             
             $this->result_snap['is_open'] = true;

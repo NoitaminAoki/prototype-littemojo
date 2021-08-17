@@ -105,6 +105,7 @@ class PaymentController extends Controller
         } else if ($transaction == 'settlement') {
             // TODO set payment status in merchant's database to 'Settlement'
             $detail_mail['subject'] = "Thank you for your payment - ".config('app.name')." - {$customer_transaction->transaction_code}";
+            $detail_mail['message'] = "Your transaction was successful! Thank you for ordering the <b>{$course->name}</b> course provided by <b>{$course->corporation->name}</b>.";
             $paymentStatus = 'settlement';
         } else if ($transaction == 'pending') {
             // TODO set payment status in merchant's database to 'Pending'
@@ -132,6 +133,7 @@ class PaymentController extends Controller
         } else if ($transaction == 'cancel') {
             // TODO set payment status in merchant's database to 'Denied'
             $detail_mail['subject'] = "Your payment process has been canceled - ".config('app.name')." - {$customer_transaction->transaction_code}";
+            $detail_mail['message'] = "Your order has been canceled by ".config('app.name').". Please contact ".config('app.name')." if you have any questions regarding your order.";
             $paymentStatus = 'cancel';
         }
         

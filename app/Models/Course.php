@@ -170,6 +170,7 @@ class Course extends Model
         ->selectRaw('ADDDATE(ct.start_date, INTERVAL (IF(course.duration = "week", 7, 30)) DAY) as end_date')
         ->leftJoin('courses as course', 'course.id', '=', 'ct.course_id')
         ->where(['ct.course_id' => $this->id, 'ct.customer_id' => $user_id])
+        ->orderBy('ct.created_at', 'desc')
         ->first();
 
         return $transaction;
