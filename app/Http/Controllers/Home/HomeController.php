@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use App\Models\{
     Blog,
     Course,
+	Level,
     CustomerCertificate as UserCertificate,
 };
 use App\Helpers\StringGenerator;
@@ -18,6 +19,7 @@ class HomeController extends Controller
     {
         $popular_courses = Course::where('is_published', 1)->inRandomOrder()->offset(0)->limit(10)->get();
         $data['courses'] = (object) ['popular_courses' => $popular_courses];
+    	$data['levels']    = Level::select('id', 'name')->get();
         $data['popularBlog'] = Blog::where([
             ['is_publish', true],
             ['is_highlight', true]

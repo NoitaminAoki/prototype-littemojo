@@ -27,6 +27,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'profile_picture',
+        'profile_picture_path',
     ];
     protected $guarded = [];
 
@@ -59,4 +61,10 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function uriProfilePicture()
+    {
+        //'page_dist/img/default-profile-picture.png'
+        return asset($this->profile_picture_path);
+    }
 }

@@ -622,7 +622,20 @@
                             </div>
                             
                             <div class="info-box-content text-font-family font-weight-normal">
-                                <span class="info-box-text text-secondary">23 videos (Total 74 min), 6 readings, 10 quizzes</span>
+                                <span class="info-box-text text-secondary">
+                                    {{$lesson->totalVideos()->total}} videos (Total {{$lesson->totalVideos()->duration_as_minute}} min),
+                                    {{$lesson->totalbooks()}} readings,
+                                    {{$lesson->totalQuizzes()}} quizzes
+                                    {{-- @if ($lesson->totalVideos()->total > 0)
+                                    {{$lesson->totalVideos()->total}} videos (Total {{$lesson->totalVideos()->duration_as_minute}} min){{($lesson->totalbooks() > 0)? ',' : ''}}
+                                    @endif
+                                    @if ($lesson->totalbooks() > 0)
+                                    {{$lesson->totalbooks()}} readings{{($lesson->totalQuizzes() > 0)? ',' : ''}}
+                                    @endif 
+                                    @if ($lesson->totalQuizzes() > 0)
+                                    {{$lesson->totalQuizzes()}} quizzes
+                                    @endif --}}
+                                </span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>

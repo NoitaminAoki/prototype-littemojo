@@ -257,18 +257,22 @@
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 search-course-right section-gap">
-                <form class="form-wrap" action="#">
+                <form class="form-wrap" action="{{ route('home.course.index') }}">
                     <h4 class="text-white pb-20 text-center mb-30">Search for Available Course</h4>		
-                    <input type="text" class="form-control" name="name" placeholder="Your Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your Name'" >
-                    <input type="phone" class="form-control" name="phone" placeholder="Your Phone Number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your Phone Number'" >
-                    <input type="email" class="form-control" name="email" placeholder="Your Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your Email Address'" >
-                    <div class="form-select" id="service-select">
-                        <select>
-                            <option datd-display="">Choose Course</option>
-                            <option value="1">Course One</option>
-                            <option value="2">Course Two</option>
-                            <option value="3">Course Three</option>
-                            <option value="4">Course Four</option>
+                    <input type="text" class="form-control" name="title" placeholder="Course Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Course Name'" autocomplete="off">
+                    <div class="form-select" style="margin-bottom: 5px;">
+                        <select class="nice-select" name="duration">
+                            <option datd-display="">Choose Duration</option>
+                            <option value="week">1 Week</option>
+                            <option value="month">1 Month</option>
+                        </select>
+                    </div>									
+                    <div class="form-select" style="margin-bottom: 5px;">
+                        <select class="nice-select" name="level">
+                            <option datd-display="">Choose Level</option>
+                            @foreach($levels as $level)
+                            <option value="{{$level->name}}">{{$level->name}}</option>
+                            @endforeach
                         </select>
                     </div>									
                     <button class="primary-btn text-uppercase">Submit</button>
@@ -557,4 +561,12 @@
     </div>	
 </section>
 <!-- End blog Area -->		
+@endsection
+
+@section('script')
+<script>
+    $(document).ready(function() {
+        $('.nice-select').niceSelect();
+    })
+</script>
 @endsection

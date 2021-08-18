@@ -115,6 +115,11 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
     });
 });
 
+Route::middleware(['auth:web', 'verified'])->group(function () {
+    // Route::get('learn/{title}/enroll', [PaymentController::class, 'index'])->name('home.course.enroll');
+    Route::get('learn/{title}/enroll', LvPayCourse::class)->name('home.course.enroll');
+});
+
 Route::middleware(['auth:web', 'verified'])->prefix('ajax/request/')->name('ajax.request.')->group(function () {
     Route::post('lesson/rating', [DashCouseController::class, 'lessonRateItem'])->name('lesson.rating');
 });
@@ -132,10 +137,6 @@ Route::resource('blog', BlogController::class);
 
 Route::get('/learn/{title}', [HomeController::class, 'detailCourse'])->name('home.detail.course');
 
-Route::middleware(['auth:web', 'verified'])->group(function () {
-    // Route::get('learn/{title}/enroll', [PaymentController::class, 'index'])->name('home.course.enroll');
-    Route::get('learn/{title}/enroll', LvPayCourse::class)->name('home.course.enroll');
-});
 
 
 Route::view('dashboard', 'dashboard')->middleware(['auth:sanctum', 'verified'])->name('dashboard');
