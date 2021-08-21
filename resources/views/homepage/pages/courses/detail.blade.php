@@ -232,6 +232,47 @@
         font-family: 'Open Sans', Arial, sans-serif;
     }
     
+    .box-left-number {
+        display: inline-block;
+    }
+    
+    .title-review {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+    
+    .box-left-review {
+        padding-right: 5rem;
+    }
+    
+    .number-text-review {
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        font-weight: 700;
+        font-size: 3rem;
+        line-height: 3.75rem !important;
+        margin-bottom: 0;
+    }
+    .number-text-review small {
+        font-size: 1.5rem;
+        color: #777;
+    }
+    
+    .star-text-review {
+        font-size: 1.3rem;
+    }
+    .star-sub-text-review {
+        padding-top: 5px;
+        color: #000000;
+    }
+    
+    .custom-bg-orange {
+        background-color: #ffac15;
+    }
+
+    .box-user-review h6 {
+        font-size: 1rem;
+    }
+    
     @media (min-width: 608px){
         .cust-container {
             width: 576px;
@@ -251,6 +292,7 @@
         .cust-container {
             width: 1152px;
         }
+
     }
     @media (min-width: 1472px) {
         .cust-container {
@@ -263,6 +305,11 @@
     @media (max-width: 960px) {
         .banner-gradient-color {
             background-image: linear-gradient(90deg, rgb(66, 133, 244), rgb(52, 168, 141));
+        }
+    }
+    @media (max-width: 992px) {
+        .box-left-number {
+            display: block;
         }
     }
     @media (max-width: 768px) {
@@ -283,6 +330,87 @@
             padding-bottom: 1rem;
         }
     }
+    .content-user-review {
+        min-width: 100%;
+    }
+    @media (min-width: 1184px){
+        .content-user-review {
+            min-width: unset;
+        }
+    }
+
+    .content-form-review .title-form {
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Star Rating */
+    .number-rating {
+        font-family: 'Open Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        font-size: 4rem;
+        font-weight: 600;
+    }
+    
+    .text-review {
+        font-size: .9rem;
+    }
+    
+    .rating-review {
+        font-family: 'Open Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        font-size: 2.75rem;
+        font-weight: 600;
+    }
+    
+    .rating-review-sm {
+        font-family: 'Open Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        font-size: 1rem;
+    }
+    
+    .text-rating {
+        font-family: 'Open Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        font-size: 1.5rem;
+    }
+    
+    .rating-fieldset, .rating-label { margin: 0; padding: 0; }
+    
+    /****** Style Star Rating Widget *****/
+    
+    .rating-label {
+        cursor: pointer;
+        font-weight: 900;
+    }
+    
+    .rating { 
+        border: none;
+        float: left;
+    }
+    
+    .rating > input { display: none; } 
+    .rating > .rating-label:before { 
+        margin: 5px 10px 5px 0;
+        font-size: 2.25em;
+        font-family: "Font Awesome 5 Free";
+        display: inline-block;
+        content: "\f005";
+    }
+    
+    .rating > .rating-label { 
+        color: #ddd; 
+        float: right; 
+    }
+    
+    /***** CSS Magic to Highlight Stars on Hover *****/
+    
+    .rating > input:checked ~ .rating-label, /* show gold star when clicked */
+    .rating:not(:checked) > .rating-label:hover, /* hover current star */
+    .rating:not(:checked) > .rating-label:hover ~ .rating-label { color: #FFD700;  } /* hover previous stars in list */
+    
+    .rating > input:checked + .rating-label:hover, /* hover current star when changing rating */
+    .rating > input:checked ~ .rating-label:hover,
+    .rating > .rating-label:hover ~ input:checked ~ .rating-label, /* lighten current selection */
+    .rating > input:checked ~ .rating-label:hover ~ .rating-label { color: #FFED85;  }
+    /* End Star Rating */
+    
 </style>
 @endsection
 
@@ -605,7 +733,7 @@
                 @foreach($course->lessons as $key => $lesson)
                 <div class="col-12 mt-3 row">
                     <div class="col-lg-2">
-                        <div class="text-center" style="display: inline-block">
+                        <div class="text-center box-left-number">
                             <span>LESSON</span>
                             <br>
                             <span class="custom-header-text-lesson">{{$key+1}}</span>
@@ -627,110 +755,271 @@
                                     {{$lesson->totalbooks()}} readings,
                                     {{$lesson->totalQuizzes()}} quizzes
                                     {{-- @if ($lesson->totalVideos()->total > 0)
-                                    {{$lesson->totalVideos()->total}} videos (Total {{$lesson->totalVideos()->duration_as_minute}} min){{($lesson->totalbooks() > 0)? ',' : ''}}
-                                    @endif
-                                    @if ($lesson->totalbooks() > 0)
-                                    {{$lesson->totalbooks()}} readings{{($lesson->totalQuizzes() > 0)? ',' : ''}}
-                                    @endif 
-                                    @if ($lesson->totalQuizzes() > 0)
-                                    {{$lesson->totalQuizzes()}} quizzes
-                                    @endif --}}
-                                </span>
+                                        {{$lesson->totalVideos()->total}} videos (Total {{$lesson->totalVideos()->duration_as_minute}} min){{($lesson->totalbooks() > 0)? ',' : ''}}
+                                        @endif
+                                        @if ($lesson->totalbooks() > 0)
+                                        {{$lesson->totalbooks()}} readings{{($lesson->totalQuizzes() > 0)? ',' : ''}}
+                                        @endif 
+                                        @if ($lesson->totalQuizzes() > 0)
+                                        {{$lesson->totalQuizzes()}} quizzes
+                                        @endif --}}
+                                    </span>
+                                </div>
+                                <!-- /.info-box-content -->
                             </div>
-                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                <div class="pt-4rem"></div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="review-area section-gap">
+        <div class="cust-container">
+            <div class="row mb-60">
+                <div class="col-12">
+                    <h5 class="title-review">Reviews</h5>
+                </div>
+                <div class="col-lg-4" style="min-width: 360px;margin-bottom:40px;">
+                    <div class="w-100">
+                        <h5 class="mb-2">Average user rating</h5>
+                        <div class="d-flex align-items-center">
+                            <div class="box-left-review">
+                                <div class="w-100">
+                                    <h2 class="number-text-review">4.3 <small>/ 5</small></h2>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="w-100 text-warning star-text-review">
+                                    <span class="fas fa-star"></span>
+                                    <span class="fas fa-star"></span>
+                                    <span class="fas fa-star"></span>
+                                    <span class="fas fa-star-half-alt"></span>
+                                    <span class="far fa-star"></span>
+                                </div>
+                                <div class="w-100 star-sub-text-review">
+                                    280.800 reviews
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-100 mt-4">
+                        <div class="w-100">
+                            <table class="w-100">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-center" style="width: 40px">
+                                            <span class="text-black">5 <i class="fas fa-star checked text-warning"></i></span>
+                                        </td>
+                                        <td style="width: 250px">
+                                            <div class="progress rounded-0">
+                                                <div class="progress-bar custom-bg-orange" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="pl-2 text-black">75%</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center" style="width: 40px">
+                                            <span class="text-black">4 <i class="fas fa-star checked text-warning"></i></span>
+                                        </td>
+                                        <td style="width: 250px">
+                                            <div class="progress rounded-0">
+                                                <div class="progress-bar custom-bg-orange" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="pl-2 text-black">0%</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center" style="width: 40px">
+                                            <span class="text-black">3 <i class="fas fa-star checked text-warning"></i></span>
+                                        </td>
+                                        <td style="width: 250px">
+                                            <div class="progress rounded-0">
+                                                <div class="progress-bar custom-bg-orange" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="pl-2 text-black">25%</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center" style="width: 40px">
+                                            <span class="text-black">2 <i class="fas fa-star checked text-warning"></i></span>
+                                        </td>
+                                        <td style="width: 250px">
+                                            <div class="progress rounded-0">
+                                                <div class="progress-bar custom-bg-orange" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="pl-2 text-black">0%</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center" style="width: 40px">
+                                            <span class="text-black" style="padding-left: 3px;">1 <i class="fas fa-star checked text-warning"></i></span>
+                                        </td>
+                                        <td style="width: 250px">
+                                            <div class="progress rounded-0">
+                                                <div class="progress-bar custom-bg-orange" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="pl-2 text-black">0%</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-                @endforeach
-            </div>
-            <div class="pt-4rem"></div>
-        </div>
-    </div>
-</section>
+                <div class="col-lg-8 content-user-review">
+                    <div class="w-100">
+                        <h5 class="mb-2">All Ratings and Reviews</h5>
+                    </div>
+                    <div class="card rounded-0 border-0">
+                        <div class="card-body border-bottom">
+                            <div class="box-user-review w-100 text-black">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h6>James Sullivan</h6>
+                                        <p>March 20, 2020</p>
+                                    </div>
+                                    <div class="text-warning">
+                                        <span class="fas fa-star"></span>
+                                        <span class="fas fa-star"></span>
+                                        <span class="fas fa-star"></span>
+                                        <span class="fas fa-star"></span>
+                                        <span class="fas fa-star"></span>
+                                    </div>
+                                </div>
+                                <div class="w-100">
+                                    <p>You were such a hit. Thanks for this course and the next five more! On behalf of our entire organization, thanks again for taking the Conference to a whole new level of education and professionalism!!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
 
-<!-- Start cta-one Area -->
-<section class="cta-one-area relative section-gap">
-    <div class="container">
-        <div class="overlay overlay-bg"></div>
-        <div class="row justify-content-center">
-            <div class="wrap">
-                <h1 class="text-white">Become an instructor</h1>
-                <p>
-                    There is a moment in the life of any aspiring astronomer that it is time to buy that first telescope. It’s exciting to think about setting up your own viewing station whether that is on the deck.
-                </p>
-                <a class="primary-btn wh" href="#">Apply for the post</a>								
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card rounded-0 border-0 content-form-review">
+                <div class="card-body">
+                    <h6 class="title-form">Leave Review</h6>
+                    <div class="w-100 mb-4">
+                        <p class="text-black mb-1">Rate the Course</p>
+                        <div class="d-flex">
+                            <fieldset class="rating-fieldset rating">
+                                <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star5" name="rating" value="5" data-title="Awesome" /><label class="rating-label full" for="star5" title="Awesome - 5 Stars"></label>
+                                <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star4" name="rating" value="4" data-title="Pretty good" /><label class="rating-label full" for="star4" title="Pretty good - 4 Stars"></label>
+                                <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star3" name="rating" value="3" data-title="Good" /><label class="rating-label full" for="star3" title="Good - 3 Stars"></label>
+                                <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star2" name="rating" value="2" data-title="Kinda bad" /><label class="rating-label full" for="star2" title="Kinda bad - 2 Stars"></label>
+                                <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star1" name="rating" value="1" data-title="Bad" /><label class="rating-label full" for="star1" title="Bad - 1 Star"></label>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="w-100 mb-4">
+                        <p class="text-black mb-1">Your Review</p>
+                        <textarea class="form-control" name="" rows="4"></textarea>
+                    </div>
+                    <div class="w-100 text-right">
+                        <button class="genric-btn primary">Submit Review</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Start cta-one Area -->
+    <section class="cta-one-area relative section-gap">
+        <div class="container">
+            <div class="overlay overlay-bg"></div>
+            <div class="row justify-content-center">
+                <div class="wrap">
+                    <h1 class="text-white">Become an instructor</h1>
+                    <p>
+                        There is a moment in the life of any aspiring astronomer that it is time to buy that first telescope. It’s exciting to think about setting up your own viewing station whether that is on the deck.
+                    </p>
+                    <a class="primary-btn wh" href="#">Apply for the post</a>								
+                </div>					
+            </div>
+        </div>	
+    </section>
+    <!-- End cta-one Area -->
+    
+    <!-- Start blog Area -->
+    <section class="blog-area section-gap" id="blog">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="menu-content pb-70 col-lg-8">
+                    <div class="title text-center">
+                        <h1 class="mb-10">Latest posts from our Blog</h1>
+                        <p>In the history of modern astronomy there is.</p>
+                    </div>
+                </div>
             </div>					
-        </div>
-    </div>	
-</section>
-<!-- End cta-one Area -->
-
-<!-- Start blog Area -->
-<section class="blog-area section-gap" id="blog">
-    <div class="container">
-        <div class="row d-flex justify-content-center">
-            <div class="menu-content pb-70 col-lg-8">
-                <div class="title text-center">
-                    <h1 class="mb-10">Latest posts from our Blog</h1>
-                    <p>In the history of modern astronomy there is.</p>
+            <div class="row">
+                <div class="col-lg-3 col-md-6 single-blog">
+                    <div class="thumb">
+                        <img class="img-fluid" src="{{ asset('page_dist/img/b1.jpg')}}" alt="">								
+                    </div>
+                    <p class="meta">25 April, 2018  |  By <a href="#">Mark Wiens</a></p>
+                    <a href="blog-single.html">
+                        <h5>Addiction When Gambling Becomes A Problem</h5>
+                    </a>
+                    <p>
+                        Computers have become ubiquitous in almost every facet of our lives. At work, desk jockeys spend hours in front of their.
+                    </p>
+                    <a href="#" class="details-btn d-flex justify-content-center align-items-center"><span class="details">Details</span><span class="lnr lnr-arrow-right"></span></a>		
                 </div>
+                <div class="col-lg-3 col-md-6 single-blog">
+                    <div class="thumb">
+                        <img class="img-fluid" src="{{ asset('page_dist/img/b2.jpg')}}" alt="">								
+                    </div>
+                    <p class="meta">25 April, 2018  |  By <a href="#">Mark Wiens</a></p>
+                    <a href="blog-single.html">
+                        <h5>Computer Hardware Desktops And Notebooks</h5>
+                    </a>
+                    <p>
+                        Ah, the technical interview. Nothing like it. Not only does it cause anxiety, but it causes anxiety for several different reasons. 
+                    </p>
+                    <a href="#" class="details-btn d-flex justify-content-center align-items-center"><span class="details">Details</span><span class="lnr lnr-arrow-right"></span></a>						
+                </div>
+                <div class="col-lg-3 col-md-6 single-blog">
+                    <div class="thumb">
+                        <img class="img-fluid" src="{{ asset('page_dist/img/b3.jpg')}}" alt="">								
+                    </div>
+                    <p class="meta">25 April, 2018  |  By <a href="#">Mark Wiens</a></p>
+                    <a href="blog-single.html">
+                        <h5>Make Myspace Your Best Designed Space</h5>
+                    </a>
+                    <p>
+                        Plantronics with its GN Netcom wireless headset creates the next generation of wireless headset and other products such as wireless.
+                    </p>
+                    <a href="#" class="details-btn d-flex justify-content-center align-items-center"><span class="details">Details</span><span class="lnr lnr-arrow-right"></span></a>									
+                </div>
+                <div class="col-lg-3 col-md-6 single-blog">
+                    <div class="thumb">
+                        <img class="img-fluid" src="{{ asset('page_dist/img/b4.jpg')}}" alt="">								
+                    </div>
+                    <p class="meta">25 April, 2018  |  By <a href="#">Mark Wiens</a></p>
+                    <a href="blog-single.html">
+                        <h5>Video Games Playing With Imagination</h5>
+                    </a>
+                    <p>
+                        About 64% of all on-line teens say that do things online that they wouldn’t want their parents to know about.   11% of all adult internet 
+                    </p>
+                    <a href="#" class="details-btn d-flex justify-content-center align-items-center"><span class="details">Details</span><span class="lnr lnr-arrow-right"></span></a>							
+                </div>							
             </div>
-        </div>					
-        <div class="row">
-            <div class="col-lg-3 col-md-6 single-blog">
-                <div class="thumb">
-                    <img class="img-fluid" src="{{ asset('page_dist/img/b1.jpg')}}" alt="">								
-                </div>
-                <p class="meta">25 April, 2018  |  By <a href="#">Mark Wiens</a></p>
-                <a href="blog-single.html">
-                    <h5>Addiction When Gambling Becomes A Problem</h5>
-                </a>
-                <p>
-                    Computers have become ubiquitous in almost every facet of our lives. At work, desk jockeys spend hours in front of their.
-                </p>
-                <a href="#" class="details-btn d-flex justify-content-center align-items-center"><span class="details">Details</span><span class="lnr lnr-arrow-right"></span></a>		
-            </div>
-            <div class="col-lg-3 col-md-6 single-blog">
-                <div class="thumb">
-                    <img class="img-fluid" src="{{ asset('page_dist/img/b2.jpg')}}" alt="">								
-                </div>
-                <p class="meta">25 April, 2018  |  By <a href="#">Mark Wiens</a></p>
-                <a href="blog-single.html">
-                    <h5>Computer Hardware Desktops And Notebooks</h5>
-                </a>
-                <p>
-                    Ah, the technical interview. Nothing like it. Not only does it cause anxiety, but it causes anxiety for several different reasons. 
-                </p>
-                <a href="#" class="details-btn d-flex justify-content-center align-items-center"><span class="details">Details</span><span class="lnr lnr-arrow-right"></span></a>						
-            </div>
-            <div class="col-lg-3 col-md-6 single-blog">
-                <div class="thumb">
-                    <img class="img-fluid" src="{{ asset('page_dist/img/b3.jpg')}}" alt="">								
-                </div>
-                <p class="meta">25 April, 2018  |  By <a href="#">Mark Wiens</a></p>
-                <a href="blog-single.html">
-                    <h5>Make Myspace Your Best Designed Space</h5>
-                </a>
-                <p>
-                    Plantronics with its GN Netcom wireless headset creates the next generation of wireless headset and other products such as wireless.
-                </p>
-                <a href="#" class="details-btn d-flex justify-content-center align-items-center"><span class="details">Details</span><span class="lnr lnr-arrow-right"></span></a>									
-            </div>
-            <div class="col-lg-3 col-md-6 single-blog">
-                <div class="thumb">
-                    <img class="img-fluid" src="{{ asset('page_dist/img/b4.jpg')}}" alt="">								
-                </div>
-                <p class="meta">25 April, 2018  |  By <a href="#">Mark Wiens</a></p>
-                <a href="blog-single.html">
-                    <h5>Video Games Playing With Imagination</h5>
-                </a>
-                <p>
-                    About 64% of all on-line teens say that do things online that they wouldn’t want their parents to know about.   11% of all adult internet 
-                </p>
-                <a href="#" class="details-btn d-flex justify-content-center align-items-center"><span class="details">Details</span><span class="lnr lnr-arrow-right"></span></a>							
-            </div>							
-        </div>
-    </div>	
-</section>
-<!-- End blog Area -->		
-@endsection
+        </div>	
+    </section>
+    <!-- End blog Area -->		
+    @endsection
