@@ -1,0 +1,66 @@
+/* Star Rating */
+.number-rating {
+    font-family: 'Open Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 4rem;
+    font-weight: 600;
+}
+
+.text-review {
+    font-size: .9rem;
+}
+
+.rating-review {
+    font-family: 'Open Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 2.75rem;
+    font-weight: 600;
+}
+
+.rating-review-sm {
+    font-family: 'Open Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 1rem;
+}
+
+.text-rating {
+    font-family: 'Open Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 1.5rem;
+}
+
+.rating-fieldset, .rating-label { margin: 0; padding: 0; }
+
+/****** Style Star Rating Widget *****/
+
+.rating-label {
+    cursor: pointer;
+    font-weight: 900;
+}
+
+.rating { 
+    border: none;
+    float: left;
+}
+
+.rating > input { display: none; } 
+.rating > .rating-label:before { 
+    margin: 5px;
+    font-size: 2.25em;
+    font-family: "Font Awesome 5 Free";
+    display: inline-block;
+    content: "\f005";
+}
+
+.rating > .rating-label { 
+    color: #ddd; 
+    float: right; 
+}
+
+/***** CSS Magic to Highlight Stars on Hover *****/
+
+.rating > input:checked ~ .rating-label, /* show gold star when clicked */
+.rating:not(:checked) > .rating-label:hover, /* hover current star */
+.rating:not(:checked) > .rating-label:hover ~ .rating-label { color: #FFD700;  } /* hover previous stars in list */
+
+.rating > input:checked + .rating-label:hover, /* hover current star when changing rating */
+.rating > input:checked ~ .rating-label:hover,
+.rating > .rating-label:hover ~ input:checked ~ .rating-label, /* lighten current selection */
+.rating > input:checked ~ .rating-label:hover ~ .rating-label { color: #FFED85;  }
+/* End Star Rating */

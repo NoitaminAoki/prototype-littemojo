@@ -11,6 +11,7 @@ use App\Models\{
     Course,
     CourseLesson,
     CustomerCourseProgress as UserCourseProgress,
+    CustomerCourseRating as UserCourseRating,
     CustomerCertificate as UserCertificate,
 };
 
@@ -22,6 +23,8 @@ class LvCourseFinish extends Component
 
     public $course_id;
     public $user_certificate;
+    public $rating_value = 5;
+    public $rating_desc = '';
 
     public function mount($title)
     {
@@ -31,8 +34,14 @@ class LvCourseFinish extends Component
         ->leftJoin('catalog_topics', 'catalog_topics.id', 'courses.catalog_topic_id')
         ->leftJoin('levels', 'levels.id', 'courses.level_id')
         ->where('slug_title', $title)->firstOrFail();
-
+        
         $this->course_id = $course->id;
+        $user_rating = UserCourseRating::where(['customer_id' => $user_auth->id, 'course_id' => $this->course_id])->first();
+
+        if($user_rating) {
+            $this->rating_value = $user_rating->rating;
+            $this->rating_desc = $user_rating->description;
+        }
 
         $course_status = $course->getAccess($user_auth->id);
         if($course_status->status_number == 3 || $course_status->status_number == 0) {
@@ -78,6 +87,7 @@ class LvCourseFinish extends Component
         $this->is_course_finished = $course->isFinished($user_auth->id);
         $this->user_certificate = $course->getCustomerCertificate($user_auth->id);
         $data['course'] = $course;
+        $data['courseDetailRating'] = $course->getDetailRating();
 
         return view('homepage.pages.courses.enrolled.lv_course_finish')
         ->with($data)
@@ -115,10 +125,24 @@ class LvCourseFinish extends Component
                 'filename' => "{$slug_username}_{$this->slug_course_name}.pdf",
                 'path' => $uri,
             ]);
-            return $this->dispatchBrowserEvent('notification:success', ['title' => 'Success!', 'message' => "Your certificate has successfully created!"]);
+            return $this->dispatchBrowserEvent('notification:success', ['title' => 'Success!', 'message' => "Your certificate has successfully created!", 'isRateCourse' => true]);
             // dd($certificate);
         }
         // dd($certificate);
         // dd($content);
+    }
+
+    public function submitRating()
+    {
+        $user_auth = Auth::guard('web')->user();
+        if($this->rating_value < 1 || $this->rating_value > 5) {
+            $this->rating_value = 5;
+        }
+        $user_rating = UserCourseRating::updateOrCreate(
+            ['customer_id' => $user_auth->id, 'course_id' => $this->course_id],
+            ['rating' => $this->rating_value, 'description' => $this->rating_desc]
+        );
+        
+        return $this->dispatchBrowserEvent('notification:success', ['title' => 'Success!', 'message' => "Thank You for Your Feedback.", 'isCloseModal' => true, 'modalId' => '#modal-rating-course']);
     }
 }

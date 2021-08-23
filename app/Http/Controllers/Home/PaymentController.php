@@ -105,21 +105,21 @@ class PaymentController extends Controller
         } else if ($transaction == 'settlement') {
             // TODO set payment status in merchant's database to 'Settlement'
             $detail_mail['subject'] = "Thank you for your payment - ".config('app.name')." - {$customer_transaction->transaction_code}";
-            $detail_mail['message'] = "Your transaction was successful! Thank you for ordering the <b>{$course->name}</b> course provided by <b>{$course->corporation->name}</b>.";
+            $detail_mail['message'] = "Your transaction was successful! Thank you for ordering the <b>{$course->title}</b> course provided by <b>{$course->corporation->name}</b>.";
             $paymentStatus = 'settlement';
         } else if ($transaction == 'pending') {
             // TODO set payment status in merchant's database to 'Pending'
             $trx_detail = CustomerTransactionDetail::where('customer_transaction_id', $customer_transaction->id)->first();
             $detail_mail['subject'] = "Your payment process has not been completed - ".config('app.name')." - {$customer_transaction->transaction_code}";
             if($trx_detail) {
-                $detail_mail['message'] = "thank you for ordering the <b>{$course->name}</b> course provided by <b>{$course->corporation->name}</b>. Please complete your payment before due time.<br><br> You will receive email from <b>Midtrans <small>&lt;noreply@midtrans.com&gt;</small></b> for procedure of payment <b>or</b> click the button below to download pdf payment method.";
+                $detail_mail['message'] = "thank you for ordering the <b>{$course->title}</b> course provided by <b>{$course->corporation->name}</b>. Please complete your payment before due time.<br><br> You will receive email from <b>Midtrans <small>&lt;noreply@midtrans.com&gt;</small></b> for procedure of payment <b>or</b> click the button below to download pdf payment method.";
                 $detail_mail['button_link'] = [
                     'url' => $trx_detail->link_pdf_payment_method,
                     'button_text' => 'Download',
                     'with_text' => true,
                 ];
             } else {
-                $detail_mail['message'] = "thank you for ordering the <b>{$course->name}</b> course provided by <b>{$course->corporation->name}</b>. Please complete your payment before due time.<br><br> You will receive email from <b>Midtrans <small>&lt;noreply@midtrans.com&gt;</small></b> for procedure of payment.";
+                $detail_mail['message'] = "thank you for ordering the <b>{$course->title}</b> course provided by <b>{$course->corporation->name}</b>. Please complete your payment before due time.<br><br> You will receive email from <b>Midtrans <small>&lt;noreply@midtrans.com&gt;</small></b> for procedure of payment.";
             }
             $paymentStatus = 'pending';
         } else if ($transaction == 'deny') {

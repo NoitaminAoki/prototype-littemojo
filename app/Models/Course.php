@@ -14,6 +14,7 @@ use App\Models\{
     CustomerTransaction as UserTransaction,
     CustomerCourseProgress as UserCourseProgress,
     CustomerCertificate as UserCertificate,
+    CustomerCourseRating as UserCourseRating,
     CatalogTopic,
     Level
 };
@@ -191,5 +192,52 @@ class Course extends Model
         $certificate = UserCertificate::where(['customer_id' => $user_id, 'course_id' => $this->id])->first();
 
         return $certificate;
+    }
+
+    public function getDetailRating()
+    {
+        $detail_rating = UserCourseRating::selectRaw('COUNT(id) as total, SUM(rating) as total_rating')
+        ->selectRaw('SUM(if(rating = 5, 1, 0)) as total_5_rating')
+        ->selectRaw('SUM(if(rating = 4, 1, 0)) as total_4_rating')
+        ->selectRaw('SUM(if(rating = 3, 1, 0)) as total_3_rating')
+        ->selectRaw('SUM(if(rating = 2, 1, 0)) as total_2_rating')
+        ->selectRaw('SUM(if(rating = 1, 1, 0)) as total_1_rating')
+        ->where('course_id', $this->id)
+        ->first();
+
+        $data = [
+            'total' => 0,
+            'avg_rating' => 0,
+            'percent_5_rating' => 0,
+            'percent_4_rating' => 0,
+            'percent_3_rating' => 0,
+            'percent_2_rating' => 0,
+            'percent_1_rating' => 0,
+        ];
+
+        if($detail_rating && $detail_rating->total > 0) {
+            $data['total'] = (int) $detail_rating->total;
+            $data['avg_rating'] = round($detail_rating->total_rating/$detail_rating->total, 1);
+            $data['percent_5_rating'] = round($detail_rating->total_5_rating/$detail_rating->total * 100);
+            $data['percent_4_rating'] = round($detail_rating->total_4_rating/$detail_rating->total * 100);
+            $data['percent_3_rating'] = round($detail_rating->total_3_rating/$detail_rating->total * 100);
+            $data['percent_2_rating'] = round($detail_rating->total_2_rating/$detail_rating->total * 100);
+            $data['percent_1_rating'] = round($detail_rating->total_1_rating/$detail_rating->total * 100);
+        }
+
+        return (object) $data;
+    }
+
+    public function getTotalEnrolled()
+    {
+        $transaction = UserTransaction::selectRaw('COUNT(id) as total')
+        ->where(['course_id' => $this->id, 'status_payment' => 'settlement'])
+        ->first();
+
+        if($transaction) {
+            return $transaction->total;
+        }
+
+        return 0;
     }
 }

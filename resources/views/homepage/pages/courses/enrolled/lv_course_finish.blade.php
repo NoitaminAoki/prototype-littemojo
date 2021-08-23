@@ -2,6 +2,7 @@
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('plugins/sweetalert2/sweetalert2.min.css') }}">
+<link rel="stylesheet" href="{{ asset('css/rating-star.css') }}">
 <style>
     .text-offer-by {
         padding-top: .75rem;
@@ -68,6 +69,13 @@
     
     .mt-4rem {
         margin-top: 4rem;
+    }
+
+    .content-rating-course > .text-rating {
+        font-size: 14px;
+        line-height: 19px;
+        font-weight: 700;
+        font-family: 'Open Sans';
     }
     
     .card-start {
@@ -282,15 +290,15 @@
     }
     .bg-image-countdown-1 {
         color: #ffffff;
-        background-image: url(http://localhost:8000/page_dist/img/countdown-timer-bg-1.jpg);
+        background-image: url('{{asset("page_dist/img/countdown-timer-bg-1.jpg")}}');
     }
     .bg-image-countdown-2 {
         color: #ffffff;
-        background-image: url(http://localhost:8000/page_dist/img/countdown-timer-bg-2.png);
+        background-image: url('{{asset("page_dist/img/countdown-timer-bg-2.png")}}');
     }
     .bg-image-countdown-3 {
         color: #ffffff;
-        background-image: url(http://localhost:8000/page_dist/img/countdown-timer-bg-3.jpg);
+        background-image: url('{{asset("page_dist/img/countdown-timer-bg-3.jpg")}}');
     }
     
     .bg-theme-blue {
@@ -330,17 +338,23 @@ $date_expired = $date_transaction->end_date;
                                     <li class=""><a href="#" class="text-white custom-text-white text-decoration-none font-weight-bold">{{$course->catalog_topic_title}}</a></li>
                                 </ol>
                                 <h2 class="font-weight-bold text-light banner-title"> {{$course->title}} </h2>
-                                <div class="text-warning mt-2">
+                                <div class="text-warning content-rating-course mt-2">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= $courseDetailRating->avg_rating)
                                     <span class="fas fa-star checked"></span>
-                                    <span class="fas fa-star checked"></span>
-                                    <span class="fas fa-star checked"></span>
+                                    @else
+                                    @if ($i == ceil($courseDetailRating->avg_rating))
                                     <span class="fas fa-star-half-alt checked"></span>
+                                    @else
                                     <span class="far fa-star"></span>
-                                    <span class="ml-1 text-rating">4.6</span>
-                                    <span class="ml-1 text-white text-rating">86,528 ratings</span>
+                                    @endif
+                                    @endif
+                                    @endfor
+                                    <span class="ml-1 text-rating">{{$courseDetailRating->avg_rating}}</span>
+                                    <span class="ml-1 text-white">{{number_format($courseDetailRating->total, 0)}} rating{{($courseDetailRating->total > 1)? 's' : ''}}</span>
                                 </div>
                                 <div class="mt-5 text-enrolled">
-                                    <span><strong class="font-weight-bold">500,231</strong> Already enrolled</span>
+                                    <span><strong class="font-weight-bold">{{number_format($course->getTotalEnrolled(), 0)}}</strong> Already enrolled</span>
                                 </div>
                                 
                                 <br>
@@ -599,6 +613,65 @@ $date_expired = $date_transaction->end_date;
         </div>
     </div>
     
+    <!-- Modal -->
+    <div wire:ignore.self class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" id="modal-rating-course">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="staticBackdropLabel">How was your experience in this course?</h4>
+                    {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button> --}}
+                </div>
+                <form wire:submit.prevent="submitRating">
+                    <div class="modal-body">
+                        <div class="overlay-wrapper">
+                            <div wire:loading.flex wire:target="submitRating" class="overlay modal-overlay" style="display: none;"><i class="fas fa-3x fa-sync-alt fa-spin"></i></div>
+                            <div class="d-flex justify-content-center">
+                                <h5 id="number_rating" class="number-rating">{{$rating_value}}</h5>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <h5 id="text_rating" class="text-rating">
+                                    @if ($rating_value == 5)
+                                    Awesome
+                                    @elseif($rating_value == 4)
+                                    Pretty Good
+                                    @elseif($rating_value == 3)
+                                    Good
+                                    @elseif($rating_value == 2)
+                                    Kinda Bad
+                                    @elseif($rating_value == 1)
+                                    Bad
+                                    @endif
+                                </h5>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <fieldset class="rating-fieldset rating">
+                                    <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star5" name="rating" value="5" data-title="Awesome" /><label class="rating-label full" for="star5" title="Awesome - 5 Stars"></label>
+                                    <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star4" name="rating" value="4" data-title="Pretty good" /><label class="rating-label full" for="star4" title="Pretty good - 4 Stars"></label>
+                                    <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star3" name="rating" value="3" data-title="Good" /><label class="rating-label full" for="star3" title="Good - 3 Stars"></label>
+                                    <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star2" name="rating" value="2" data-title="Kinda bad" /><label class="rating-label full" for="star2" title="Kinda bad - 2 Stars"></label>
+                                    <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star1" name="rating" value="1" data-title="Bad" /><label class="rating-label full" for="star1" title="Bad - 1 Star"></label>
+                                </fieldset>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <div class="form-group">
+                                    <label for="description">Description<small class="text-danger">*</small></label>
+                                    <textarea wire:model.defer="rating_desc" name="rating_description" id="description" class="form-control" rows="5" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-end">
+                        <button type="submit" wire:loading.attr="disabled" id="btn-process" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- End Modal -->
 </div>
 
 
@@ -656,6 +729,11 @@ $date_expired = $date_transaction->end_date;
         })
         return status;
     }
+    
+    $("input.input-rating").on('click', function() {
+        $('#number_rating').text($(this).val());
+        $('#text_rating').text($(this).attr('data-title'));
+    })
     
     $(document).on('click', '#copy_verify_link', async function() {
         var text = $('#link_verify').text();
@@ -738,14 +816,26 @@ $date_expired = $date_transaction->end_date;
             });
         }
     }
-
+    
     
     document.addEventListener('notification:success', function (event) {
-        Swal.fire( {
+        var swalOptions = {
             icon: 'success',
             title: event.detail.title,
             text: event.detail.message,
-        });
+        }
+        if(event.detail.isRateCourse) {
+            swalOptions.onClose = openRateCouseModal;
+        }
+        if(event.detail.isCloseModal) {
+            console.log({ message: "masuk", id: event.detail.modalId});
+            $(event.detail.modalId).modal('hide');
+        }
+        Swal.fire(swalOptions);
     })
+    
+    function openRateCouseModal() {
+        setTimeout(() => { $('#modal-rating-course').modal('show') }, 600);
+    }
 </script>
 @endpush
