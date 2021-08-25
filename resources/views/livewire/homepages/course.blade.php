@@ -381,6 +381,10 @@
         </div>
         <div wire:loading.class="d-none" wire:target="filterCourse, searchCourse, goToPage" class="row my-3">
             @forelse ($courses as $course)
+            @php
+                $course_rating = $course->getDetailRating();
+                $total_student = $course->getTotalEnrolled();
+            @endphp
             <div class="col-md-12 pt-3 course-content">
                 <a class="link-container" href="{{ route('home.detail.course', ['title'=>$course->slug_title]) }}">
                     <div class="w-100">
@@ -398,14 +402,26 @@
                                 <div class="course-catalog text-capitalize mb-30">
                                     {{$course->catalog->name}}
                                 </div>
-                                <div class="w-100">
-                                    <i class="fas fa-star text-warning"></i>
-                                    <i class="fas fa-star text-warning"></i>
-                                    <i class="fas fa-star text-warning"></i>
-                                    <i class="fas fa-star text-warning"></i>
-                                    <i class="fas fa-star-half-alt text-warning"></i>
-                                    <span><b>4.8</b> (230.589) | <b>490</b> Total students</span>
+                                @if ($total_student > 0)
+                                <div class="w-100 {{($course_rating->total > 0)? 'text-warning' : ''}}">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= $course_rating->avg_rating)
+                                    <span class="fas fa-star"></span>
+                                    @else
+                                    @if ($i == ceil($course_rating->avg_rating))
+                                    <span class="fas fa-star-half-alt"></span>
+                                    @else
+                                    <span class="far fa-star"></span>
+                                    @endif
+                                    @endif
+                                    @endfor
+                                    <span class="text-black"><b>{{$course_rating->avg_rating}}</b> ({{number_format($course_rating->total, 0, ',', '.')}}) | <b>{{$total_student}}</b> Total students</span>
                                 </div>
+                                @else
+                                <div class="w-100">
+                                    <br>
+                                </div>
+                                @endif
                                 <div class="course-level rounded text-capitalize text-font-family mt-2">
                                     {{$course->level->name}}
                                 </div>

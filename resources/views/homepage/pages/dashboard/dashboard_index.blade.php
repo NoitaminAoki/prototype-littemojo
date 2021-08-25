@@ -381,6 +381,40 @@
         </div>	
     </section>
     <!-- End gallery Area -->
+    
+    <section class="review-area section-gap">
+        <div class="container">
+            <div class="row">
+                <div class="menu-content pb-50 col-lg-8">
+                    <div class="title">
+                        <h1 class="mb-10">Certificates</h1>
+                        <p>List of certificates that you have completed any course.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @forelse ($user_certificates as $user_certificate)
+                <div class="col-4">
+                    <div class="card rounded-0">
+                        <div class="card-body">
+                            <h5 class="text-font-family">
+                                {{$user_certificate->course->title}}
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                @empty
+                <div class="col-12">
+                    <div class="card rounded-0 border-0">
+                        <div class="card-body text-center">
+                            <h5 class="text-muted font-weight-normal">No certificate.</h5>
+                        </div>
+                    </div>
+                </div>
+                @endforelse
+            </div>
+        </div>
+    </section>
 </div>
 
 @push('script')

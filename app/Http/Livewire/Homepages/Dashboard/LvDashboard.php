@@ -9,6 +9,7 @@ use App\Models\{
     CourseLesson,
     CustomerTransaction as UserTransaction,
     CustomerCourseProgress as UserCourseProgress,
+    CustomerCertificate as UserCertificate,
 };
 use DB;
 use DateTime;
@@ -30,6 +31,8 @@ class LvDashboard extends Component
         $data['inprogress_courses'] = $this->getInprogressCourse($user_auth->id);
         $data['completed_courses'] = $this->getCompletedCourse($user_auth->id);
         $data['purchased_courses'] = $courses;
+
+        $data['user_certificates'] = UserCertificate::where('customer_id', $user_auth->id)->get();
 
         // dd($data);
         return view('homepage.pages.dashboard.dashboard_index')

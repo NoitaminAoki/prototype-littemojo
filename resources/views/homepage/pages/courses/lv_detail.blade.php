@@ -344,6 +344,12 @@
         margin-bottom: 2rem;
     }
     
+    .genric-btn.custom-disable{
+        background: #b3b3b9;
+        border: 1px solid transparent;
+        cursor: not-allowed;
+    }
+    
 </style>
 @endsection
 
@@ -526,7 +532,7 @@
     <!-- End events-list Area -->
     
     <!-- Start review Area -->
-    <section class="review-area section-gap relative">
+    <section wire:ignore class="review-area section-gap relative">
         <div class="overlay overlay-bg"></div>
         <div class="container">				
             <div class="row">
@@ -840,7 +846,7 @@
                                     </div>
                                 </div>
                                 <div class="w-100">
-                                    <p>You were such a hit. Thanks for this course and the next five more! On behalf of our entire organization, thanks again for taking the Conference to a whole new level of education and professionalism!!</p>
+                                    <p>{{$rating_item->description}}</p>
                                 </div>
                             </div>
                         </div>
@@ -855,30 +861,70 @@
                     </div>
                 </div>
             </div>
+            @if (Auth::guard('web')->check() && $course_is_purchased)
+            
+            @if ($user_course_review && !($form_is_edit_review))
             <div class="card rounded-0 border-0 content-form-review">
                 <div class="card-body">
-                    <h6 class="title-form">Leave Review</h6>
-                    <div class="w-100 mb-4">
-                        <p class="text-black mb-1">Rate the Course<small class="text-danger">*</small></p>
-                        <div class="d-flex">
-                            <fieldset class="rating-fieldset rating">
-                                <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star5" name="rating" value="5" data-title="Awesome" /><label class="rating-label full" for="star5" title="Awesome - 5 Stars"></label>
-                                <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star4" name="rating" value="4" data-title="Pretty good" /><label class="rating-label full" for="star4" title="Pretty good - 4 Stars"></label>
-                                <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star3" name="rating" value="3" data-title="Good" /><label class="rating-label full" for="star3" title="Good - 3 Stars"></label>
-                                <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star2" name="rating" value="2" data-title="Kinda bad" /><label class="rating-label full" for="star2" title="Kinda bad - 2 Stars"></label>
-                                <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star1" name="rating" value="1" data-title="Bad" /><label class="rating-label full" for="star1" title="Bad - 1 Star"></label>
-                            </fieldset>
+                    <h6 class="title-form mb-4">My Review</h6>
+                    <div class="w-100 border-top pt-3">
+                        <div class="box-user-review w-100 text-black">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6>{{$user_course_review->user->name}}</h6>
+                                    <p>{{date('F d, Y', strtotime($user_course_review->updated_at))}}</p>
+                                </div>
+                                <div class="text-warning">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= $user_course_review->rating)
+                                    <span class="fas fa-star"></span>
+                                    @else
+                                    <span class="far fa-star"></span>
+                                    @endif
+                                    @endfor
+                                </div>
+                            </div>
+                            <div class="w-100">
+                                <p>{{$user_course_review->description}}</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="w-100 mb-4">
-                        <p class="text-black mb-1">Your Review<small class="text-danger">*</small></p>
-                        <textarea class="form-control" name="" rows="4"></textarea>
-                    </div>
-                    <div class="w-100 text-right">
-                        <button class="genric-btn primary">Submit Review</button>
+                    <div class="w-100 mt-50 text-right">
+                        <button wire:click="editReview" wire:loading.remove class="genric-btn primary">Edit Review</button>
+                        <button wire:loading class="genric-btn primary custom-disable" style="display: none;"> <i class="fas fa-circle-notch fa-spin"></i> Edit Review</button>
                     </div>
                 </div>
             </div>
+            @else
+            <div class="card rounded-0 border-0 content-form-review">
+                <div class="card-body">
+                    <form wire:submit.prevent="submitReview">
+                        <h6 class="title-form">Leave Review</h6>
+                        <div class="w-100 mb-4">
+                            <p class="text-black mb-1">Rate the Course<small class="text-danger">*</small></p>
+                            <div class="d-flex">
+                                <fieldset class="rating-fieldset rating">
+                                    <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star5" name="rating" value="5" data-title="Awesome" /><label class="rating-label full" for="star5" title="Awesome - 5 Stars"></label>
+                                    <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star4" name="rating" value="4" data-title="Pretty good" /><label class="rating-label full" for="star4" title="Pretty good - 4 Stars"></label>
+                                    <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star3" name="rating" value="3" data-title="Good" /><label class="rating-label full" for="star3" title="Good - 3 Stars"></label>
+                                    <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star2" name="rating" value="2" data-title="Kinda bad" /><label class="rating-label full" for="star2" title="Kinda bad - 2 Stars"></label>
+                                    <input type="radio" class="input-rating" wire:model.defer="rating_value" id="star1" name="rating" value="1" data-title="Bad" /><label class="rating-label full" for="star1" title="Bad - 1 Star"></label>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div class="w-100 mb-4">
+                            <p class="text-black mb-1">Your Review</p>
+                            <textarea wire:model.defer="rating_desc" class="form-control" name="description" rows="4"></textarea>
+                        </div>
+                        <div class="w-100 text-right">
+                            <button wire:loading.remove class="genric-btn primary">Submit Review</button>
+                            <button wire:loading class="genric-btn primary custom-disable" style="display: none;"> <i class="fas fa-circle-notch fa-spin"></i> Submit Review</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            @endif
+            @endif
         </div>
     </section>
     
@@ -970,6 +1016,15 @@
 </div>
 
 @push('script')
+<script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js')}} "></script>
 <script>
+    document.addEventListener('notification:success', function (event) {
+        var swalOptions = {
+            icon: 'success',
+            title: event.detail.title,
+            text: event.detail.message,
+        }
+        Swal.fire(swalOptions);
+    })
 </script>
 @endpush

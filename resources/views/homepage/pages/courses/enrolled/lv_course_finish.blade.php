@@ -656,8 +656,8 @@ $date_expired = $date_transaction->end_date;
                             </div>
                             <div class="col-12 mt-4">
                                 <div class="form-group">
-                                    <label for="description">Description<small class="text-danger">*</small></label>
-                                    <textarea wire:model.defer="rating_desc" name="rating_description" id="description" class="form-control" rows="5" required></textarea>
+                                    <label for="description">Description</label>
+                                    <textarea wire:model.defer="rating_desc" name="rating_description" id="description" class="form-control" rows="5"></textarea>
                                 </div>
                             </div>
                         </div>
