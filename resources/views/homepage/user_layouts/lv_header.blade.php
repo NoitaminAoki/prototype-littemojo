@@ -10,7 +10,7 @@
                     <li><a href="{{url('courses')}}">Courses</a></li>
                     @auth('web')
                     <li class="menu-has-children">
-                        <a href="">
+                        <a href="#">
                             Account 
                             <i class="fas fa-angle-down" style="padding-left: 3px;"></i>
                         </a>

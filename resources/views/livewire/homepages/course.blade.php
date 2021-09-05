@@ -1,3 +1,5 @@
+@section('title',"- Course")
+
 @section('css')
 
 <style>

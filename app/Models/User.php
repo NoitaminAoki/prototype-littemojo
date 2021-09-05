@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use App\Helpers\Converter;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -66,5 +67,10 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         //'page_dist/img/default-profile-picture.png'
         return asset($this->profile_picture_path);
+    }
+
+    public function maskedEmail()
+    {
+        return Converter::maskEmail($this->email);
     }
 }

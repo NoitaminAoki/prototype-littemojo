@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\{
     Course,
+    User,
 };
 
 class CustomerCertificate extends Model
@@ -28,5 +29,10 @@ class CustomerCertificate extends Model
     public function course()
     {
         return $this->belongsTo(Course::class, 'course_id');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(User::class, 'customer_id');
     }
 }

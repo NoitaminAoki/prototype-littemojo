@@ -40,7 +40,7 @@
                     </li>			 --}}
                     @auth('web')
                     <li class="menu-has-children">
-                        <a href="">
+                        <a href="#">
                             Account 
                         </a>
                         <ul>

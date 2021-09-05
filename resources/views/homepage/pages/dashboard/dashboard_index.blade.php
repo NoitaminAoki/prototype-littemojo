@@ -1,4 +1,4 @@
-@section('title', "Dashboard - ".Auth::guard('web')->user()->name)
+@section('title', "- Dashboard ".Auth::guard('web')->user()->name)
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('plugins/sweetalert2/sweetalert2.min.css') }}">
@@ -23,7 +23,7 @@
         padding-right: 0;
         text-align: center;
         width: 10rem;
-        margin-right: 2rem;
+        margin: 10px 1rem;
     }
     .about-content {
         padding: 90px 15px;
@@ -79,6 +79,25 @@
         border-radius: 500px !important;
         text-align: end;
     }
+    .custom-border-left-2 {
+        border-left: 2px solid #dee2e6!important;
+    }
+    
+    @media (max-width: 510px) {
+        .custom-nav .nav-item, .custom-nav .nav-link {
+            width: 100%;
+        }
+    }
+    @media (max-width: 768px) {
+        .custom-nav {
+            -ms-flex-pack: justify!important;
+            justify-content: space-between!important;
+        }
+        .custom-nav .nav-link {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    }
 </style>
 @endsection
 
@@ -103,14 +122,14 @@
     <section class="gallery-area section-gap">
         <div class="container">
             <div class="row">
-                <div class="menu-content pb-50 col-lg-8">
+                <div class="menu-content pb-40 col-lg-8">
                     <div class="title">
                         <h1 class="mb-10">Courses</h1>
                         <p>List of courses that you have purchased.</p>
                     </div>
                 </div>
                 <div class="col-12">
-                    <ul class="nav mb-3" id="pills-tab" role="tablist">
+                    <ul class="nav custom-nav mb-3" id="pills-tab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">
                                 <h5 class="font-weight-normal">Home</h5>
@@ -132,6 +151,7 @@
                             <div class="row">
                                 @forelse ($purchased_courses as $course)
                                 @php
+                                $course_rating = $course->getDetailRating();
                                 $course_progress = $course->getProgress($user_id);
                                 $course_access = $course->getAccess($user_id);
                                 @endphp
@@ -161,15 +181,21 @@
                                                         <div class="course-catalog text-uppercase">
                                                             {{$course->catalog->name}}
                                                         </div>
-                                                        <div class="text-warning mt-4">
-                                                            <span class="fas fa-star checked"></span>
-                                                            <span class="fas fa-star checked"></span>
-                                                            <span class="fas fa-star checked"></span>
-                                                            <span class="fas fa-star-half-alt checked"></span>
+                                                        <div class="{{($course_rating->total > 0)? 'text-warning' : ''}} mt-4">
+                                                            @for ($i = 1; $i <= 5; $i++)
+                                                            @if ($i <= $course_rating->avg_rating)
+                                                            <span class="fas fa-star"></span>
+                                                            @else
+                                                            @if ($i == ceil($course_rating->avg_rating))
+                                                            <span class="fas fa-star-half-alt"></span>
+                                                            @else
                                                             <span class="far fa-star"></span>
-                                                            <span class="ml-1 text-black text-rating">4.6</span>
-                                                            <span class="mx-2 border-left border-right"></span>
-                                                            <span class="ml-1 text-black text-rating">86,528 ratings</span>
+                                                            @endif
+                                                            @endif
+                                                            @endfor
+                                                            <span class="ml-1 text-black text-rating">{{$course_rating->avg_rating}}</span>
+                                                            <span class="mx-2 custom-border-left-2"></span>
+                                                            <span class="ml-1 text-black text-rating">{{number_format($course_rating->total, 0, ',', '.')}} ratings</span>
                                                         </div>
                                                     </div>
                                                     <div class="w-100 mt-4rem">
@@ -230,9 +256,10 @@
                         </div>
                         <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                             <div class="row">
-                                @forelse ($inprogress_courses as $course)
+                                @forelse ($inprogress_courses as $inprogress_course)
                                 @php
-                                $course_2_progress = $course->getProgress($user_id);
+                                $inprogress_course_rating = $inprogress_course->getDetailRating();
+                                $inprogress_course_progress = $inprogress_course->getProgress($user_id);
                                 @endphp
                                 <div class="col-12 mb-4">
                                     <div class="card rounded-0 bg-white">
@@ -243,45 +270,51 @@
                                                 </div>
                                                 <div class="col-sm-8 order-sm-1 mb-2">
                                                     <div class="d-flex flex-column text-black">
-                                                        <div class="partner-name text-font-family">{{$course->corporation->name}}</div>
-                                                        <a href="{{ route('home.dashboard.course', ['title'=>$course->slug_title]) }}">
+                                                        <div class="partner-name text-font-family">{{$inprogress_course->corporation->name}}</div>
+                                                        <a href="{{ route('home.dashboard.course', ['title'=>$inprogress_course->slug_title]) }}">
                                                             <h3 class="course-title text-font-family">
-                                                                {{$course->title}}
+                                                                {{$inprogress_course->title}}
                                                             </h3>
                                                         </a>
                                                     </div>
                                                     <div class="w-100">
                                                         <div class="course-catalog text-uppercase">
-                                                            {{$course->catalog->name}}
+                                                            {{$inprogress_course->catalog->name}}
                                                         </div>
-                                                        <div class="text-warning mt-4">
-                                                            <span class="fas fa-star checked"></span>
-                                                            <span class="fas fa-star checked"></span>
-                                                            <span class="fas fa-star checked"></span>
-                                                            <span class="fas fa-star-half-alt checked"></span>
+                                                        <div class="{{($inprogress_course_rating->total > 0)? 'text-warning' : ''}} mt-4">
+                                                            @for ($i = 1; $i <= 5; $i++)
+                                                            @if ($i <= $inprogress_course_rating->avg_rating)
+                                                            <span class="fas fa-star"></span>
+                                                            @else
+                                                            @if ($i == ceil($inprogress_course_rating->avg_rating))
+                                                            <span class="fas fa-star-half-alt"></span>
+                                                            @else
                                                             <span class="far fa-star"></span>
-                                                            <span class="ml-1 text-black text-rating">4.6</span>
-                                                            <span class="mx-2 border-left border-right"></span>
-                                                            <span class="ml-1 text-black text-rating">86,528 ratings</span>
+                                                            @endif
+                                                            @endif
+                                                            @endfor
+                                                            <span class="ml-1 text-black text-rating">{{$inprogress_course_rating->avg_rating}}</span>
+                                                            <span class="mx-2 custom-border-left-2"></span>
+                                                            <span class="ml-1 text-black text-rating">{{number_format($inprogress_course_rating->total, 0, ',', '.')}} ratings</span>
                                                         </div>
                                                     </div>
                                                     <div class="w-100 mt-4rem">
                                                         <span class="text-font-family text-lg-left d-block">Status: <b class="badge badge-success text-uppercase">In progress</b></span>
-                                                        <span class="text-font-family text-lg-left d-block">Finish Date: <b class="text-danger">{{date('d F Y', strtotime($course->getDateTransaction($user_id)->end_date))}}</b></span>
+                                                        <span class="text-font-family text-lg-left d-block">Finish Date: <b class="text-danger">{{date('d F Y', strtotime($inprogress_course->getDateTransaction($user_id)->end_date))}}</b></span>
                                                     </div>
                                                     <div class="w-100 mt-2">
                                                         <div class="d-flex justify-content-between align-items-end mb-1">
-                                                            <small class="text-secondary"><b>PROGRESS</b> {{$course_2_progress->percent}}% complete</small>
+                                                            <small class="text-secondary"><b>PROGRESS</b> {{$inprogress_course_progress->percent}}% complete</small>
                                                         </div>
                                                         <div class="progress">
-                                                            <div class="progress-bar bg-teal" role="progressbar" aria-valuenow="{{$course_2_progress->percent}}" aria-valuemin="0" aria-valuemax="100" style="width: {{$course_2_progress->percent}}%">
-                                                                <span class="sr-only">{{$course_2_progress->percent}}% Complete</span>
+                                                            <div class="progress-bar bg-teal" role="progressbar" aria-valuenow="{{$inprogress_course_progress->percent}}" aria-valuemin="0" aria-valuemax="100" style="width: {{$inprogress_course_progress->percent}}%">
+                                                                <span class="sr-only">{{$inprogress_course_progress->percent}}% Complete</span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     
                                                     <div class="w-100 text-right mt-4">
-                                                        <a href="{{ route('home.dashboard.course', ['title'=>$course->slug_title]) }}" class="custom-btn-capsule btn btn-primary btn-sm"><i class="fas fa-arrow-right"></i></a>
+                                                        <a href="{{ route('home.dashboard.course', ['title'=>$inprogress_course->slug_title]) }}" class="custom-btn-capsule btn btn-primary btn-sm"><i class="fas fa-arrow-right"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -305,7 +338,11 @@
                         </div>
                         <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
                             <div class="row">
-                                @forelse ($completed_courses as $course)
+                                @forelse ($completed_courses as $completed_course)
+                                @php
+                                $completed_course_rating = $course->getDetailRating();
+                                $completed_course_access = $completed_course->getAccess($user_id);
+                                @endphp
                                 <div class="col-12 mb-4">
                                     <div class="card rounded-0 bg-white">
                                         <div class="card-body">
@@ -315,31 +352,37 @@
                                                 </div>
                                                 <div class="col-sm-8 order-sm-1 mb-2">
                                                     <div class="d-flex flex-column text-black">
-                                                        <div class="partner-name text-font-family">{{$course->corporation->name}}</div>
-                                                        <a href="{{ route('home.dashboard.course', ['title'=>$course->slug_title]) }}">
+                                                        <div class="partner-name text-font-family">{{$completed_course->corporation->name}}</div>
+                                                        <a href="{{ route('home.dashboard.course', ['title'=>$completed_course->slug_title]) }}">
                                                             <h3 class="course-title text-font-family">
-                                                                {{$course->title}}
+                                                                {{$completed_course->title}}
                                                             </h3>
                                                         </a>
                                                     </div>
                                                     <div class="w-100">
                                                         <div class="course-catalog text-uppercase">
-                                                            {{$course->catalog->name}}
+                                                            {{$completed_course->catalog->name}}
                                                         </div>
-                                                        <div class="text-warning mt-4">
-                                                            <span class="fas fa-star checked"></span>
-                                                            <span class="fas fa-star checked"></span>
-                                                            <span class="fas fa-star checked"></span>
-                                                            <span class="fas fa-star-half-alt checked"></span>
+                                                        <div class="{{($completed_course_rating->total > 0)? 'text-warning' : ''}} mt-4">
+                                                            @for ($i = 1; $i <= 5; $i++)
+                                                            @if ($i <= $completed_course_rating->avg_rating)
+                                                            <span class="fas fa-star"></span>
+                                                            @else
+                                                            @if ($i == ceil($completed_course_rating->avg_rating))
+                                                            <span class="fas fa-star-half-alt"></span>
+                                                            @else
                                                             <span class="far fa-star"></span>
-                                                            <span class="ml-1 text-black text-rating">4.6</span>
-                                                            <span class="mx-2 border-left border-right"></span>
-                                                            <span class="ml-1 text-black text-rating">86,528 ratings</span>
+                                                            @endif
+                                                            @endif
+                                                            @endfor
+                                                            <span class="ml-1 text-black text-rating">{{$completed_course_rating->avg_rating}}</span>
+                                                            <span class="mx-2 custom-border-left-2"></span>
+                                                            <span class="ml-1 text-black text-rating">{{number_format($completed_course_rating->total, 0, ',', '.')}} ratings</span>
                                                         </div>
                                                     </div>
                                                     <div class="w-100 mt-4rem">
                                                         <span class="text-font-family text-lg-left d-block">Status: <b class="badge badge-primary text-uppercase">Completed</b></span>
-                                                        <span class="text-font-family text-lg-left d-block">Finish Date: <b class="text-danger">{{date('d F Y', strtotime($course->getDateTransaction($user_id)->end_date))}}</b></span>
+                                                        <span class="text-font-family text-lg-left d-block">Finish Date: <b class="text-danger">{{date('d F Y', strtotime($completed_course->getDateTransaction($user_id)->end_date))}}</b></span>
                                                     </div>
                                                     <div class="w-100 mt-2">
                                                         <div class="d-flex justify-content-between align-items-end mb-1">
@@ -352,9 +395,15 @@
                                                         </div>
                                                     </div>
                                                     
+                                                    @if($completed_course_access->status_number == 3)
                                                     <div class="w-100 text-right mt-4">
-                                                        <a href="{{ route('home.dashboard.course', ['title'=>$course->slug_title]) }}" class="custom-btn-capsule btn btn-primary btn-sm"><i class="fas fa-arrow-right"></i></a>
+                                                        <button class="custom-btn-capsule btn-course-expired btn btn-secondary btn-sm" style="cursor: not-allowed"><i class="fas fa-ban"></i></button>
                                                     </div>
+                                                    @else
+                                                    <div class="w-100 text-right mt-4">
+                                                        <a href="{{ route('home.dashboard.course', ['title'=>$completed_course->slug_title]) }}" class="custom-btn-capsule btn btn-primary btn-sm"><i class="fas fa-arrow-right"></i></a>
+                                                    </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -394,12 +443,25 @@
             </div>
             <div class="row">
                 @forelse ($user_certificates as $user_certificate)
-                <div class="col-4">
+                <div class="col-lg-4 col-md-6">
                     <div class="card rounded-0">
-                        <div class="card-body">
-                            <h5 class="text-font-family">
-                                {{$user_certificate->course->title}}
-                            </h5>
+                        <div class="card-header text-font-family bg-white border-bottom-0 pb-0 pt-1 d-flex justify-content-between">
+                            <div>
+                                <small class="badge badge-primary">{{$user_certificate->course->corporation->name}}</small>
+                            </div>
+                            <small>{{date('d F Y', strtotime($user_certificate->created_at))}}</small>
+                        </div>
+                        <div class="card-body py-2">
+                            <a href="{{ route('home.detail.course', ['title' => $user_certificate->course->slug_title]) }}">
+                                <h5 class="text-font-family">
+                                    {{$user_certificate->course->title}} 
+                                </h5>
+                            </a>
+                            <hr class="mb-1">
+                            <div class="w-100 d-flex justify-content-between">
+                                <a href="{{route('home.certificate.verify', ['hash_id' => $user_certificate->hash_id])}}" class="btn btn-sm btn-link text-decoration-none">Verify</a>
+                                <a href="{{ route('home.certificate.download', ['uuid'=>$user_certificate->uuid, 'filename' => $user_certificate->filename]) }}" target="_blank" class="btn btn-sm btn-link text-decoration-none">Download</a>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -65,9 +65,10 @@ use App\Http\Livewire\Partners\{
 };
 
 use App\Http\Livewire\Homepages\{
-    Payments\LvPayCourse,
     Course as CoursesLive,
     LvCourseDetail as CourseDetailLive,
+    LvCertificateVerify as CertificateVerifyLive,
+    Payments\LvPayCourse,
     Dashboard\LvDashboard as DashboardLive,
     Dashboard\LvCourse as DashboardCourseLive,
     Dashboard\LvCourseFinish as DashboardCourseFinishLive,
@@ -89,9 +90,7 @@ Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
-Route::get('verify/{hash_id}', function ($hash_id) {
-    return $hash_id;
-})->name('home.certificate.verify');
+Route::get('verify/{hash_id}', CertificateVerifyLive::class)->name('home.certificate.verify');
 
 Route::view('certificates', 'homepage.pages.certificates.certificate');
 Route::view('certificates/pdf', 'homepage.pages.certificates.certificate_pdf_2');

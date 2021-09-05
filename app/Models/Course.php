@@ -79,6 +79,11 @@ class Course extends Model
         return $this->belongsTo(Catalog::class, 'catalog_id');
     }
 
+    public function catalog_topic(Type $var = null)
+    {
+        return $this->belongsTo(CatalogTopic::class, 'catalog_topic_id');
+    }
+
     public function isFinished($user_id)
     {
         $lesson = Lesson::selectRaw('COUNT(course_lessons.id) as total_lesson, COUNT(ccp.id) as completed_lesson')
