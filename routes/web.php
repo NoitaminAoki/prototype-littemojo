@@ -69,6 +69,7 @@ use App\Http\Livewire\Homepages\{
     LvCourseDetail as CourseDetailLive,
     LvCertificateVerify as CertificateVerifyLive,
     Payments\LvPayCourse,
+    Reviews\LvReviewCourse as ReviewCourseLive,
     Dashboard\LvDashboard as DashboardLive,
     Dashboard\LvCourse as DashboardCourseLive,
     Dashboard\LvCourseFinish as DashboardCourseFinishLive,
@@ -138,6 +139,8 @@ Route::resource('blog', BlogController::class);
 // Route::get('/learn/{title}', [HomeController::class, 'detailCourse'])->name('home.detail.course');
 
 Route::get('/learn/{title}', CourseDetailLive::class)->name('home.detail.course');
+
+Route::get('/learn/{title}/reviews', ReviewCourseLive::class)->name('home.detail.course.review');
 
 
 

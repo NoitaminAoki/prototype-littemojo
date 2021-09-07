@@ -824,7 +824,7 @@
                 </div>
                 <div class="col-lg-8 content-user-review">
                     <div class="w-100">
-                        <h5 class="mb-2">All Ratings and Reviews</h5>
+                        <h5 class="mb-2">Ratings and Reviews</h5>
                     </div>
                     <div class="card rounded-0 border-0">
                         @forelse ($courseReviews as $rating_item)
@@ -855,8 +855,10 @@
                             <h5 class="text-muted font-weight-normal">No reviews yet.</h5>
                         </div>
                         @endforelse
-                        <div class="card-body">
-                            
+                        <div class="card-body text-center">
+                            @if ($total_reviews > 5)
+                            <h5 class="font-weight-normal"><a href="{{ route('home.detail.course.review', ['title'=>$course->slug_title]) }}" class="btn btn-outline-primary border-0">See All Reviews</a></h5>
+                            @endif
                         </div>
                     </div>
                 </div>
