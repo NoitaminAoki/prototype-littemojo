@@ -210,14 +210,16 @@
                 <div class="col-12 mb-100">
                     <a href="{{ route('home.detail.course', ['title'=>$certificate->course->slug_title]) }}">
                         <div class="card">
-                            <div class="card-body">
+                            <div class="card-header bg-white border-bottom-0 pb-0">
                                 <small class="float-right">Click to open the course</small>
+                            </div>
+                            <div class="card-body pt-0">
                                 <div class="d-flex flex-column text-black">
-                                    <h3 class="course-title text-font-family">
+                                    <h3 class="course-title text-font-family mt-0">
                                         {{$certificate->course->title}}
                                     </h3>
                                 </div>
-                                <div class="w-100">
+                                <div class="w-100 pb-4">
                                     <div class="course-catalog text-uppercase">
                                         {{$certificate->course->catalog->name}}
                                     </div>
