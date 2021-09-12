@@ -4,10 +4,12 @@ namespace App\Http\Livewire\Homepages\Reviews;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
 use App\Helpers\Converter;
 use App\Models\{
     Course,
     CustomerCourseRating as UserCourseRating,
+    UserHelpReview,
 };
 
 class LvReviewCourse extends Component
@@ -17,6 +19,7 @@ class LvReviewCourse extends Component
 
     public $star;
     public $review_filter;
+    public $review_text_filter;
 
 	public $page = 1;
 	public $limit_data = 0;
@@ -39,7 +42,9 @@ class LvReviewCourse extends Component
         } else {
             $this->star = 'all';
         }
-        $this->review_filter = 'desc';
+        
+        $this->review_text_filter = 'Most Helpful';
+        $this->review_filter = ['type' => 'number', 'value' => 'desc'];
 
 		$this->limit_data = 5;
     }
@@ -55,10 +60,11 @@ class LvReviewCourse extends Component
         ->leftJoin('levels', 'levels.id', 'courses.level_id')
         ->where('slug_title', $this->slug_course_name)->firstOrFail();
 
-        $main_query = UserCourseRating::where('course_id', $course->id)
+        $main_query = UserCourseRating::select('customer_course_ratings.*')
+        ->where('customer_course_ratings.course_id', $course->id)
 		->when($this->star != 'all', function ($query, $star) use ($review_star)
 		{
-			return $query->where('rating', $review_star);
+			return $query->where('customer_course_ratings.rating', $review_star);
 		});
 
 
@@ -81,18 +87,51 @@ class LvReviewCourse extends Component
 		$this->total_page = $total_page;
 		$offset = Converter::pageToOffset($this->page, $limit);
         
-        $query_review = $main_query->when($offset, function ($query, $offset) use ($limit)
+        $query_review = $main_query->when($user_auth, function ($query, $user_auth)
+        {
+            return $query->addSelect('user_hr.is_helpful')
+            ->leftJoin('user_help_reviews as user_hr', function($join) use($user_auth)
+            {
+                $join->on('user_hr.review_id', '=', 'customer_course_ratings.id')
+                ->where('user_hr.user_id', '=', $user_auth->id);
+            });
+        })
+        ->when($this->review_filter['type'] == 'time', function ($query, $value)
+        {
+            return $query->orderBy('customer_course_ratings.updated_at', $this->review_filter['value']);
+        })
+        ->when($this->review_filter['type'] == 'number', function ($query, $value) use($user_auth)
+        {
+            $data_group = [
+                'customer_course_ratings.id', 
+                'customer_course_ratings.customer_id', 
+                'customer_course_ratings.course_id', 
+                'customer_course_ratings.rating', 
+                'customer_course_ratings.description', 
+                'customer_course_ratings.created_at', 
+                'customer_course_ratings.updated_at',
+            ];
+            if($user_auth) {
+                $data_group[] = 'user_hr.is_helpful';
+            }
+            return $query->selectRaw('SUM(IFNULL(help_r.is_helpful, 0)) as total_helpful')
+            ->leftJoin('user_help_reviews as help_r', 'help_r.review_id', 'customer_course_ratings.id')
+            ->groupBy($data_group)
+            ->orderBy('total_helpful', $this->review_filter['value']);
+        })
+        ->orderBy('customer_course_ratings.id', 'asc')
+        ->when($offset, function ($query, $offset) use ($limit)
 		{
 			return $query->offset($offset);
 		})
 		->limit($limit)
-        ->orderBy('updated_at', $this->review_filter)->get();
+        ->get();
 
         $this->course_id = $course->id;
         $data['course'] = $course;
         $data['courseReviews'] = $query_review;
         $data['courseDetailRating'] = $course->getDetailRating();
-        // dd($data);
+        // dd($data['courseReviews']);
         return view('homepage.pages.reviews.lv_review_couse')
         ->with($data)
         ->layout('homepage.user_layouts.lv_main');
@@ -115,10 +154,56 @@ class LvReviewCourse extends Component
     public function setReviewFilter($filter)
     {
         if ($filter == 'latest') {
-            $this->review_filter = 'desc';
+            $this->review_text_filter = 'Most Recent';
+            $this->review_filter = ['type' => 'time', 'value' => 'desc'];
         }
         else if ($filter == 'oldest') {
-            $this->review_filter = 'asc';
+            $this->review_text_filter = 'Oldest Reviews';
+            $this->review_filter = ['type' => 'time', 'value' => 'asc'];
+        }
+        else if($filter == 'helpful') {
+            $this->review_text_filter = 'Helpful Reviews';
+            $this->review_filter = ['type' => 'number', 'value' => 'desc'];
+        }
+    }
+
+    public function likeReview($review_id)
+    {
+        return $this->userHelp(true, $review_id);
+    }
+
+    public function dislikeReview($review_id)
+    {
+        return $this->userHelp(false, $review_id);
+    }
+
+    public function userHelp($is_helpful, $review_id)
+    {
+        $user_auth = Auth::guard('web')->user();
+
+        if (!$user_auth) {
+            return $this->dispatchBrowserEvent('notification:alert', ['title' => 'Need to Sign In!', 'message' => "Do you want to be redirected to the Sign In page?"]);
+        }
+        $data = [
+            'is_helpful' => false,
+            'vote' => 'no'
+        ];
+        if ($is_helpful) {
+            $data['is_helpful'] = true;
+            $data['vote'] = 'yes';
+        }
+        $help_review = UserHelpReview::firstOrCreate(
+            ['user_id' => $user_auth->id, 'review_id' => $review_id],
+            $data
+        );
+        if(!$help_review->wasRecentlyCreated) {
+            if($help_review->is_helpful == $is_helpful) {
+                $help_review->delete();
+            } else {
+                $help_review->is_helpful = $is_helpful;
+                $help_review->vote = $data['vote'];
+                $help_review->save();
+            }
         }
     }
 

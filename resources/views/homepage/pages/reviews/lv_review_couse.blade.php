@@ -99,6 +99,15 @@
         background-color: #e9ecef;
         border-color: #c3c6ca;
     }
+    .text-desc-review {
+        font-weight: 400;
+        color: #333;
+    }
+    .genric-btn.active {
+        color: #38a4ff;
+        border: 1px solid #38a4ff;
+        background: #fff;
+    }
 </style>
 @endsection
 
@@ -263,24 +272,28 @@
                         </h5>
                         <div class="btn-group">
                             <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <small>Sort by:</small> {{($review_filter == 'desc')? 'Latest' : 'Oldest'}} Reviews
+                                <small>Sort by:</small> {{$review_text_filter}}
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <button wire:click="setReviewFilter('latest')" class="dropdown-item" type="button">Latest</button>
-                                <button wire:click="setReviewFilter('oldest')" class="dropdown-item" type="button">Oldest</button>
+                                <button wire:click="setReviewFilter('helpful')" class="dropdown-item" type="button">Most Helpful</button>
+                                <button wire:click="setReviewFilter('latest')" class="dropdown-item" type="button">Most Recent</button>
+                                <button wire:click="setReviewFilter('oldest')" class="dropdown-item" type="button">Oldest Reviews</button>
                             </div>
                         </div>
                     </div>
                     <hr>
                 </div>
                 <div class="col-12">
-                    <div wire:loading.class="d-block" class="card rounded-0 border-0 d-none">
+                    <div wire:loading.class="d-block" wire:target="setReviewAll, setReviewStar, setReviewFilter, goToPage" class="card rounded-0 border-0 d-none">
                         <div class="card-body text-center">
                             <i class="fas fa-spinner fa-spin text-primary fa-2x"></i>
                         </div>
                     </div>
-                    <div wire:loading.class="d-none" class="card rounded-0 border-0">
+                    <div wire:loading.class="d-none" wire:target="setReviewAll, setReviewStar, setReviewFilter, goToPage" class="card rounded-0 border-0">
                         @forelse ($courseReviews as $rating_item)
+                        @php
+                        $total_like = $rating_item->totalHelpful();
+                        @endphp
                         <div class="card-body px-0">
                             <div class="box-user-review w-100 text-black">
                                 <div class="d-flex justify-content-between">
@@ -299,8 +312,26 @@
                                     </div>
                                 </div>
                                 <div class="w-100">
-                                    <p>{{$rating_item->description}}</p>
+                                    <p class="text-desc-review">{{$rating_item->description}}</p>
                                 </div>
+                                <div class="w-100 mt-3 pt-2 border-top">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <p class="mb-0">Was this review helpful?</p>
+                                        </div>
+                                        <div>
+                                            <button wire:click="likeReview({{$rating_item->id}})" class="genric-btn info {{($rating_item->is_helpful)? 'active' : ''}} small px-3"><i class="fas fa-thumbs-up"></i> Yes</button>
+                                            <button wire:click="dislikeReview({{$rating_item->id}})" class="genric-btn info {{(!is_null($rating_item->is_helpful) && !$rating_item->is_helpful)? 'active' : ''}} small px-3"><i class="fas fa-thumbs-down"></i> No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                @if ($total_like > 0)
+                                <div class="w-100 mt-1">
+                                    <span class="badge badge-light font-weight-normal">
+                                        <b class="font-weight-normal">{{number_format($total_like, 0)}}</b> people found this review helpful
+                                    </span>
+                                </div>
+                                @endif
                             </div>
                         </div>
                         @empty
@@ -356,5 +387,12 @@
 @push('script')
 <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js')}} "></script>
 <script>
+    document.addEventListener('notification:alert', function (event) {
+        Swal.fire( {
+            icon: 'warning',
+            title: event.detail.title,
+            text: event.detail.message,
+        });
+    })
 </script>
 @endpush

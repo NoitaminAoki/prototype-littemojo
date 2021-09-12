@@ -9,9 +9,9 @@
 <link rel="stylesheet" href="{{ asset('page_dist/css/main.css') }}">
 <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
 <style>
-    #header {
+    /* #header {
         z-index: 1052;
-    }
+    } */
     #mobile-nav-toggle {
         top: 18px;
     }
@@ -27,6 +27,9 @@
     .btn-nav-link:hover {
         color: #f7631b;
         text-decoration: none;
+    }
+    .select2-dropdown {
+        z-index: 996;
     }
     .select2-search__field:focus {
         outline: 0;

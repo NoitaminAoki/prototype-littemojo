@@ -69,7 +69,7 @@
         line-height: 120%;
     }
     .custom-content-top {
-        justify-content: end !important;
+        justify-content: start !important;
     }
     .custom-info-box-icon {
         -webkit-box-align: center;
@@ -89,7 +89,7 @@
         white-space: pre-wrap;
     }
     .custom-icon-top {
-        align-items: end;
+        align-items: start;
         padding-top: 3px;
     }
     a.custom-text-white:hover {
@@ -350,6 +350,10 @@
         cursor: not-allowed;
     }
     
+    .text-desc-review {
+        font-weight: 400;
+        color: #333;
+    }
 </style>
 @endsection
 
@@ -846,7 +850,7 @@
                                     </div>
                                 </div>
                                 <div class="w-100">
-                                    <p>{{$rating_item->description}}</p>
+                                    <p class="text-desc-review">{{$rating_item->description}}</p>
                                 </div>
                             </div>
                         </div>
