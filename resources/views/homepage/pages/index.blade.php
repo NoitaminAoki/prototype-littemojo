@@ -518,7 +518,7 @@
                 <p>
                     There is a moment in the life of any aspiring astronomer that it is time to buy that first telescope. It’s exciting to think about setting up your own viewing station whether that is on the deck.
                 </p>
-                <a class="primary-btn wh" href="#">Apply for the post</a>								
+                <a class="primary-btn wh" href="{{ route('partner.register.form') }}">Apply for the post</a>								
             </div>					
         </div>
     </div>	

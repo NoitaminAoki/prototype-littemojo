@@ -31,10 +31,15 @@
                         </ul>
                     </li>
                     <li><a class="genric-btn primary small border-0 text-capitalize" href="{{ route('home.dashboard.index') }}">My Dashboard</a></li>
+                    @endauth
+                    @auth('partner')
+                    <li><a class="genric-btn primary small border-0 text-capitalize" href="{{ route('partner.dashboard') }}">My Dashboard</a></li>
                     @endauth		          					          		          
-                    @guest
+                    @guest('web')
+                    @guest('partner')
                     <li><a href="{{ route('login') }}">Sign In</a></li>
                     <li><a class="genric-btn primary small border-0 text-capitalize" href="{{ route('register') }}">Join for Free</a></li>
+                    @endguest
                     @endguest
                 </ul>
             </nav><!-- #nav-menu-container -->		    		

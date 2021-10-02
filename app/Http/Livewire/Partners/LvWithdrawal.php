@@ -72,9 +72,17 @@ class LvWithdrawal extends Component
         ->get();
         
         $this->bank_accounts = BankAccount::where('partner_id', $user_auth->id)->get();
-
+        
+        $data = [
+            'withdrawals' => $withdrawals, 
+            'can_add_withdrawal' => $can_add_withdrawal,
+            'finance_income' => $total_income, 
+            'finance_outcome' => $total_outcome, 
+            'finance_remaining_balance' => $this->max_amount,
+        ];
+        
         return view('partners.withdrawal.lv_index')
-        ->with(['withdrawals' => $withdrawals, 'can_add_withdrawal' => $can_add_withdrawal])
+        ->with($data)
         ->layout('partners.layouts.app-main');
     }
     

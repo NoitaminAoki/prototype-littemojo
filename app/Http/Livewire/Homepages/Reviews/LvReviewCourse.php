@@ -182,7 +182,7 @@ class LvReviewCourse extends Component
         $user_auth = Auth::guard('web')->user();
 
         if (!$user_auth) {
-            return $this->dispatchBrowserEvent('notification:alert', ['title' => 'Need to Sign In!', 'message' => "Do you want to be redirected to the Sign In page?"]);
+        return $this->dispatchBrowserEvent('notification:alert', ['title' => 'Need to Sign In!', /*'message' => "Do you want to be redirected to the Sign In page?"*/]);
         }
         $data = [
             'is_helpful' => false,

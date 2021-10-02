@@ -71,6 +71,55 @@
 
 <div class="row">
     <div class="col-lg-12">
+        <div class="row">
+            <div class="col-md-4 col-sm-6">
+                <div class="info-box bg-primary">
+                    <span class="info-box-icon"><i class="fas fa-wallet"></i></span>
+                    
+                    <div class="info-box-content">
+                        <span class="info-box-text">Remaining Balances</span>
+                        <span class="info-box-number">IDR {{number_format($finance_remaining_balance, 0, ',', '.')}}</span>
+                        
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <div class="info-box bg-teal">
+                    <span class="info-box-icon"><i class="fas fa-sign-in-alt"></i></span>
+                    
+                    <div class="info-box-content">
+                        <span class="info-box-text">Sales</span>
+                        <span class="info-box-number">IDR {{number_format($finance_income, 0, ',', '.')}}</span>
+                        
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <div class="info-box bg-maroon">
+                    <span class="info-box-icon"><i class="fas fa-sign-out-alt"></i></span>
+                    
+                    <div class="info-box-content">
+                        <span class="info-box-text">Withdrawals</span>
+                        <span class="info-box-number">IDR {{number_format($finance_outcome, 0, ',', '.')}}</span>
+                        
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
         <div class="card">
             <div class="card-body">
                 <div class="col-12 mb-4">

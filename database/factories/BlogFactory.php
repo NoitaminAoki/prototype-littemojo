@@ -24,7 +24,7 @@ class BlogFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(5),
-            'img' => 'public/files/article1.png',
+            'img' => '/uploaded_files/blogs/article1.jpg',
             'content' => $this->faker->paragraph(),
             'is_publish' => $this->faker->boolean(60),
             'is_highlight' => $this->faker->boolean(30),
