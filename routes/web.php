@@ -68,6 +68,7 @@ use App\Http\Livewire\Homepages\{
     Course as CoursesLive,
     LvCourseDetail as CourseDetailLive,
     LvCertificateVerify as CertificateVerifyLive,
+    LvBlogs as BlogsLive,
     Payments\LvPayCourse,
     Reviews\LvReviewCourse as ReviewCourseLive,
     Dashboard\LvDashboard as DashboardLive,
@@ -80,6 +81,7 @@ use App\Http\Livewire\Homepages\{
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+
 Route::view('ea', 'auth.verify_password');
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
@@ -93,11 +95,23 @@ Route::get('/email/verify', function () {
 
 Route::get('verify/{hash_id}', CertificateVerifyLive::class)->name('home.certificate.verify');
 
+Route::get('/', [HomeController::class, 'index'])->name('home.index');
+
+Route::get('courses', CoursesLive::class)->name('home.course.index');
+
+Route::get('/blogs', BlogsLive::class)->name('home.blogs.index');
+
 Route::view('certificates', 'homepage.pages.certificates.certificate');
 Route::view('certificates/pdf', 'homepage.pages.certificates.certificate_pdf_2');
 Route::view('certificates/print', 'homepage.pages.certificates.certificate_print');
 Route::get('certificates/download', [HomeController::class, 'pdfCertificate']);
 // Route::view('/', 'homepage.pages.index');
+
+Route::get('/learn/{title}', CourseDetailLive::class)->name('home.detail.course');
+
+Route::get('/learn/{title}/reviews', ReviewCourseLive::class)->name('home.detail.course.review');
+
+
 
 Route::middleware(['auth:web', 'verified'])->group(function () {
     Route::get('certificates/download/{uuid}/pdf/{filename}', [HomeController::class, 'getCertificate'])->name('home.certificate.download');
@@ -131,16 +145,10 @@ Route::get('payments/completed', [PaymentController::class, 'completed']);
 Route::get('payments/failed', [PaymentController::class, 'failed']);
 Route::get('payments/unfinish', [PaymentController::class, 'unfinish']);
 
-Route::get('/', [HomeController::class, 'index'])->name('home.index');
-Route::get('courses', CoursesLive::class)->name('home.course.index');
 
 Route::resource('blog', BlogController::class);
 
 // Route::get('/learn/{title}', [HomeController::class, 'detailCourse'])->name('home.detail.course');
-
-Route::get('/learn/{title}', CourseDetailLive::class)->name('home.detail.course');
-
-Route::get('/learn/{title}/reviews', ReviewCourseLive::class)->name('home.detail.course.review');
 
 
 

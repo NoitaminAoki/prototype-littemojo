@@ -33,139 +33,173 @@ class CatalogSeeder extends Seeder
             
 			[
 				'catalog_id' => 1,
-				'name' => 'History'
+				'name' => 'History',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 1,
-				'name' => 'Music and Art'
+				'name' => 'Music and Art',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 1,
-				'name' => 'philosophy'
+				'name' => 'philosophy',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 2,
-				'name' => 'Finance'
+				'name' => 'Finance',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 2,
-				'name' => 'Marketing'
+				'name' => 'Marketing',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 2,
-				'name' => 'Entrepreneurship'
+				'name' => 'Entrepreneurship',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 3,
-				'name' => 'Software Development'
+				'name' => 'Software Development',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 3,
-				'name' => 'Mobile And Web Development'
+				'name' => 'Mobile And Web Development',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 3,
-				'name' => 'Algorithms'
+				'name' => 'Algorithms',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 3,
-				'name' => 'Computer Security And Networks'
+				'name' => 'Computer Security And Networks',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 4,
-				'name' => 'Data Analysis'
+				'name' => 'Data Analysis',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 4,
-				'name' => 'Machine Learning'
+				'name' => 'Machine Learning',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 4,
-				'name' => 'Probability And Statistics'
+				'name' => 'Probability And Statistics',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 5,
-				'name' => 'Cloud Computing'
+				'name' => 'Cloud Computing',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 5,
-				'name' => 'Security'
+				'name' => 'Security',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 5,
-				'name' => 'Data Management'
+				'name' => 'Data Management',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 5,
-				'name' => 'Networking'
+				'name' => 'Networking',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 5,
-				'name' => 'Support And Operations'
+				'name' => 'Support And Operations',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 6,
-				'name' => 'Animal Health'
+				'name' => 'Animal Health',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 6,
-				'name' => 'Basic Science'
+				'name' => 'Basic Science',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 6,
-				'name' => 'Health Informatics'
+				'name' => 'Health Informatics',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 6,
-				'name' => 'Public Health'
+				'name' => 'Public Health',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 6,
-				'name' => 'Psychology'
+				'name' => 'Psychology',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 7,
-				'name' => 'Electrical Engineering'
+				'name' => 'Electrical Engineering',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 7,
-				'name' => 'Mechanical Engineering'
+				'name' => 'Mechanical Engineering',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 7,
-				'name' => 'Chemistry'
+				'name' => 'Chemistry',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 7,
-				'name' => 'Environmental Science And Sustainability'
+				'name' => 'Environmental Science And Sustainability',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 7,
-				'name' => 'Research Methods'
+				'name' => 'Research Methods',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 8,
-				'name' => 'Economics'
+				'name' => 'Economics',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 8,
-				'name' => 'Education'
+				'name' => 'Education',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 8,
-				'name' => 'Governance And Society'
+				'name' => 'Governance And Society',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 8,
-				'name' => 'Law'
+				'name' => 'Law',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 9,
-				'name' => 'Learning English'
+				'name' => 'Learning English',
+				'is_approved' => 1,
 			],
 			[
 				'catalog_id' => 9,
-				'name' => 'Other Languages'
+				'name' => 'Other Languages',
+				'is_approved' => 1,
 			],
         ]);
     }

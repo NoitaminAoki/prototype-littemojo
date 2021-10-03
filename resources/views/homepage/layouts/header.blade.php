@@ -62,7 +62,6 @@
                     @endauth	          					          		          
                     @guest('web')
                     @guest('partner')
-                        
                     <li><a href="{{ route('login') }}">Sign In</a></li>
                     <li><a class="genric-btn primary small border-0 text-capitalize" href="{{ route('register') }}">Join for Free</a></li>
                     @endguest

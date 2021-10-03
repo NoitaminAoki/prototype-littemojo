@@ -860,7 +860,7 @@
                         </div>
                         @endforelse
                         <div class="card-body text-center">
-                            @if ($total_reviews > 5)
+                            @if ($total_reviews >= 1)
                             <h5 class="font-weight-normal"><a href="{{ route('home.detail.course.review', ['title'=>$course->slug_title]) }}" class="btn btn-outline-primary border-0">See All Reviews</a></h5>
                             @endif
                         </div>

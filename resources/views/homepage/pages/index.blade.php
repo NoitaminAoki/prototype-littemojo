@@ -93,6 +93,13 @@
             width: 31%;
         }
     }
+    .custom-image-height {
+        height: 220px;
+    }
+    .custom-image-height .img-fluid {
+        height: 100%;
+        object-fit: cover;
+    }
 </style>
 @endsection
 
@@ -283,98 +290,6 @@
 </section>
 <!-- End search-course Area -->
 
-
-<!-- Start upcoming-event Area -->
-<section class="upcoming-event-area section-gap">
-    <div class="container">
-        <div class="row d-flex justify-content-center">
-            <div class="menu-content pb-70 col-lg-8">
-                <div class="title text-center">
-                    <h1 class="mb-10">Upcoming Events of our Institute</h1>
-                    <p>If you are a serious astronomy fanatic like a lot of us</p>
-                </div>
-            </div>
-        </div>								
-        <div class="row">
-            <div class="active-upcoming-event-carusel">
-                <div class="single-carusel row align-items-center">
-                    <div class="col-12 col-md-6 thumb">
-                        <img class="img-fluid" src="{{ asset('page_dist/img/e1.jpg')}}" alt="">
-                    </div>
-                    <div class="detials col-12 col-md-6">
-                        <p>25th February, 2018</p>
-                        <a href="#"><h4>The Universe Through A Child S Eyes</h4></a>
-                        <p>
-                            For most of us, the idea of astronomy is something we directly connect to “stargazing”, telescopes and seeing magnificent displays in the heavens.
-                        </p>
-                    </div>
-                </div>
-                <div class="single-carusel row align-items-center">
-                    <div class="col-12 col-md-6 thumb">
-                        <img class="img-fluid" src="{{ asset('page_dist/img/e2.jpg')}}" alt="">
-                    </div>
-                    <div class="detials col-12 col-md-6">
-                        <p>25th February, 2018</p>
-                        <a href="#"><h4>The Universe Through A Child S Eyes</h4></a>
-                        <p>
-                            For most of us, the idea of astronomy is something we directly connect to “stargazing”, telescopes and seeing magnificent displays in the heavens.
-                        </p>
-                    </div>
-                </div>	
-                <div class="single-carusel row align-items-center">
-                    <div class="col-12 col-md-6 thumb">
-                        <img class="img-fluid" src="{{ asset('page_dist/img/e1.jpg')}}" alt="">
-                    </div>
-                    <div class="detials col-12 col-md-6">
-                        <p>25th February, 2018</p>
-                        <a href="#"><h4>The Universe Through A Child S Eyes</h4></a>
-                        <p>
-                            For most of us, the idea of astronomy is something we directly connect to “stargazing”, telescopes and seeing magnificent displays in the heavens.
-                        </p>
-                    </div>
-                </div>	
-                <div class="single-carusel row align-items-center">
-                    <div class="col-12 col-md-6 thumb">
-                        <img class="img-fluid" src="{{ asset('page_dist/img/e1.jpg')}}" alt="">
-                    </div>
-                    <div class="detials col-12 col-md-6">
-                        <p>25th February, 2018</p>
-                        <a href="#"><h4>The Universe Through A Child S Eyes</h4></a>
-                        <p>
-                            For most of us, the idea of astronomy is something we directly connect to “stargazing”, telescopes and seeing magnificent displays in the heavens.
-                        </p>
-                    </div>
-                </div>
-                <div class="single-carusel row align-items-center">
-                    <div class="col-12 col-md-6 thumb">
-                        <img class="img-fluid" src="{{ asset('page_dist/img/e2.jpg')}}" alt="">
-                    </div>
-                    <div class="detials col-12 col-md-6">
-                        <p>25th February, 2018</p>
-                        <a href="#"><h4>The Universe Through A Child S Eyes</h4></a>
-                        <p>
-                            For most of us, the idea of astronomy is something we directly connect to “stargazing”, telescopes and seeing magnificent displays in the heavens.
-                        </p>
-                    </div>
-                </div>	
-                <div class="single-carusel row align-items-center">
-                    <div class="col-12 col-md-6 thumb">
-                        <img class="img-fluid" src="{{ asset('page_dist/img/e1.jpg')}}" alt="">
-                    </div>
-                    <div class="detials col-12 col-md-6">
-                        <p>25th February, 2018</p>
-                        <a href="#"><h4>The Universe Through A Child S Eyes</h4></a>
-                        <p>
-                            For most of us, the idea of astronomy is something we directly connect to “stargazing”, telescopes and seeing magnificent displays in the heavens.
-                        </p>
-                    </div>
-                </div>																						
-            </div>
-        </div>
-    </div>	
-</section>
-<!-- End upcoming-event Area -->
-
 <!-- Start review Area -->
 <section class="review-area section-gap relative">
     <div class="overlay overlay-bg"></div>
@@ -523,44 +438,55 @@
         </div>
     </div>	
 </section>
-<!-- End cta-one Area -->
+<!-- End cta-one Area -->	
 
-<!-- Start blog Area -->
-<section class="blog-area section-gap" id="blog">
+<!-- Start upcoming-event Area -->
+<section class="upcoming-event-area section-gap">
     <div class="container">
         <div class="row d-flex justify-content-center">
             <div class="menu-content pb-70 col-lg-8">
                 <div class="title text-center">
-                    <h1 class="mb-10">Here's some popular tricks</h1>
+                    <h1 class="mb-10">Latest posts from our Blog</h1>
                     <p>In the history of modern astronomy there is.</p>
                 </div>
             </div>
-        </div>					
+        </div>								
         <div class="row">
-            @foreach ($popularBlog as $blog)
-            <div class="col-lg-3 col-md-6 single-blog">
-                <div class="thumb">
-                    <img class="img-fluid" src="{{ Storage::url($blog->img) }}"
-                    alt="{{ $blog->title }}">
+            <div class="active-upcoming-event-carusel">
+                @foreach ($popularBlog as $key => $blog)
+                <div class="single-carusel row align-items-top">
+                    <div class="col-12 col-md-6 thumb custom-image-height">
+                        <img class="img-fluid" src="{{ asset($blog->img) }}" alt="{{$blog->title}}">
+                    </div>
+                    <div class="detials col-12 col-md-6">
+                        <p>{{ $blog->created_at->format('d F, Y') }}</p>
+                        <a href="{{ route('blog.show', $blog->id) }}"><h4>{{ Str::words($blog->title, 10) }}</h4></a>
+                        <p class="text-justify">
+                            {{ Str::words($blog->content, 25, ' [...]') }}
+                        </p>
+                    </div>
                 </div>
-                <p class="meta">
-                    {{ $blog->created_at->format('d M, Y') }}  | 
-                    By <a href="#">{{ $blog->user->name }}</a>
-                </p>
-                <a href="blog-single.html">
-                    <h5>{{ Str::limit($blog->title, 25) }}</h5>
-                </a>
-                <a href="{{ route('blog.show', $blog->id) }}" 
-                    class="btn btn-primary text-white d-inline-flex align-items-center">
-                    <span class="details mr-2">Details</span>
-                    <span class="lnr lnr-arrow-right"></span>
-                </a>
+                @endforeach																						
             </div>
-            @endforeach						
         </div>
     </div>	
 </section>
-<!-- End blog Area -->		
+<!-- End upcoming-event Area -->
+
+<!-- Start cta-two Area -->
+<section class="cta-two-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 cta-left">
+                <h1>Not Yet Satisfied with our Trend?</h1>
+            </div>
+            <div class="col-lg-4 cta-right">
+                <a class="primary-btn wh" href="{{ route('home.blogs.index') }}">view our blog</a>
+            </div>
+        </div>
+    </div>	
+</section>
+<!-- End cta-two Area -->
 @endsection
 
 @section('script')

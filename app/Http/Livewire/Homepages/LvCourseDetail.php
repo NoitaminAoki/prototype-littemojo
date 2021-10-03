@@ -51,7 +51,7 @@ class LvCourseDetail extends Component
                 $this->rating_desc = $data['user_course_review']->description;
             }
         }
-        $data['total_reviews'] = UserCourseRating::count();
+        $data['total_reviews'] = UserCourseRating::where('course_id', $course->id)->count();
         // dd($data);
         return view('homepage.pages.courses.lv_detail')
         ->with($data)

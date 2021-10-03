@@ -15,6 +15,10 @@
     #mobile-nav-toggle {
         top: 18px;
     }
+    
+    .form-input:focus {
+        outline: 0;
+    }
     .btn-nav-link {
         padding: 5px 9px;
         color: #333;
